@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity
 
         TabLayout tabLayout;
 
+        
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
