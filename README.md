@@ -1,2 +1,1 @@
-# moneytracking
-Money tracking
+# moneytrack
