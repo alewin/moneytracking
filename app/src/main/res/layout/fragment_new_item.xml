@@ -29,14 +29,26 @@ android:orientation="vertical">
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView"
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_layout_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
-                android:textColorHint="@color/my_secondary_text"
-                android:hint="Enter Place Here"/>
+                android:theme="@style/InputLayout"
+                android:hint="Enter Place">
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="50dp"
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+
+
 
 
 
@@ -44,12 +56,13 @@ android:orientation="vertical">
                 android:id="@+id/text_input_layout_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Name">
+                android:theme="@style/InputLayout"
+                android:hint=" Name">
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/add_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/my_primary_text"
+                    android:textColorHint="@color/my_secondary_text"
                     android:inputType="text" />
             </android.support.design.widget.TextInputLayout>
 
@@ -58,13 +71,14 @@ android:orientation="vertical">
                 android:id="@+id/text_input_layout_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/my_primary_text"
-                android:hint="Enter Description" >
+                android:theme="@style/InputLayout"
+                android:hint=" Description" >
             <android.support.design.widget.TextInputEditText
                     android:id="@+id/add_description"
+                    android:lines="3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="text" />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -72,8 +86,7 @@ android:orientation="vertical">
     <android.support.design.widget.TextInputLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/date_of_check"
-        android:textColorHint="@color/my_primary_text"
+        android:id="@+id/date_of_check"  android:theme="@style/InputLayout"
         android:layout_weight="1"
         >
         <EditText

@@ -13,4 +13,10 @@
 <color name="my_secondary_text">#000</color>
 <color name="my_icons">#FFFFFF</color>
 <color name="my_divider">#B6B6B6</color>
+
+    <color name="grey">#FF7F7F7F</color>
+
+    <color name="green">#89b987</color>
+    <color name="white">#FFFFFF</color>
+
 </resources>

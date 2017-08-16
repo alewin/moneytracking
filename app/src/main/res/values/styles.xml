@@ -22,6 +22,14 @@
 
 
 
+    <style name="InputLayout" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/grey</item>
+        <item name="colorAccent">@color/grey</item>
+        <item name="colorControlNormal">@color/grey</item>
+        <item name="colorControlActivated">@color/green</item>
+    </style>
 
     <style name="Base.Theme.MTApp" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/my_primary</item>
