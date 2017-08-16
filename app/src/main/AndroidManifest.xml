@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.unibo.koci.moneytracking">
 
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,9 +23,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".newItem"
+        <activity android:name=".Activities.NewItemActivity"
             android:parentActivityName=".MainActivity"
             android:label="New Item"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA0br9k6Vs8TJuqFPguwXXwqo3C4n-gA2k"/>
     </application>
 
 </manifest>

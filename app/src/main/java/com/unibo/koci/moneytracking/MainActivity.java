@@ -3,7 +3,6 @@ package com.unibo.koci.moneytracking;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.unibo.koci.moneytracking.Activities.NewItemActivity;
 import com.unibo.koci.moneytracking.Fragments.TabFragment;
 
 import java.util.ArrayList;
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent newItem = new Intent(MainActivity.this, newItem.class);
+                Intent newItem = new Intent(MainActivity.this, NewItemActivity.class);
                 startActivity(newItem);
             }
         });
