@@ -10,7 +10,7 @@
 <color name="my_primary_light">#B3E5FC</color>
 <color name="my_accent">#FF5722</color>
 <color name="my_primary_text">#ffffff</color>
-<color name="my_secondary_text">#ffffff</color>
+<color name="my_secondary_text">#000</color>
 <color name="my_icons">#FFFFFF</color>
 <color name="my_divider">#B6B6B6</color>
 </resources>

@@ -1,4 +1,4 @@
-package com.unibo.koci.moneytracking;
+package com.unibo.koci.moneytracking.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,14 +8,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.unibo.koci.moneytracking.Adapters.MoneyItemAdapter;
+import com.unibo.koci.moneytracking.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
  * Created by koale on 12/08/17.
  */
 
@@ -32,7 +32,6 @@ public class TabFragment extends Fragment {
         Bundle args = new Bundle();
         args.putInt("someInt", someInt);
         myFragment.setArguments(args);
-
         return myFragment;
     }
 

@@ -1,4 +1,4 @@
-package com.unibo.koci.moneytracking.Entità;
+package com.unibo.koci.moneytracking.Entities;
 
 import android.support.annotation.IntDef;
 
@@ -18,5 +18,4 @@ import java.lang.annotation.RetentionPolicy;
 class MoneyTypology {
     int money;
     ComeType type;
-
 }

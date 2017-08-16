@@ -1,12 +1,12 @@
 package com.unibo.koci.moneytracking.Adapters;
 
-/**
+/*
  * Created by koale on 12/08/17.
  */
-import java.util.ArrayList;
-import java.util.List;
 
+import java.util.List;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,14 +16,13 @@ import android.widget.TextView;
 
 import com.unibo.koci.moneytracking.R;
 
+import static android.R.id.input;
+
+
 public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.ViewHolder> {
     private List<String> values;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
     public class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
         public TextView txtHeader;
         public TextView txtFooter;
         public ImageView iconitem;
@@ -69,21 +68,25 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        final String name = values.get(position);
+
+        final String name = values.get(holder.getAdapterPosition());
+
+
+
         holder.txtHeader.setText(name);
         holder.txtHeader.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                //remove(position);
+                remove(holder.getAdapterPosition());
             }
         });
 
         holder.txtFooter.setText("Footer: " + name);
 
-        if (         values.get(position).toLowerCase().contains("3")
+        if (         values.get(holder.getAdapterPosition()).toLowerCase().contains("3")
                 ) {
 
             holder.iconitem.setImageResource(R.drawable.ic_menu_gallery);
