@@ -1,19 +1,20 @@
 package com.unibo.koci.moneytracking.Activities;
 
 import android.app.DatePickerDialog;
-import android.icu.util.Calendar;
+import java.util.Calendar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amitshekhar.DebugDB;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -24,7 +25,12 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.unibo.koci.moneytracking.Adapters.PlaceAdapter;
+import com.unibo.koci.moneytracking.Entities.DaoMaster;
+import com.unibo.koci.moneytracking.Entities.DaoSession;
+import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.R;
+
+import org.greenrobot.greendao.database.Database;
 
 /**
  * Created by koale on 15/08/17.
@@ -33,6 +39,7 @@ import com.unibo.koci.moneytracking.R;
 public class NewItemActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks {
+
 
 
     private static final String LOG_TAG = "ciaooo";
@@ -44,10 +51,34 @@ public class NewItemActivity extends AppCompatActivity implements
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 
+        private DaoSession daoSession;
+
+    public DaoSession getDaoSession() {
+        return daoSession;
+    }
+
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_new_item);
+        setContentView(R.layout.activity_new_item);
+
+
+        DebugDB.getAddressLog();
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "Location");
+        Database db = helper.getWritableDb();
+        daoSession = new DaoMaster(db).newSession();
+
+
+
+
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
@@ -62,6 +93,25 @@ public class NewItemActivity extends AppCompatActivity implements
                 BOUNDS_MOUNTAIN_VIEW, null);
         mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
 
+
+
+        final Button buttonAdd = (Button)findViewById(R.id.add_button);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+
+                                             @Override
+                                             public void onClick(View v) {
+                                                 Toast.makeText(NewItemActivity.this, "aggiunto", Toast.LENGTH_LONG).show();
+
+                                                 Location loc = new Location(null,"Riccione",4.222,3.4343);
+                                                 long locid = getDaoSession().insert(loc);
+
+
+                                             }
+                                         });
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final EditText dateInputText = (EditText)findViewById(R.id.check_date);
         dateInputText.setOnClickListener(new View.OnClickListener() {

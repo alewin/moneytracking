@@ -1,46 +1,73 @@
 package com.unibo.koci.moneytracking.Entities;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.NotNull;
+import org.greenrobot.greendao.annotation.Generated;
+
 /**
  * Created by koale on 14/08/17.
  */
 
 
-public class Location {
 
+@Entity
+public class Location {
+    @Id
+    private Long id;
+
+    @NotNull
     private String name;
-    private double latitude;
+
+    @NotNull
+    private double latatude;
+
+    @NotNull
     private double longitude;
 
-    public Location(String name, double latitude, double longitude) {
+    @Generated(hash = 146174459)
+    public Location(Long id, @NotNull String name, double latatude,
+            double longitude) {
+        this.id = id;
         this.name = name;
-        this.latitude = latitude;
+        this.latatude = latatude;
         this.longitude = longitude;
     }
 
+    @Generated(hash = 375979639)
+    public Location() {
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public double getLatatude() {
+        return this.latatude;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setLatatude(double latatude) {
+        this.latatude = latatude;
     }
 
     public double getLongitude() {
-        return longitude;
+        return this.longitude;
     }
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
-
 
 }

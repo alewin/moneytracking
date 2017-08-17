@@ -7,9 +7,9 @@
     <string name="action_settings">Settings</string>
 
 
-    <string name="tab_month">Mensile</string>
-    <string name="tab_week">Settimanale</string>
-    <string name="tab_day">Giornaliero</string>
+    <string name="tab_month">Month</string>
+    <string name="tab_week">Week</string>
+    <string name="tab_day">Day</string>
 
 
 </resources>

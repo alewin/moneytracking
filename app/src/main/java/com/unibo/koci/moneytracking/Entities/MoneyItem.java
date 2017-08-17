@@ -1,40 +1,77 @@
 package com.unibo.koci.moneytracking.Entities;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.NotNull;
+import org.greenrobot.greendao.annotation.ToOne;
+
 import java.util.Date;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.DaoException;
 
 /**
  * Created by koale on 12/08/17.
  */
 
-public class MoneyItem {
-    int id;
-    String name;
-    String description;
-    Date date;
-    Category category;
-    Location pos;
-    MoneyTypology amount;
 
-    public MoneyItem(int id, String name, String description, Date date, Category category, Location pos, MoneyTypology amount) {
+
+@Entity
+public class MoneyItem {
+    @Id
+    private Long id;
+
+    @NotNull
+    private String name;
+
+    @NotNull
+    private String description;
+
+    @NotNull
+    private Date date;
+
+    @NotNull
+    @ToOne(joinProperty = "id")
+    private Category category;
+
+    @NotNull
+    @ToOne(joinProperty = "id")
+    private Location location;
+
+    @NotNull
+    private float amount;
+
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+
+    /** Used for active entity operations. */
+    @Generated(hash = 1993525430)
+    private transient MoneyItemDao myDao;
+
+    @Generated(hash = 1323479359)
+    public MoneyItem(Long id, @NotNull String name, @NotNull String description,
+            @NotNull Date date, float amount) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.date = date;
-        this.category = category;
-        this.pos = pos;
         this.amount = amount;
     }
 
-    public int getId() {
-        return id;
+    @Generated(hash = 2145621404)
+    public MoneyItem() {
     }
 
-    public void setId(int id) {
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
         this.id = id;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -42,7 +79,7 @@ public class MoneyItem {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -50,35 +87,127 @@ public class MoneyItem {
     }
 
     public Date getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Date date) {
         this.date = date;
     }
 
+    public float getAmount() {
+        return this.amount;
+    }
+
+    public void setAmount(float amount) {
+        this.amount = amount;
+    }
+
+    @Generated(hash = 1372501278)
+    private transient Long category__resolvedKey;
+
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 1152182047)
     public Category getCategory() {
+        Long __key = this.id;
+        if (category__resolvedKey == null || !category__resolvedKey.equals(__key)) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            CategoryDao targetDao = daoSession.getCategoryDao();
+            Category categoryNew = targetDao.load(__key);
+            synchronized (this) {
+                category = categoryNew;
+                category__resolvedKey = __key;
+            }
+        }
         return category;
     }
 
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 1178303271)
     public void setCategory(Category category) {
-        this.category = category;
+        synchronized (this) {
+            this.category = category;
+            id = category == null ? null : category.getId();
+            category__resolvedKey = id;
+        }
     }
 
-    public Location getPos() {
-        return pos;
+    @Generated(hash = 1068795426)
+    private transient Long location__resolvedKey;
+
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 1085432286)
+    public Location getLocation() {
+        Long __key = this.id;
+        if (location__resolvedKey == null || !location__resolvedKey.equals(__key)) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            LocationDao targetDao = daoSession.getLocationDao();
+            Location locationNew = targetDao.load(__key);
+            synchronized (this) {
+                location = locationNew;
+                location__resolvedKey = __key;
+            }
+        }
+        return location;
     }
 
-    public void setPos(Location pos) {
-        this.pos = pos;
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 746508213)
+    public void setLocation(Location location) {
+        synchronized (this) {
+            this.location = location;
+            id = location == null ? null : location.getId();
+            location__resolvedKey = id;
+        }
     }
 
-    public MoneyTypology getAmount() {
-        return amount;
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
     }
 
-    public void setAmount(MoneyTypology amount) {
-        this.amount = amount;
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
     }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 2043645194)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getMoneyItemDao() : null;
+    }
+
+
 }
-

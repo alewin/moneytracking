@@ -86,10 +86,12 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
 
         holder.txtFooter.setText("Footer: " + name);
 
-        if (         values.get(holder.getAdapterPosition()).toLowerCase().contains("3")
-                ) {
+        if (values.get(holder.getAdapterPosition()).toLowerCase().contains("3")) {
+            holder.iconitem.setImageResource(R.drawable.thumb_up);
+        }
+        else {
+            holder.iconitem.setImageResource(R.drawable.thumb_down);
 
-            holder.iconitem.setImageResource(R.drawable.ic_menu_gallery);
         }
     }
 

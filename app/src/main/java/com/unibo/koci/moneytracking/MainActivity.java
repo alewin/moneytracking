@@ -18,8 +18,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.amitshekhar.DebugDB;
+import com.unibo.koci.moneytracking.Activities.CategoriesActivity;
 import com.unibo.koci.moneytracking.Activities.NewItemActivity;
+import com.unibo.koci.moneytracking.Activities.ViewPagerAdapter;
+import com.unibo.koci.moneytracking.Entities.Category;
+import com.unibo.koci.moneytracking.Entities.DaoMaster;
+import com.unibo.koci.moneytracking.Entities.DaoSession;
 import com.unibo.koci.moneytracking.Fragments.TabFragment;
+
+import org.greenrobot.greendao.database.Database;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,39 +37,9 @@ public class MainActivity extends AppCompatActivity
 
 
 
-
-    // Adapter for the viewpager using FragmentPagerAdapter
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
 
 
         super.onCreate(savedInstanceState);
@@ -79,47 +57,6 @@ public class MainActivity extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
-/*
-
-
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_day));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_week));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_month));
-
-
-        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        // use this setting to
-        // improve performance if you know that changes
-        // in content do not change the layout size
-        // of the RecyclerView
-        recyclerView.setHasFixedSize(true);
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        List<String> input = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            input.add("Test" + i);
-        }// define an adapter
-        mAdapter = new MoneyItemAdapter(input);
-        recyclerView.setAdapter(mAdapter);
-
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
-                new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-                    @Override
-                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder
-                            target) {
-                        return false;
-                    }
-                    @Override
-                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                        input.remove(viewHolder.getAdapterPosition());
-                        mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-                    }
-                };
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-*/
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -187,17 +124,14 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_home) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_category) {
+            startActivity(new Intent(MainActivity.this, CategoriesActivity.class));
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_graph) {
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_report) {
 
         }
 
