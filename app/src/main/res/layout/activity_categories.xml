@@ -23,7 +23,7 @@
 
 
     <ListView
-        android:id="@+id/list_categories"
+        android:id="@+id/listview_cat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

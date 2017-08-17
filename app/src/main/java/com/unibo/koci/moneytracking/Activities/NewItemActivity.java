@@ -25,6 +25,7 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.unibo.koci.moneytracking.Adapters.PlaceAdapter;
+import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.DaoMaster;
 import com.unibo.koci.moneytracking.Entities.DaoSession;
 import com.unibo.koci.moneytracking.Entities.Location;
@@ -51,11 +52,6 @@ public class NewItemActivity extends AppCompatActivity implements
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 
-        private DaoSession daoSession;
-
-    public DaoSession getDaoSession() {
-        return daoSession;
-    }
 
 
     @Override
@@ -64,16 +60,16 @@ public class NewItemActivity extends AppCompatActivity implements
         return true;
     }
 
+    DBHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
 
-        DebugDB.getAddressLog();
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "Location");
-        Database db = helper.getWritableDb();
-        daoSession = new DaoMaster(db).newSession();
+        //DebugDB.getAddressLog();
+        // dbHelper = new DBHelper(this);
 
 
 
@@ -103,7 +99,7 @@ public class NewItemActivity extends AppCompatActivity implements
                                                  Toast.makeText(NewItemActivity.this, "aggiunto", Toast.LENGTH_LONG).show();
 
                                                  Location loc = new Location(null,"Riccione",4.222,3.4343);
-                                                 long locid = getDaoSession().insert(loc);
+                                                 long locid = dbHelper.getDaoSession().insert(loc);
 
 
                                              }

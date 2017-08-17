@@ -5,12 +5,16 @@ package com.unibo.koci.moneytracking.Adapters;
  */
 
 import java.util.List;
+
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +30,7 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
         public TextView txtHeader;
         public TextView txtFooter;
         public ImageView iconitem;
+        public ImageButton settingCard;
         public View layout;
 
         public ViewHolder(View v) {
@@ -34,6 +39,7 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
             txtHeader = (TextView) v.findViewById(R.id.itemlist_title);
             txtFooter = (TextView) v.findViewById(R.id.itemlist_description);
             iconitem = (ImageView) v.findViewById(R.id.itemlist_icon);
+            settingCard = (ImageButton) v.findViewById(R.id.setting_card);
         }
     }
 
@@ -93,7 +99,26 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
             holder.iconitem.setImageResource(R.drawable.thumb_down);
 
         }
+
+
+        holder.settingCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopupMenu(holder.settingCard,position);
+            }
+        });
+
     }
+
+    private void showPopupMenu(View view,int position) {
+        // inflate menu
+        PopupMenu popup = new PopupMenu(view.getContext(),view );
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.menu_card_option, popup.getMenu());
+        //popup.setOnMenuItemClickListener(new MyMenuItemClickListener(position));
+        popup.show();
+    }
+
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
@@ -102,3 +127,38 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
     }
 
 }
+/*
+class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
+
+    private int position;
+    public MyMenuItemClickListener(int positon) {
+        this.position=positon;
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+
+            case R.id.Not_interasted_catugury:
+                String RemoveCategory=mDataSet.get(position).getCategory();
+                // mDataSet.remove(position);
+                //notifyItemRemoved(position);
+                // notifyItemRangeChanged(position,mDataSet.size());
+
+                mySharedPreferences.saveStringPrefs(Constants.REMOVE_CTAGURY,RemoveCategory,MainActivity.context);
+                Toast.makeText(MainActivity.context, "Add to favourite", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.No_interasted:
+                mDataSet.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position,mDataSet.size());
+                Toast.makeText(MainActivity.context, "Done for now", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.delete:
+                mySharedPreferences.deletePrefs(Constants.REMOVE_CTAGURY,MainActivity.context);
+            default:
+        }
+        return false;
+    }
+}
+*/
