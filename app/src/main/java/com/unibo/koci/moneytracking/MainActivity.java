@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -18,61 +15,33 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.amitshekhar.DebugDB;
 import com.unibo.koci.moneytracking.Activities.CategoriesActivity;
 import com.unibo.koci.moneytracking.Activities.NewItemActivity;
 import com.unibo.koci.moneytracking.Activities.ViewPagerAdapter;
-import com.unibo.koci.moneytracking.Entities.Category;
-import com.unibo.koci.moneytracking.Entities.DaoMaster;
-import com.unibo.koci.moneytracking.Entities.DaoSession;
 import com.unibo.koci.moneytracking.Fragments.TabFragment;
 
-import org.greenrobot.greendao.database.Database;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
+    private ViewPager viewPager;
+    private ViewPagerAdapter vpage_adapter;
+    private Toolbar toolbar;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        init_tabview();
+        init_toolbar();
+        init_fab();
+        init_navview();
+    }
 
-        // Add Fragments to adapter one by one
-        adapter.addFragment(new TabFragment().newInstance(1), getResources().getString(R.string.tab_day));
-        adapter.addFragment(new TabFragment().newInstance(2), getResources().getString(R.string.tab_week));
-        adapter.addFragment(new TabFragment().newInstance(3), getResources().getString(R.string.tab_month));
-        viewPager.setAdapter(adapter);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.setupWithViewPager(viewPager);
-
-
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent newItem = new Intent(MainActivity.this, NewItemActivity.class);
-                startActivity(newItem);
-            }
-        });
-
+    private void init_navview() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -84,7 +53,35 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void init_fab() {
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent newItem = new Intent(MainActivity.this, NewItemActivity.class);
+                startActivity(newItem);
+            }
+        });
+    }
 
+    private void init_toolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+    private void init_tabview() {
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        vpage_adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        // Add Fragments to vpage_adapter one by one
+        vpage_adapter.addFragment(new TabFragment().newInstance(1), getResources().getString(R.string.tab_day));
+        vpage_adapter.addFragment(new TabFragment().newInstance(2), getResources().getString(R.string.tab_week));
+        vpage_adapter.addFragment(new TabFragment().newInstance(3), getResources().getString(R.string.tab_month));
+        viewPager.setAdapter(vpage_adapter);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
+    }
 
     @Override
     public void onBackPressed() {

@@ -2,6 +2,7 @@ package com.unibo.koci.moneytracking.Entities;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.ToOne;
 
@@ -26,19 +27,26 @@ public class MoneyItem {
     @NotNull
     private String description;
 
+    //@Property(defaultValue="new Date()")
     @NotNull
     private Date date;
 
     @NotNull
-    @ToOne(joinProperty = "id")
+    private double amount;
+
+    @NotNull
+    @Index
+    private Long categoryID;
+
+    @NotNull
+    @Index
+    private Long locationID;
+
+    @ToOne(joinProperty = "categoryID")
     private Category category;
 
-    @NotNull
-    @ToOne(joinProperty = "id")
+    @ToOne(joinProperty = "locationID")
     private Location location;
-
-    @NotNull
-    private float amount;
 
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
@@ -48,14 +56,17 @@ public class MoneyItem {
     @Generated(hash = 1993525430)
     private transient MoneyItemDao myDao;
 
-    @Generated(hash = 1323479359)
+    @Generated(hash = 673340660)
     public MoneyItem(Long id, @NotNull String name, @NotNull String description,
-            @NotNull Date date, float amount) {
+            @NotNull Date date, double amount, @NotNull Long categoryID,
+            @NotNull Long locationID) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.date = date;
         this.amount = amount;
+        this.categoryID = categoryID;
+        this.locationID = locationID;
     }
 
     @Generated(hash = 2145621404)
@@ -94,21 +105,37 @@ public class MoneyItem {
         this.date = date;
     }
 
-    public float getAmount() {
+    public double getAmount() {
         return this.amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public Long getCategoryID() {
+        return this.categoryID;
+    }
+
+    public void setCategoryID(Long categoryID) {
+        this.categoryID = categoryID;
+    }
+
+    public Long getLocationID() {
+        return this.locationID;
+    }
+
+    public void setLocationID(Long locationID) {
+        this.locationID = locationID;
     }
 
     @Generated(hash = 1372501278)
     private transient Long category__resolvedKey;
 
     /** To-one relationship, resolved on first access. */
-    @Generated(hash = 1152182047)
+    @Generated(hash = 1790867297)
     public Category getCategory() {
-        Long __key = this.id;
+        Long __key = this.categoryID;
         if (category__resolvedKey == null || !category__resolvedKey.equals(__key)) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
@@ -125,12 +152,16 @@ public class MoneyItem {
     }
 
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 1178303271)
-    public void setCategory(Category category) {
+    @Generated(hash = 264614216)
+    public void setCategory(@NotNull Category category) {
+        if (category == null) {
+            throw new DaoException(
+                    "To-one property 'categoryID' has not-null constraint; cannot set to-one to null");
+        }
         synchronized (this) {
             this.category = category;
-            id = category == null ? null : category.getId();
-            category__resolvedKey = id;
+            categoryID = category.getCategoryID();
+            category__resolvedKey = categoryID;
         }
     }
 
@@ -138,9 +169,9 @@ public class MoneyItem {
     private transient Long location__resolvedKey;
 
     /** To-one relationship, resolved on first access. */
-    @Generated(hash = 1085432286)
+    @Generated(hash = 1847191610)
     public Location getLocation() {
-        Long __key = this.id;
+        Long __key = this.locationID;
         if (location__resolvedKey == null || !location__resolvedKey.equals(__key)) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
@@ -157,12 +188,16 @@ public class MoneyItem {
     }
 
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 746508213)
-    public void setLocation(Location location) {
+    @Generated(hash = 43823444)
+    public void setLocation(@NotNull Location location) {
+        if (location == null) {
+            throw new DaoException(
+                    "To-one property 'locationID' has not-null constraint; cannot set to-one to null");
+        }
         synchronized (this) {
             this.location = location;
-            id = location == null ? null : location.getId();
-            location__resolvedKey = id;
+            locationID = location.getLocationID();
+            location__resolvedKey = locationID;
         }
     }
 
@@ -208,6 +243,4 @@ public class MoneyItem {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getMoneyItemDao() : null;
     }
-
-
 }

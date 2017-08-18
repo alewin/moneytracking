@@ -13,14 +13,14 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class Category {
     @Id
-    private Long id;
+    private Long categoryID;
 
     @NotNull
     private String name;
 
-    @Generated(hash = 2033714148)
-    public Category(Long id, @NotNull String name) {
-        this.id = id;
+    @Generated(hash = 428706830)
+    public Category(Long categoryID, @NotNull String name) {
+        this.categoryID = categoryID;
         this.name = name;
     }
 
@@ -28,12 +28,13 @@ public class Category {
     public Category() {
     }
 
-    public Long getId() {
-        return this.id;
+
+    public Long getCategoryID() {
+        return this.categoryID;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCategoryID(Long categoryID) {
+        this.categoryID = categoryID;
     }
 
     public String getName() {

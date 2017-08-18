@@ -6,6 +6,7 @@ package com.unibo.koci.moneytracking.Adapters;
 
 import java.util.List;
 
+import android.content.Context;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -14,17 +15,35 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.unibo.koci.moneytracking.Entities.Category;
+import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.R;
 
 import static android.R.id.input;
 
 
+/*
+public class CategoriesAdapter extends ArrayAdapter<MoneyItem> {
+
+    private Context mContext;
+
+
+    public CategoriesAdapter(Context context, List<Category> categories) {
+
+        super(context, 0, categories);
+        this.mContext = context;
+    }
+*/
+
 public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.ViewHolder> {
-    private List<String> values;
+
+
+    private List<MoneyItem> moneyItems;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView txtHeader;
@@ -43,19 +62,20 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
         }
     }
 
-    public void add(int position, String item) {
-        values.add(position, item);
+    public void add(int position, MoneyItem item) {
+        moneyItems.add(position, item);
         notifyItemInserted(position);
     }
 
     public void remove(int position) {
-        values.remove(position);
+        moneyItems.remove(position);
         notifyItemRemoved(position);
     }
 
+
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MoneyItemAdapter(List<String> myDataset) {
-        values = myDataset;
+    public MoneyItemAdapter(List<MoneyItem> myDataset) {
+        moneyItems = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
@@ -78,7 +98,7 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        final String name = values.get(holder.getAdapterPosition());
+        final String name = moneyItems.get(holder.getAdapterPosition()).getName().toString();
 
 
 
@@ -92,7 +112,7 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
 
         holder.txtFooter.setText("Footer: " + name);
 
-        if (values.get(holder.getAdapterPosition()).toLowerCase().contains("3")) {
+        if (moneyItems.get(holder.getAdapterPosition()).getAmount() > 0 ) {
             holder.iconitem.setImageResource(R.drawable.thumb_up);
         }
         else {
@@ -123,7 +143,7 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return values.size();
+        return moneyItems.size();
     }
 
 }

@@ -1,7 +1,13 @@
 package com.unibo.koci.moneytracking.Activities;
 
 import android.app.DatePickerDialog;
+
+import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
+
+import java.text.SimpleDateFormat;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,7 +20,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.amitshekhar.DebugDB;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -26,12 +31,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.unibo.koci.moneytracking.Adapters.PlaceAdapter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
-import com.unibo.koci.moneytracking.Entities.DaoMaster;
-import com.unibo.koci.moneytracking.Entities.DaoSession;
 import com.unibo.koci.moneytracking.Entities.Location;
+import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.R;
 
-import org.greenrobot.greendao.database.Database;
 
 /**
  * Created by koale on 15/08/17.
@@ -41,40 +44,107 @@ public class NewItemActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks {
 
-
-
-    private static final String LOG_TAG = "ciaooo";
+    // google api
+    private static String LOG_TAG = "maps";
     private static final int GOOGLE_API_CLIENT_ID = 0;
-    private AutoCompleteTextView mAutocompleteTextView;
-
     private GoogleApiClient mGoogleApiClient;
     private PlaceAdapter mPlaceArrayAdapter;
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
-            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
+            new LatLng(44.4833333, 11.3333333), new LatLng(44.4833333, 11.3333333));
 
-
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
+    //object view
+    private AutoCompleteTextView mAutocompleteTextView;
+    private Button buttonAdd;
+    private EditText dateInputText;
+    private Toolbar toolbar;
 
     DBHelper dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
+        buttonAdd = (Button) findViewById(R.id.add_button);
+        dateInputText = (EditText) findViewById(R.id.check_date);
+        toolbar = (Toolbar) findViewById(R.id.toolbar2);
 
-        //DebugDB.getAddressLog();
-        // dbHelper = new DBHelper(this);
+        dbHelper = new DBHelper(this);
+
+        init_placeAPI();
+        init_toolbar();
+        init_dateinput();
+        init_addbutton();
+    }
+
+    private void init_toolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void init_dateinput() {
+        dateInputText.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                //To show current date in the datepicker
+                Calendar mcurrentDate = Calendar.getInstance();
+                int mYear = mcurrentDate.get(Calendar.YEAR);
+                int mMonth = mcurrentDate.get(Calendar.MONTH);
+                int mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog mDatePicker = new DatePickerDialog(NewItemActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        dateInputText.setText(selectedday + "/" + selectedmonth + "/" + selectedyear);
+                    }
+                }, mYear, mMonth, mDay);
+                mDatePicker.setTitle("Select date");
+                mDatePicker.show();
+            }
+        });
+    }
+
+    private void init_addbutton() {
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(NewItemActivity.this, "aggiunto", Toast.LENGTH_LONG).show();
+
+                Location loc = new Location(null, "Riccione", 4.222, 3.4343);
+                long locid = dbHelper.getDaoSession().insert(loc);
+
+                long catid = 1;
+                double amount = 10;
+
+                Date date = getDate(dateInputText.getText().toString());
+                MoneyItem mi = new MoneyItem(null, "Name", "Description", date, amount, catid, locid);
+                long moneyid = dbHelper.getDaoSession().insert(mi);
 
 
+            }
+        });
+    }
 
 
+    public static Date getDate(String datestring) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
 
+        date = new Date();
+
+        try {
+            date = format.parse(datestring);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return date;
+    }
+
+    private void init_placeAPI() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
@@ -88,48 +158,6 @@ public class NewItemActivity extends AppCompatActivity implements
         mPlaceArrayAdapter = new PlaceAdapter(this, android.R.layout.simple_list_item_1,
                 BOUNDS_MOUNTAIN_VIEW, null);
         mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
-
-
-
-        final Button buttonAdd = (Button)findViewById(R.id.add_button);
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
-
-                                             @Override
-                                             public void onClick(View v) {
-                                                 Toast.makeText(NewItemActivity.this, "aggiunto", Toast.LENGTH_LONG).show();
-
-                                                 Location loc = new Location(null,"Riccione",4.222,3.4343);
-                                                 long locid = dbHelper.getDaoSession().insert(loc);
-
-
-                                             }
-                                         });
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        final EditText dateInputText = (EditText)findViewById(R.id.check_date);
-        dateInputText.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                //To show current date in the datepicker
-                Calendar mcurrentDate=Calendar.getInstance();
-                int mYear=mcurrentDate.get(Calendar.YEAR);
-                int mMonth=mcurrentDate.get(Calendar.MONTH);
-                int mDay=mcurrentDate.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog mDatePicker=new DatePickerDialog(NewItemActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                      dateInputText.setText(selectedday + "/" + selectedmonth + "/" + selectedyear);
-                    }
-                },mYear, mMonth, mDay);
-                mDatePicker.setTitle("Select date");
-                mDatePicker.show();  }
-        });
-
     }
 
     private AdapterView.OnItemClickListener mAutocompleteClickListener
@@ -195,4 +223,11 @@ public class NewItemActivity extends AppCompatActivity implements
         mPlaceArrayAdapter.setGoogleApiClient(null);
         Log.e(LOG_TAG, "Google Places API connection suspended.");
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
 }

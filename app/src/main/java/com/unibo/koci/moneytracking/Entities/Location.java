@@ -14,23 +14,23 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class Location {
     @Id
-    private Long id;
+    private Long locationID;
 
     @NotNull
     private String name;
 
     @NotNull
-    private double latatude;
+    private double latitude;
 
     @NotNull
     private double longitude;
 
-    @Generated(hash = 146174459)
-    public Location(Long id, @NotNull String name, double latatude,
+    @Generated(hash = 2019704419)
+    public Location(Long locationID, @NotNull String name, double latitude,
             double longitude) {
-        this.id = id;
+        this.locationID = locationID;
         this.name = name;
-        this.latatude = latatude;
+        this.latitude = latitude;
         this.longitude = longitude;
     }
 
@@ -38,12 +38,12 @@ public class Location {
     public Location() {
     }
 
-    public Long getId() {
-        return this.id;
+    public Long getLocationID() {
+        return this.locationID;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setLocationID(Long locationID) {
+        this.locationID = locationID;
     }
 
     public String getName() {
@@ -54,12 +54,12 @@ public class Location {
         this.name = name;
     }
 
-    public double getLatatude() {
-        return this.latatude;
+    public double getLatitude() {
+        return this.latitude;
     }
 
-    public void setLatatude(double latatude) {
-        this.latatude = latatude;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     public double getLongitude() {

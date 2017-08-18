@@ -10,6 +10,7 @@
     <string name="tab_month">Month</string>
     <string name="tab_week">Week</string>
     <string name="tab_day">Day</string>
+    <string name="available_amount">€</string>
 
 
 </resources>

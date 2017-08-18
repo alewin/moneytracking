@@ -2,7 +2,6 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/htab_maincontent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -38,13 +37,13 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/available_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="50dp"
+                    android:textSize="@dimen/total_amount_size"
                     android:textColor="@color/my_primary_text"
                     android:textAlignment="center"
-                    android:text="5$"/>
+                    android:text="@string/available_amount"/>
 
 
             </LinearLayout>
