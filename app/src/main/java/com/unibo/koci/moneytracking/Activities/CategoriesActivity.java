@@ -60,7 +60,7 @@ public class CategoriesActivity extends AppCompatActivity {
     private void init_listadapter() {
 
         categories_list = new ArrayList();
-
+        catadapter = new CategoriesAdapter(this, categories_list);
         catListView = (ListView) findViewById(R.id.listview_cat);
         catListView.setAdapter(catadapter);
 
@@ -110,6 +110,8 @@ public class CategoriesActivity extends AppCompatActivity {
         daoSession.getCategoryDao().delete(c);
         updateUI();
     }
+
+    //     Attempt to invoke virtual method 'void com.unibo.koci.moneytracking.Adapters.CategoriesAdapter.clear()' on a null object reference
 
     private void updateUI() {
         categories_list = dbHelper.getDaoSession().getCategoryDao().loadAll();

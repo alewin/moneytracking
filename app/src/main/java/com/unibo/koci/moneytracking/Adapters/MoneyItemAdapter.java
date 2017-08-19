@@ -19,11 +19,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
+import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
+import static android.R.attr.onClick;
 import static android.R.id.input;
 
 
@@ -46,8 +49,9 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
     private List<MoneyItem> moneyItems;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView txtHeader;
-        public TextView txtFooter;
+        public TextView txtTitle;
+        public TextView txtDescription;
+        public TextView txtDate;
         public ImageView iconitem;
         public ImageButton settingCard;
         public View layout;
@@ -55,8 +59,9 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
         public ViewHolder(View v) {
             super(v);
             layout = v;
-            txtHeader = (TextView) v.findViewById(R.id.itemlist_title);
-            txtFooter = (TextView) v.findViewById(R.id.itemlist_description);
+            txtTitle = (TextView) v.findViewById(R.id.itemlist_title);
+            txtDescription = (TextView) v.findViewById(R.id.itemlist_description);
+            txtDate = (TextView) v.findViewById(R.id.itemlist_date);
             iconitem = (ImageView) v.findViewById(R.id.itemlist_icon);
             settingCard = (ImageButton) v.findViewById(R.id.setting_card);
         }
@@ -78,46 +83,55 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
         moneyItems = myDataset;
     }
 
-    // Create new views (invoked by the layout manager)
+
     @Override
-    public MoneyItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
-        // create a new view
-        LayoutInflater inflater = LayoutInflater.from(
-                parent.getContext());
-        View v =
-                inflater.inflate(R.layout.money_item_list, parent, false);
-        // set the view's size, margins, paddings and layout parameters
+    public MoneyItemAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
+
+
+
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View v = inflater.inflate(R.layout.money_item_list, parent, false);
+
+
+
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
 
+
+
+
+
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
 
-        final String name = moneyItems.get(holder.getAdapterPosition()).getName().toString();
-
-
-
-        holder.txtHeader.setText(name);
-        holder.txtHeader.setOnClickListener(new OnClickListener() {
+        final OnClickListener titleListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                remove(holder.getAdapterPosition());
-            }
-        });
+                Toast.makeText(v.getContext(), "clicked="+ position,Toast.LENGTH_SHORT).show();
+                //                remove(holder.getAdapterPosition());
 
-        holder.txtFooter.setText("Footer: " + name);
+                notifyDataSetChanged();
+
+            }
+        };
+        holder.layout.setOnClickListener(titleListener);
+
+
+        String name = moneyItems.get(holder.getAdapterPosition()).getName().toString();
+        String description = String.valueOf(moneyItems.get(holder.getAdapterPosition()).getAmount());
+        String date = moneyItems.get(holder.getAdapterPosition()).getDate().toString();
+
+        holder.txtTitle.setText(name);
+        holder.txtDescription.setText(description);
+        holder.txtDate.setText(date);
 
         if (moneyItems.get(holder.getAdapterPosition()).getAmount() > 0 ) {
             holder.iconitem.setImageResource(R.drawable.thumb_up);
         }
         else {
             holder.iconitem.setImageResource(R.drawable.thumb_down);
-
         }
 
 

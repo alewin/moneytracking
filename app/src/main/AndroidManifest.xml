@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.unibo.koci.moneytracking">
 
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -22,21 +22,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Activities.NewItemActivity"
-            android:parentActivityName=".MainActivity"
-            android:label="New Item"/>
-
-        <activity android:name=".Activities.CategoriesActivity"
-            android:parentActivityName=".MainActivity"
-            android:label="Manage Categories"/>
+        <activity
+            android:name=".Activities.NewItemActivity"
+            android:label="New Item"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".Activities.CategoriesActivity"
+            android:label="Manage Categories"
+            android:parentActivityName=".MainActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+            android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA0br9k6Vs8TJuqFPguwXXwqo3C4n-gA2k"/>
+            android:value="AIzaSyA0br9k6Vs8TJuqFPguwXXwqo3C4n-gA2k" />
+
+
+        <activity
+            android:name=".Activities.SettingsActivity"
+            android:theme="@style/PreferenceScreen"
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".Activities.DetailActivity"
+            android:label="@string/title_activity_detail"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".Activities.ReportActivity" />
+        <activity android:name=".Activities.GraphActivity"></activity>
     </application>
 
 </manifest>

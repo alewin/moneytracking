@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import com.unibo.koci.moneytracking.Activities.CategoriesActivity;
 import com.unibo.koci.moneytracking.Activities.NewItemActivity;
+import com.unibo.koci.moneytracking.Activities.SettingsActivity;
 import com.unibo.koci.moneytracking.Activities.ViewPagerAdapter;
 import com.unibo.koci.moneytracking.Fragments.TabFragment;
 
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             return true;
         }
 

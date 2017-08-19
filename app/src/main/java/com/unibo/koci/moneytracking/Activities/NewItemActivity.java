@@ -3,12 +3,18 @@ package com.unibo.koci.moneytracking.Activities;
 import android.app.DatePickerDialog;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.ListIterator;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -31,8 +37,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.unibo.koci.moneytracking.Adapters.PlaceAdapter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
+import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
+import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
 
@@ -54,10 +62,17 @@ public class NewItemActivity extends AppCompatActivity implements
 
     //object view
     private AutoCompleteTextView mAutocompleteTextView;
+    private EditText nameAdd;
+    private EditText descriptionAdd;
+    private EditText amountAdd;
     private Button buttonAdd;
     private EditText dateInputText;
+    private EditText categoryInputText;
     private Toolbar toolbar;
 
+    private int amount_type; // 0 expense 1 gain
+    private Place place;
+    private long catid;
     DBHelper dbHelper;
 
 
@@ -66,18 +81,46 @@ public class NewItemActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
+        nameAdd = (EditText) findViewById(R.id.add_name);
+        descriptionAdd = (EditText) findViewById(R.id.add_description);
+        amountAdd = (EditText) findViewById(R.id.add_amount);
+
         buttonAdd = (Button) findViewById(R.id.add_button);
         dateInputText = (EditText) findViewById(R.id.check_date);
+        categoryInputText = (EditText) findViewById(R.id.add_category);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar2);
 
         dbHelper = new DBHelper(this);
 
+        init_typeAmount();
         init_placeAPI();
         init_toolbar();
         init_dateinput();
         init_addbutton();
+        init_selectategory();
     }
+    private void init_typeAmount(){
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("What do you want to add?")
+                .setCancelable(false)
+                .setPositiveButton("Expense", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        amount_type = 0;
+                        dialog.cancel();
+                      //  NewItemActivity.this.finish();
+                    }
+                })
+                .setNegativeButton("Gain", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        amount_type = 1;
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
     private void init_toolbar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -105,24 +148,78 @@ public class NewItemActivity extends AppCompatActivity implements
             }
         });
     }
+    private void force_create_new_category(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("There aren't categories, please add new category")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(NewItemActivity.this, CategoriesActivity.class));
 
-    private void init_addbutton() {
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+    private void init_selectategory() {
+
+        List<String> listItems = new ArrayList<String>();
+        final List<Category> categories_list = dbHelper.getDaoSession().getCategoryDao().loadAll();
+
+        if(categories_list.size() == 0){
+            force_create_new_category();
+        }
+        int i=0;
+        while(listItems.size() != categories_list.size()){
+            listItems.add(categories_list.get(i++).getName().toString());
+        }
+
+        final CharSequence[] categories_string = listItems.toArray(new CharSequence[listItems.size()]);
+
+        categoryInputText.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(NewItemActivity.this, "aggiunto", Toast.LENGTH_LONG).show();
 
-                Location loc = new Location(null, "Riccione", 4.222, 3.4343);
+                new AlertDialog.Builder(v.getContext())
+                        .setSingleChoiceItems(categories_string, 0, null)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.dismiss();
+                                int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                                categoryInputText.setText(categories_list.get(selectedPosition).getName().toString());
+                                catid = categories_list.get(selectedPosition).getCategoryID();
+                            }
+                        })
+                        .show();
+            }
+        });
+    }
+
+    private void init_addbutton() {
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Location loc = new Location(null, place.getName().toString(), place.getLatLng().latitude, place.getLatLng().longitude);
                 long locid = dbHelper.getDaoSession().insert(loc);
-
-                long catid = 1;
-                double amount = 10;
-
+                double amount;
+                String name = nameAdd.getText().toString();
+                String description = descriptionAdd.getText().toString();
                 Date date = getDate(dateInputText.getText().toString());
-                MoneyItem mi = new MoneyItem(null, "Name", "Description", date, amount, catid, locid);
+                if(amount_type == 0) {
+                    amount = Double.valueOf("-" + amountAdd.getText().toString());
+                }else{
+                    amount = Double.valueOf(amountAdd.getText().toString());
+
+                }
+
+                Log.w("Aggiungimi", name + " " + description + " " + date +" " + amount + " " + locid + " " + catid + " " );
+                MoneyItem mi = new MoneyItem(null,name,description,date,amount,catid,locid);
                 long moneyid = dbHelper.getDaoSession().insert(mi);
 
+
+                Toast.makeText(NewItemActivity.this, "aggiunto", Toast.LENGTH_LONG).show();
 
             }
         });
@@ -184,7 +281,7 @@ public class NewItemActivity extends AppCompatActivity implements
                 return;
             }
             // Selecting the first object buffer.
-            final Place place = places.get(0);
+            place = places.get(0);
             CharSequence attributions = places.getAttributions();
 /*
             mNameTextView.setText(Html.fromHtml(place.getName() + ""));

@@ -67,5 +67,18 @@ dependencies {
     debugCompile 'com.amitshekhar.android:debug-db:1.0.0'
     testCompile 'junit:junit:4.12'
 }
+dependencies {
+    compile 'com.android.support:support-v4:25.+'
+    compile 'com.android.support:support-vector-drawable:25.+'
+}
+dependencies {
+    compile 'com.android.support.constraint:constraint-layout:+'
+}
+dependencies {
+    compile 'com.android.support.constraint:constraint-layout:+'
+}
+dependencies {
+    compile 'com.android.support.constraint:constraint-layout:+'
+}
 
 

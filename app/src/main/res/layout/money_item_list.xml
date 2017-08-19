@@ -12,7 +12,7 @@ android:theme="@style/ThemeOverlay.AppCompat.Dark">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/window_background"
+        android:background="@color/windowBackground"
 
         android:gravity="center">
 
@@ -34,7 +34,7 @@ android:theme="@style/ThemeOverlay.AppCompat.Dark">
             android:text="Title "
             android:textAppearance="?attr/textAppearanceListItem"
             android:textSize="16sp"
-            android:textColor="@color/my_secondary_text"
+            android:textColor="@color/textColorSecondary"
             android:layout_alignTop="@+id/itemlist_icon"
             android:layout_toEndOf="@+id/itemlist_icon" />
 
@@ -44,7 +44,7 @@ android:theme="@style/ThemeOverlay.AppCompat.Dark">
             android:layout_height="wrap_content"
             android:layout_below="@+id/itemlist_title"
             android:layout_marginLeft="16dp"
-            android:textColor="@color/my_secondary_text"
+            android:textColor="@color/textColorSecondary"
 
             android:layout_toRightOf="@+id/itemlist_icon"
             android:ellipsize="end"
@@ -52,18 +52,37 @@ android:theme="@style/ThemeOverlay.AppCompat.Dark">
             android:text="Description"
             android:textSize="14sp" />
 
+        <TextView
+            android:id="@+id/itemlist_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/itemlist_description"
+            android:layout_marginLeft="16dp"
+            android:textColor="@color/textColorSecondary"
+
+            android:layout_toRightOf="@+id/itemlist_icon"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="date"
+            android:textSize="14sp" />
+
+
+
 
         <ImageButton
             android:id="@+id/setting_card"
             android:layout_width="10dp"
             android:layout_height="20dp"
-            android:src="@drawable/ic_dots"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/itemlist_title"
+            android:layout_marginEnd="10dp"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:elevation="0dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:background="@null"
-            android:layout_alignTop="@+id/itemlist_title"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_dots" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>
