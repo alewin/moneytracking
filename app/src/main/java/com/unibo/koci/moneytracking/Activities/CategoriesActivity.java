@@ -45,8 +45,6 @@ public class CategoriesActivity extends AppCompatActivity {
 
         init_toolbar();
         init_listadapter();
-
-        DebugDB.getAddressLog();
         updateUI();
     }
 
@@ -111,7 +109,6 @@ public class CategoriesActivity extends AppCompatActivity {
         updateUI();
     }
 
-    //     Attempt to invoke virtual method 'void com.unibo.koci.moneytracking.Adapters.CategoriesAdapter.clear()' on a null object reference
 
     private void updateUI() {
         categories_list = dbHelper.getDaoSession().getCategoryDao().loadAll();

@@ -140,7 +140,7 @@ public class NewItemActivity extends AppCompatActivity implements
 
                 DatePickerDialog mDatePicker = new DatePickerDialog(NewItemActivity.this, new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                        dateInputText.setText(selectedday + "/" + selectedmonth + "/" + selectedyear);
+                        dateInputText.setText(selectedday + "/" + (selectedmonth+1) + "/" + selectedyear);
                     }
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select date");
@@ -206,6 +206,7 @@ public class NewItemActivity extends AppCompatActivity implements
                 double amount;
                 String name = nameAdd.getText().toString();
                 String description = descriptionAdd.getText().toString();
+
                 Date date = getDate(dateInputText.getText().toString());
                 if(amount_type == 0) {
                     amount = Double.valueOf("-" + amountAdd.getText().toString());
@@ -227,7 +228,7 @@ public class NewItemActivity extends AppCompatActivity implements
 
 
     public static Date getDate(String datestring) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         Date date;
 
         date = new Date();
@@ -282,18 +283,7 @@ public class NewItemActivity extends AppCompatActivity implements
             }
             // Selecting the first object buffer.
             place = places.get(0);
-            CharSequence attributions = places.getAttributions();
-/*
-            mNameTextView.setText(Html.fromHtml(place.getName() + ""));
-            mAddressTextView.setText(Html.fromHtml(place.getAddress() + ""));
-            mIdTextView.setText(Html.fromHtml(place.getId() + ""));
-            mPhoneTextView.setText(Html.fromHtml(place.getPhoneNumber() + ""));
 
-            mWebTextView.setText(place.getWebsiteUri() + "");
-            if (attributions != null) {
-                mAttTextView.setText(Html.fromHtml(attributions.toString()));
-            }
-            */
         }
     };
 

@@ -15,7 +15,6 @@ import org.greenrobot.greendao.DaoException;
  */
 
 
-
 @Entity
 public class MoneyItem {
     @Id
@@ -27,7 +26,6 @@ public class MoneyItem {
     @NotNull
     private String description;
 
-    //@Property(defaultValue="new Date()")
     @NotNull
     private Date date;
 
@@ -243,4 +241,5 @@ public class MoneyItem {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getMoneyItemDao() : null;
     }
+
 }

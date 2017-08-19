@@ -28,6 +28,11 @@
     </style>
 
 
+    <style name="ListViewStyle" parent="@android:style/Widget.Holo.Light.ListView">
+        <item name="android:background">@color/windowBackground</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 
     <style name="Base.Theme.MTApp" parent="Theme.AppCompat.NoActionBar">
 
@@ -35,7 +40,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
+        <item name="android:listViewStyle">@style/ListViewStyle</item>
 
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
