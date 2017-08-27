@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/total_amount_size"
-                    android:textColor="@color/textColorPrimary"
+                    android:textColor="@color/white"
                     android:textAlignment="center"
                     android:text="@string/available_amount"/>
 

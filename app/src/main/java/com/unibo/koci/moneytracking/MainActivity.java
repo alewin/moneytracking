@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -15,11 +17,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.unibo.koci.moneytracking.Activities.ArchiveActivity;
 import com.unibo.koci.moneytracking.Activities.CategoriesActivity;
 import com.unibo.koci.moneytracking.Activities.NewItemActivity;
 import com.unibo.koci.moneytracking.Activities.SettingsActivity;
-import com.unibo.koci.moneytracking.Activities.ViewPagerAdapter;
+import com.unibo.koci.moneytracking.Adapters.ViewPagerAdapter;
+import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Fragments.TabFragment;
 
 
@@ -31,12 +36,17 @@ public class MainActivity extends AppCompatActivity
     private ViewPagerAdapter vpage_adapter;
     private Toolbar toolbar;
     private FloatingActionButton fab;
+    private TextView total_amount;
+
+    DBHelper dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        dbHelper = new DBHelper(this);
         init_tabview();
         init_toolbar();
         init_fab();
@@ -68,14 +78,21 @@ public class MainActivity extends AppCompatActivity
 
     private void init_toolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        total_amount = (TextView)findViewById(R.id.available_amount);
+        total_amount.setText(String.valueOf( dbHelper.getTotalAmount()) + "€");
         setSupportActionBar(toolbar);
     }
+
+
 
     private void init_tabview() {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         vpage_adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
+
+
         // Add Fragments to vpage_adapter one by one
+
         vpage_adapter.addFragment(new TabFragment().newInstance(1), getResources().getString(R.string.tab_day));
         vpage_adapter.addFragment(new TabFragment().newInstance(2), getResources().getString(R.string.tab_week));
         vpage_adapter.addFragment(new TabFragment().newInstance(3), getResources().getString(R.string.tab_month));
@@ -84,23 +101,23 @@ public class MainActivity extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.addOnTabSelectedListener(tabListener);
         tabLayout.setupWithViewPager(viewPager);
+
     }
     TabLayout.OnTabSelectedListener tabListener = new TabLayout.OnTabSelectedListener() {
 
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
-            viewPager.setCurrentItem(tab.getPosition());
-            Log.w("kokokoko",String.valueOf(tab.getPosition()));
+            Log.d("KOCITAB", "tabSelected: " + tab.getPosition());
         }
 
         @Override
         public void onTabUnselected(TabLayout.Tab tab) {
-
+            Log.d("KOCITAB", "tabUnselected: " + tab.getPosition());
         }
 
         @Override
         public void onTabReselected(TabLayout.Tab tab) {
-
+            Log.d("KOCITAB", "tabReselected: " + tab.getPosition());
         }
     };
 
@@ -149,6 +166,10 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this, CategoriesActivity.class));
 
         } else if (id == R.id.nav_graph) {
+
+        } else if (id == R.id.nav_archive) {
+            startActivity(new Intent(MainActivity.this, ArchiveActivity.class));
+
 
         } else if (id == R.id.nav_report) {
 

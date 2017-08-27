@@ -88,18 +88,13 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
     public MoneyItemAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
 
 
-
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate(R.layout.money_item_list, parent, false);
-
 
 
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
-
-
-
 
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -109,7 +104,7 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
         final OnClickListener titleListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "clicked="+ position,Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "clicked=" + position, Toast.LENGTH_SHORT).show();
                 //                remove(holder.getAdapterPosition());
 
                 notifyDataSetChanged();
@@ -127,10 +122,9 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
         holder.txtDescription.setText(description);
         holder.txtDate.setText(date);
 
-        if (moneyItems.get(holder.getAdapterPosition()).getAmount() > 0 ) {
+        if (moneyItems.get(holder.getAdapterPosition()).getAmount() > 0) {
             holder.iconitem.setImageResource(R.drawable.thumb_up);
-        }
-        else {
+        } else {
             holder.iconitem.setImageResource(R.drawable.thumb_down);
         }
 
@@ -138,15 +132,15 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
         holder.settingCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPopupMenu(holder.settingCard,position);
+                showPopupMenu(holder.settingCard, position);
             }
         });
 
     }
 
-    private void showPopupMenu(View view,int position) {
+    private void showPopupMenu(View view, int position) {
         // inflate menu
-        PopupMenu popup = new PopupMenu(view.getContext(),view );
+        PopupMenu popup = new PopupMenu(view.getContext(), view);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_card_option, popup.getMenu());
         //popup.setOnMenuItemClickListener(new MyMenuItemClickListener(position));

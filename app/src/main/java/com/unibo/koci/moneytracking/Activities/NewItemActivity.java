@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -61,7 +62,7 @@ public class NewItemActivity extends AppCompatActivity implements
             new LatLng(44.4833333, 11.3333333), new LatLng(44.4833333, 11.3333333));
 
     //object view
-    private AutoCompleteTextView mAutocompleteTextView;
+    private AutoCompleteTextView addLocation;
     private EditText nameAdd;
     private EditText descriptionAdd;
     private EditText amountAdd;
@@ -99,8 +100,10 @@ public class NewItemActivity extends AppCompatActivity implements
         init_dateinput();
         init_addbutton();
         init_selectategory();
+
     }
-    private void init_typeAmount(){
+
+    private void init_typeAmount() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("What do you want to add?")
@@ -109,10 +112,10 @@ public class NewItemActivity extends AppCompatActivity implements
                     public void onClick(DialogInterface dialog, int id) {
                         amount_type = 0;
                         dialog.cancel();
-                      //  NewItemActivity.this.finish();
+                        //  NewItemActivity.this.finish();
                     }
                 })
-                .setNegativeButton("Gain", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Profit", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         amount_type = 1;
                         dialog.cancel();
@@ -121,6 +124,7 @@ public class NewItemActivity extends AppCompatActivity implements
         AlertDialog alert = builder.create();
         alert.show();
     }
+
     private void init_toolbar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -140,7 +144,7 @@ public class NewItemActivity extends AppCompatActivity implements
 
                 DatePickerDialog mDatePicker = new DatePickerDialog(NewItemActivity.this, new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                        dateInputText.setText(selectedday + "/" + (selectedmonth+1) + "/" + selectedyear);
+                        dateInputText.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
                     }
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select date");
@@ -148,7 +152,8 @@ public class NewItemActivity extends AppCompatActivity implements
             }
         });
     }
-    private void force_create_new_category(){
+
+    private void force_create_new_category() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("There aren't categories, please add new category")
                 .setCancelable(false)
@@ -161,69 +166,131 @@ public class NewItemActivity extends AppCompatActivity implements
         AlertDialog alert = builder.create();
         alert.show();
     }
+
     private void init_selectategory() {
 
         List<String> listItems = new ArrayList<String>();
         final List<Category> categories_list = dbHelper.getDaoSession().getCategoryDao().loadAll();
 
-        if(categories_list.size() == 0){
+        if (categories_list.size() == 0) {
             force_create_new_category();
         }
-        int i=0;
-        while(listItems.size() != categories_list.size()){
+        int i = 0;
+        while (listItems.size() != categories_list.size()) {
             listItems.add(categories_list.get(i++).getName().toString());
         }
 
         final CharSequence[] categories_string = listItems.toArray(new CharSequence[listItems.size()]);
 
-        categoryInputText.setOnClickListener(new View.OnClickListener() {
+        categoryInputText
+                .setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if (hasFocus) {
+                            new AlertDialog.Builder(v.getContext(),R.style.DialogStyle)
+                                    .setSingleChoiceItems(categories_string, 0, null)
+                                    .setPositiveButton("Select", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            dialog.dismiss();
+                                            int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                                            categoryInputText.setText(categories_list.get(selectedPosition).getName().toString());
+                                            catid = categories_list.get(selectedPosition).getCategoryID();
+                                        }
+                                    })
+                                    .show();
 
-            @Override
-            public void onClick(View v) {
 
-                new AlertDialog.Builder(v.getContext())
-                        .setSingleChoiceItems(categories_string, 0, null)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.dismiss();
-                                int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                                categoryInputText.setText(categories_list.get(selectedPosition).getName().toString());
-                                catid = categories_list.get(selectedPosition).getCategoryID();
-                            }
-                        })
-                        .show();
-            }
-        });
+                        }
+                    }
+                });
+
+
     }
 
+
     private void init_addbutton() {
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Location loc = new Location(null, place.getName().toString(), place.getLatLng().latitude, place.getLatLng().longitude);
-                long locid = dbHelper.getDaoSession().insert(loc);
-                double amount;
-                String name = nameAdd.getText().toString();
-                String description = descriptionAdd.getText().toString();
+        try {
 
-                Date date = getDate(dateInputText.getText().toString());
-                if(amount_type == 0) {
-                    amount = Double.valueOf("-" + amountAdd.getText().toString());
-                }else{
-                    amount = Double.valueOf(amountAdd.getText().toString());
 
+            buttonAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("debugkoci", "ok1");
+                    String name, description;
+
+                    double amount = 0;
+                    Date date;
+                    long moneyid, locid;
+                    boolean ok = true;
+                    Location loc  = new Location(null,"",0,0);
+
+                    name = nameAdd.getText().toString();
+                    if (name.isEmpty()) {
+                        nameAdd.setError("Insert name");
+                        ok = false;
+                    }
+
+                    description = descriptionAdd.getText().toString();
+                    if (description.isEmpty()) {
+                        descriptionAdd.setError("Insert Description");
+                        ok = false;
+                        Log.d("debugkoci", "ok1");
+
+                    }
+
+                    if (categoryInputText.getText().toString().isEmpty()) {
+                        categoryInputText.setError("Select category");
+                        ok = false;
+                    }
+
+                    if(place == null) {
+                            addLocation.setError("Insert Location");
+                            ok = false;
+                    }else{
+                        loc = new Location(null, place.getName().toString(), place.getLatLng().latitude, place.getLatLng().longitude);
+
+                    }
+
+
+                    date = getDate(dateInputText.getText().toString());
+                    if (date.toString().isEmpty()) {
+                        dateInputText.setError("Insert Date");
+                        ok = false;
+                    }
+
+                    if (amountAdd.getText().toString().isEmpty()) {
+
+                        ok = false;
+                    }else{
+                        if (amount_type == 0) {
+                            amount = Double.valueOf("-" + amountAdd.getText().toString());
+                        } else {
+                            amount = Double.valueOf(amountAdd.getText().toString());
+
+                        }
+                    }
+                    Log.d("debugkoci", "ok133");
+
+                    if (ok == true) {
+                        Log.d("debugkoci", "okee1");
+
+                        locid = dbHelper.getDaoSession().insert(loc);
+                        MoneyItem mi = new MoneyItem(null, name, description, date, amount, catid, locid);
+                        moneyid = dbHelper.getDaoSession().insert(mi);
+                        Toast.makeText(NewItemActivity.this, "aggiunto", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(NewItemActivity.this, "Please fill all input", Toast.LENGTH_LONG).show();
+
+                        Log.d("debugkoci", "okwew1");
+
+                    }
+                    Log.d("debugkoci", "okwqwqew1");
                 }
+            });
+        }catch(NullPointerException x){
 
-                Log.w("Aggiungimi", name + " " + description + " " + date +" " + amount + " " + locid + " " + catid + " " );
-                MoneyItem mi = new MoneyItem(null,name,description,date,amount,catid,locid);
-                long moneyid = dbHelper.getDaoSession().insert(mi);
-
-
-                Toast.makeText(NewItemActivity.this, "aggiunto", Toast.LENGTH_LONG).show();
-
-            }
-        });
+        }
     }
 
 
@@ -248,14 +315,14 @@ public class NewItemActivity extends AppCompatActivity implements
                 .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
                 .addConnectionCallbacks(this)
                 .build();
-        mAutocompleteTextView = (AutoCompleteTextView) findViewById(R.id
-                .autoCompleteTextView);
-        mAutocompleteTextView.setThreshold(3);
+        addLocation = (AutoCompleteTextView) findViewById(R.id
+                .addLocation);
+        addLocation.setThreshold(3);
 
-        mAutocompleteTextView.setOnItemClickListener(mAutocompleteClickListener);
+        addLocation.setOnItemClickListener(mAutocompleteClickListener);
         mPlaceArrayAdapter = new PlaceAdapter(this, android.R.layout.simple_list_item_1,
                 BOUNDS_MOUNTAIN_VIEW, null);
-        mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
+        addLocation.setAdapter(mPlaceArrayAdapter);
     }
 
     private AdapterView.OnItemClickListener mAutocompleteClickListener

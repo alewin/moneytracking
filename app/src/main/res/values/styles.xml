@@ -12,6 +12,14 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+
+    </style>
+
+
+    <style name="DialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:colorAccent">@color/colorPrimary</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textColorPrimary">@color/textColorSecondary</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -49,6 +57,8 @@
         <item name="android:textColorHint">@color/grey</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/green</item>
+
+
 
     </style>
 

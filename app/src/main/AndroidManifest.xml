@@ -38,17 +38,17 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA0br9k6Vs8TJuqFPguwXXwqo3C4n-gA2k" />
 
-
         <activity
             android:name=".Activities.SettingsActivity"
-            android:theme="@style/PreferenceScreen"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:theme="@style/PreferenceScreen" />
         <activity
             android:name=".Activities.DetailActivity"
             android:label="@string/title_activity_detail"
             android:theme="@style/AppTheme" />
         <activity android:name=".Activities.ReportActivity" />
-        <activity android:name=".Activities.GraphActivity"></activity>
+        <activity android:name=".Activities.GraphActivity" />
+        <activity android:name=".Activities.ArchiveActivity"></activity>
     </application>
 
 </manifest>

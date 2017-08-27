@@ -6,8 +6,12 @@ import android.content.Context;
 import com.amitshekhar.DebugDB;
 import com.unibo.koci.moneytracking.Entities.DaoMaster;
 import com.unibo.koci.moneytracking.Entities.DaoSession;
+import com.unibo.koci.moneytracking.Entities.MoneyItem;
 
 import org.greenrobot.greendao.database.Database;
+
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by koale on 14/08/17.
@@ -31,6 +35,16 @@ public class DBHelper {
         return daoSession;
     }
 
+    public double getTotalAmount(){
+        List<MoneyItem> l = daoSession.getMoneyItemDao().loadAll();
+        double total = 0.0;
+        ListIterator<MoneyItem> listIterator = l.listIterator();
+        while(listIterator.hasNext()){
+            total += listIterator.next().getAmount();
 
+
+        }
+        return total;
+    }
 
 }

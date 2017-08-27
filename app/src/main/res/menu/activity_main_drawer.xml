@@ -11,6 +11,10 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="Categories" />
         <item
+            android:id="@+id/nav_archive"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Archive" />
+        <item
             android:id="@+id/nav_graph"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Graphs" />
