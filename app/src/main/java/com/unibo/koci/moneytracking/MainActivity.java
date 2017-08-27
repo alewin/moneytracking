@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -21,11 +19,17 @@ import android.widget.TextView;
 
 import com.unibo.koci.moneytracking.Activities.ArchiveActivity;
 import com.unibo.koci.moneytracking.Activities.CategoriesActivity;
+import com.unibo.koci.moneytracking.Activities.GraphActivity;
 import com.unibo.koci.moneytracking.Activities.NewItemActivity;
+import com.unibo.koci.moneytracking.Activities.ReportActivity;
 import com.unibo.koci.moneytracking.Activities.SettingsActivity;
 import com.unibo.koci.moneytracking.Adapters.ViewPagerAdapter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Fragments.TabFragment;
+
+import org.joda.time.LocalDate;
+
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity
@@ -78,17 +82,17 @@ public class MainActivity extends AppCompatActivity
 
     private void init_toolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        total_amount = (TextView)findViewById(R.id.available_amount);
-        total_amount.setText(String.valueOf( dbHelper.getTotalAmount()) + "€");
+        total_amount = (TextView) findViewById(R.id.available_amount);
+        LocalDate dt = new LocalDate(LocalDate.now());
+        LocalDate start = new LocalDate(0);
+        total_amount.setText(String.valueOf(dbHelper.getTotal(start,dt)) + "€");
         setSupportActionBar(toolbar);
     }
-
 
 
     private void init_tabview() {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         vpage_adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
 
 
         // Add Fragments to vpage_adapter one by one
@@ -103,6 +107,7 @@ public class MainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(viewPager);
 
     }
+
     TabLayout.OnTabSelectedListener tabListener = new TabLayout.OnTabSelectedListener() {
 
         @Override
@@ -166,12 +171,16 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this, CategoriesActivity.class));
 
         } else if (id == R.id.nav_graph) {
+            startActivity(new Intent(MainActivity.this, GraphActivity.class));
+
 
         } else if (id == R.id.nav_archive) {
             startActivity(new Intent(MainActivity.this, ArchiveActivity.class));
 
 
         } else if (id == R.id.nav_report) {
+            startActivity(new Intent(MainActivity.this, ReportActivity.class));
+
 
         }
 

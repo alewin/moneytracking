@@ -3,7 +3,14 @@
     package="com.unibo.koci.moneytracking">
 
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+
     <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -12,6 +19,14 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <external-path android:name="myApp" android:path="MoneyTrack/" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA0br9k6Vs8TJuqFPguwXXwqo3C4n-gA2k" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -30,25 +45,41 @@
             android:name=".Activities.CategoriesActivity"
             android:label="Manage Categories"
             android:parentActivityName=".MainActivity" />
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA0br9k6Vs8TJuqFPguwXXwqo3C4n-gA2k" />
-
         <activity
             android:name=".Activities.SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/PreferenceScreen" />
         <activity
             android:name=".Activities.DetailActivity"
             android:label="@string/title_activity_detail"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".Activities.ReportActivity" />
-        <activity android:name=".Activities.GraphActivity" />
-        <activity android:name=".Activities.ArchiveActivity"></activity>
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".Activities.ReportActivity"
+            android:label="Report"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".Activities.GraphActivity"
+            android:label="Graph"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".Activities.ArchiveActivity"
+            android:label="Archive"
+            android:parentActivityName=".MainActivity" />
+
+
+        <provider
+            android:name=".GenericFileProvider"
+            android:authorities="${applicationId}.my.package.name.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_path"/>
+        </provider>
+
+
     </application>
+
 
 </manifest>
