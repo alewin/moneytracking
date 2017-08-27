@@ -58,7 +58,6 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-
         JodaTimeAndroid.init(getContext());
     }
 
@@ -72,7 +71,6 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
 
     void loadItems() {
-        Log.w("ok","sono entrato");
         dbHelper = new DBHelper(getContext());
         moneyItemDao = dbHelper.getDaoSession().getMoneyItemDao();
         input = new ArrayList<>();
@@ -81,16 +79,13 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
         switch (tab) {
             case 1:
-                input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.minusDays(1).toDate(), dt.plusDays(1).toDate())).list();
-                Log.w("koko", "1size " + input.size());
+                input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.toDate(), dt.toDate())).list();
                 break;
             case 2:
                 input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.dayOfWeek().withMinimumValue().toDate(), dt.dayOfWeek().withMaximumValue().toDate())).list();
-                Log.w("koko", "2size " + input.size());
                 break;
             case 3:
                 input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.dayOfMonth().withMinimumValue().toDate(), dt.dayOfMonth().withMaximumValue().toDate())).list();
-                Log.w("koko", "3size " + input.size());
                 break;
         }
     }
@@ -108,19 +103,6 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(adapter);
 
-        /*
-        rv.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        rv.setLayoutManager(llm);
-
-
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        student_rview.setLayoutManager(layoutManager);
-        student_rview.setAdapter(rvAdapter);
-*/
 
         swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container_money);
         swipeLayout.setOnRefreshListener(this);
@@ -135,8 +117,10 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         new Handler().postDelayed(new Runnable() {
             @Override public void run() {
                 swipeLayout.setRefreshing(false);
+                adapter.notifyDataSetChanged();
+
             }
-        }, 5000);
+        }, 1000);
     }
 
 
@@ -145,7 +129,6 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.w("alessiokoci", "fn");
     }
 
 

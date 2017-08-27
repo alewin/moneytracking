@@ -32,6 +32,7 @@ android:theme="@style/ThemeOverlay.AppCompat.Dark">
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:text="Title "
+            android:textStyle="bold"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textSize="16sp"
             android:textColor="@color/textColorSecondary"
@@ -45,7 +46,6 @@ android:theme="@style/ThemeOverlay.AppCompat.Dark">
             android:layout_below="@+id/itemlist_title"
             android:layout_marginLeft="16dp"
             android:textColor="@color/textColorSecondary"
-
             android:layout_toRightOf="@+id/itemlist_icon"
             android:ellipsize="end"
             android:maxLines="1"
@@ -59,7 +59,7 @@ android:theme="@style/ThemeOverlay.AppCompat.Dark">
             android:layout_below="@+id/itemlist_description"
             android:layout_marginLeft="16dp"
             android:textColor="@color/textColorSecondary"
-
+            android:textStyle="italic"
             android:layout_toRightOf="@+id/itemlist_icon"
             android:ellipsize="end"
             android:maxLines="1"

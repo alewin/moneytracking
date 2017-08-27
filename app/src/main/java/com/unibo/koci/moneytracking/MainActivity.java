@@ -27,6 +27,8 @@ import com.unibo.koci.moneytracking.Adapters.ViewPagerAdapter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Fragments.TabFragment;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import org.joda.time.LocalDate;
 
 import java.util.Date;

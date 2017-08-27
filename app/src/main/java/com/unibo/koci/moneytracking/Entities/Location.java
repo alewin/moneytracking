@@ -19,10 +19,8 @@ public class Location {
     @NotNull
     private String name;
 
-    @NotNull
     private double latitude;
 
-    @NotNull
     private double longitude;
 
     @Generated(hash = 2019704419)
@@ -69,5 +67,4 @@ public class Location {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
-
 }

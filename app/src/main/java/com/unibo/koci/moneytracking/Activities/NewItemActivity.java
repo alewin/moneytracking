@@ -44,6 +44,8 @@ import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
+import org.joda.time.DateTime;
+
 
 /**
  * Created by koale on 15/08/17.
@@ -131,6 +133,7 @@ public class NewItemActivity extends AppCompatActivity implements
     }
 
     private void init_dateinput() {
+
         dateInputText.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -147,6 +150,7 @@ public class NewItemActivity extends AppCompatActivity implements
                     }
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select date");
+                mDatePicker.getDatePicker().setMaxDate(new Date().getTime());
                 mDatePicker.show();
             }
         });
@@ -159,7 +163,6 @@ public class NewItemActivity extends AppCompatActivity implements
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         startActivity(new Intent(NewItemActivity.this, CategoriesActivity.class));
-
                     }
                 });
         AlertDialog alert = builder.create();
@@ -186,7 +189,7 @@ public class NewItemActivity extends AppCompatActivity implements
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         if (hasFocus) {
-                            new AlertDialog.Builder(v.getContext(),R.style.DialogStyle)
+                            new AlertDialog.Builder(v.getContext(), R.style.DialogStyle)
                                     .setSingleChoiceItems(categories_string, 0, null)
                                     .setPositiveButton("Select", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -210,8 +213,6 @@ public class NewItemActivity extends AppCompatActivity implements
     private void init_addbutton() {
 
         try {
-
-
             buttonAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -222,7 +223,7 @@ public class NewItemActivity extends AppCompatActivity implements
                     Date date;
                     long moneyid, locid;
                     boolean ok = true;
-                    Location loc  = new Location(null,"",0,0);
+                    Location loc = new Location(null, "", 0, 0);
 
                     name = nameAdd.getText().toString();
                     if (name.isEmpty()) {
@@ -234,8 +235,6 @@ public class NewItemActivity extends AppCompatActivity implements
                     if (description.isEmpty()) {
                         descriptionAdd.setError("Insert Description");
                         ok = false;
-                        Log.d("debugkoci", "ok1");
-
                     }
 
                     if (categoryInputText.getText().toString().isEmpty()) {
@@ -243,12 +242,16 @@ public class NewItemActivity extends AppCompatActivity implements
                         ok = false;
                     }
 
-                    if(place == null) {
+
+                    if (place == null) {
+                        if (addLocation.getText().toString().isEmpty()) {
                             addLocation.setError("Insert Location");
                             ok = false;
-                    }else{
+                        } else {
+                            loc = new Location(null, addLocation.getText().toString(), 0, 0);
+                        }
+                    } else {
                         loc = new Location(null, place.getName().toString(), place.getLatLng().latitude, place.getLatLng().longitude);
-
                     }
 
 
@@ -261,7 +264,7 @@ public class NewItemActivity extends AppCompatActivity implements
                     if (amountAdd.getText().toString().isEmpty()) {
 
                         ok = false;
-                    }else{
+                    } else {
                         if (amount_type == 0) {
                             amount = Double.valueOf("-" + amountAdd.getText().toString());
                         } else {
@@ -269,25 +272,20 @@ public class NewItemActivity extends AppCompatActivity implements
 
                         }
                     }
-                    Log.d("debugkoci", "ok133");
 
-                    if (ok == true) {
-                        Log.d("debugkoci", "okee1");
-
+                    if (ok) {
                         locid = dbHelper.getDaoSession().insert(loc);
                         MoneyItem mi = new MoneyItem(null, name, description, date, amount, catid, locid);
                         moneyid = dbHelper.getDaoSession().insert(mi);
-                        Toast.makeText(NewItemActivity.this, "aggiunto", Toast.LENGTH_LONG).show();
+                        Toast.makeText(NewItemActivity.this, "Added", Toast.LENGTH_LONG).show();
+                        finish();
                     } else {
                         Toast.makeText(NewItemActivity.this, "Please fill all input", Toast.LENGTH_LONG).show();
-
-                        Log.d("debugkoci", "okwew1");
-
                     }
-                    Log.d("debugkoci", "okwqwqew1");
                 }
             });
-        }catch(NullPointerException x){
+        } catch (NullPointerException x) {
+            Toast.makeText(NewItemActivity.this, "Please fill all input!", Toast.LENGTH_LONG).show();
 
         }
     }

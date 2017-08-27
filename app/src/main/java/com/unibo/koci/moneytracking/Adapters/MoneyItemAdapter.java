@@ -26,6 +26,8 @@ import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
+import org.joda.time.DateTime;
+
 import static android.R.attr.onClick;
 import static android.R.id.input;
 
@@ -116,11 +118,12 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
 
         String name = moneyItems.get(holder.getAdapterPosition()).getName().toString();
         String description = String.valueOf(moneyItems.get(holder.getAdapterPosition()).getAmount());
-        String date = moneyItems.get(holder.getAdapterPosition()).getDate().toString();
+        DateTime date = new DateTime(moneyItems.get(holder.getAdapterPosition()).getDate());
 
         holder.txtTitle.setText(name);
-        holder.txtDescription.setText(description);
-        holder.txtDate.setText(date);
+        holder.txtDescription.setText(description + "€");
+        holder.txtDate.setText(date.toString("dd/MM/yy"));
+
 
         if (moneyItems.get(holder.getAdapterPosition()).getAmount() > 0) {
             holder.iconitem.setImageResource(R.drawable.thumb_up);
@@ -139,7 +142,6 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
     }
 
     private void showPopupMenu(View view, int position) {
-        // inflate menu
         PopupMenu popup = new PopupMenu(view.getContext(), view);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_card_option, popup.getMenu());
