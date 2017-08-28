@@ -7,6 +7,7 @@ package com.unibo.koci.moneytracking.Adapters;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -21,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.unibo.koci.moneytracking.Activities.DetailActivity;
+import com.unibo.koci.moneytracking.Activities.SettingsActivity;
 import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.MainActivity;
@@ -32,21 +35,7 @@ import static android.R.attr.onClick;
 import static android.R.id.input;
 
 
-/*
-public class CategoriesAdapter extends ArrayAdapter<MoneyItem> {
-
-    private Context mContext;
-
-
-    public CategoriesAdapter(Context context, List<Category> categories) {
-
-        super(context, 0, categories);
-        this.mContext = context;
-    }
-*/
-
 public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.ViewHolder> {
-
 
     private List<MoneyItem> moneyItems;
 
@@ -89,14 +78,13 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
     @Override
     public MoneyItemAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
 
-
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate(R.layout.money_item_list, parent, false);
-
-
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
+
+
 
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -107,6 +95,10 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "clicked=" + position, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(v.getContext(), DetailActivity.class);
+                intent.putExtra("item",moneyItems.get(position));
+                v.getContext().startActivity(intent);
+
                 //                remove(holder.getAdapterPosition());
 
                 notifyDataSetChanged();

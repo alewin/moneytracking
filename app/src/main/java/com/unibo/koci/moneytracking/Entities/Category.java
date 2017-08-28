@@ -4,6 +4,9 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Generated;
+
+import java.io.Serializable;
+
 /**
  * Created by koale on 11/08/17.
  */
@@ -11,7 +14,9 @@ import org.greenrobot.greendao.annotation.Generated;
 
 
 @Entity
-public class Category {
+public class Category implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     private Long categoryID;
 
@@ -44,5 +49,6 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
+
 
 }

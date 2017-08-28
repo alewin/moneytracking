@@ -5,6 +5,8 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Generated;
 
+import java.io.Serializable;
+
 /**
  * Created by koale on 14/08/17.
  */
@@ -12,7 +14,9 @@ import org.greenrobot.greendao.annotation.Generated;
 
 
 @Entity
-public class Location {
+public class Location implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     private Long locationID;
 

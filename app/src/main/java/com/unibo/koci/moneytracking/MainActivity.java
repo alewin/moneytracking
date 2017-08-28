@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -34,8 +35,7 @@ import org.joda.time.LocalDate;
 import java.util.Date;
 
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
     private ViewPager viewPager;
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity
         total_amount = (TextView) findViewById(R.id.available_amount);
         LocalDate dt = new LocalDate(LocalDate.now());
         LocalDate start = new LocalDate(0);
-        total_amount.setText(String.valueOf(dbHelper.getTotal(start,dt)) + "€");
+        total_amount.setText(String.valueOf(dbHelper.getTotal(start, dt)) + "€");
         setSupportActionBar(toolbar);
     }
 
@@ -96,37 +96,20 @@ public class MainActivity extends AppCompatActivity
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         vpage_adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-
         // Add Fragments to vpage_adapter one by one
 
-        vpage_adapter.addFragment(new TabFragment().newInstance(1), getResources().getString(R.string.tab_day));
-        vpage_adapter.addFragment(new TabFragment().newInstance(2), getResources().getString(R.string.tab_week));
-        vpage_adapter.addFragment(new TabFragment().newInstance(3), getResources().getString(R.string.tab_month));
+        TabFragment one = new TabFragment().newInstance(1), two = new TabFragment().newInstance(2), three = new TabFragment().newInstance(3);
+        vpage_adapter.addFragment(one, getResources().getString(R.string.tab_day));
+        vpage_adapter.addFragment(two, getResources().getString(R.string.tab_week));
+        vpage_adapter.addFragment(three, getResources().getString(R.string.tab_month));
         viewPager.setAdapter(vpage_adapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.addOnTabSelectedListener(tabListener);
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+
         tabLayout.setupWithViewPager(viewPager);
 
     }
 
-    TabLayout.OnTabSelectedListener tabListener = new TabLayout.OnTabSelectedListener() {
-
-        @Override
-        public void onTabSelected(TabLayout.Tab tab) {
-            Log.d("KOCITAB", "tabSelected: " + tab.getPosition());
-        }
-
-        @Override
-        public void onTabUnselected(TabLayout.Tab tab) {
-            Log.d("KOCITAB", "tabUnselected: " + tab.getPosition());
-        }
-
-        @Override
-        public void onTabReselected(TabLayout.Tab tab) {
-            Log.d("KOCITAB", "tabReselected: " + tab.getPosition());
-        }
-    };
 
     @Override
     public void onBackPressed() {

@@ -1,5 +1,6 @@
 package com.unibo.koci.moneytracking.Activities;
 
+
 import android.app.DatePickerDialog;
 
 import java.text.ParseException;
@@ -17,7 +18,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,17 +41,15 @@ import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
-import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
-import org.joda.time.DateTime;
 
 
 /**
  * Created by koale on 15/08/17.
  */
 
-public class NewItemActivity extends AppCompatActivity implements
+public class EditActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks {
 
@@ -60,8 +58,7 @@ public class NewItemActivity extends AppCompatActivity implements
     private static final int GOOGLE_API_CLIENT_ID = 0;
     private GoogleApiClient mGoogleApiClient;
     private PlaceAdapter mPlaceArrayAdapter;
-    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
-            new LatLng(44.4833333, 11.3333333), new LatLng(44.4833333, 11.3333333));
+    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(new LatLng(44.4833333, 11.3333333), new LatLng(44.4833333, 11.3333333));
 
     //object view
     private AutoCompleteTextView addLocation;
@@ -76,34 +73,48 @@ public class NewItemActivity extends AppCompatActivity implements
     private Place place;
     private long catid;
     DBHelper dbHelper;
-
+    MoneyItem item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
-        nameAdd = (EditText) findViewById(R.id.add_name);
-        descriptionAdd = (EditText) findViewById(R.id.add_description);
-        amountAdd = (EditText) findViewById(R.id.add_amount);
-
-        buttonAdd = (Button) findViewById(R.id.add_button);
-        dateInputText = (EditText) findViewById(R.id.check_date);
-        categoryInputText = (EditText) findViewById(R.id.add_category);
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar2);
-
+        item = (MoneyItem)(getIntent().getSerializableExtra("item"));
         dbHelper = new DBHelper(this);
 
-        init_placeAPI();
+        init_editText();
+
         init_toolbar();
         init_dateinput();
         init_addbutton();
         init_selectategory();
-
+        init_placeAPI();
     }
 
+
+    private void init_editText(){
+        item.__setDaoSession(dbHelper.getDaoSession());
+
+        addLocation = (AutoCompleteTextView) findViewById(R.id.addLocation);
+        nameAdd = (EditText) findViewById(R.id.add_name);
+        descriptionAdd = (EditText) findViewById(R.id.add_description);
+        amountAdd = (EditText) findViewById(R.id.add_amount);
+        buttonAdd = (Button) findViewById(R.id.add_button);
+        dateInputText = (EditText) findViewById(R.id.check_date);
+        categoryInputText = (EditText) findViewById(R.id.add_category);
+        buttonAdd.setText("Edit");
+
+        nameAdd.setText(item.getName());
+        amountAdd.setText(String.valueOf(item.getAmount()));
+        categoryInputText.setText((item.getCategory().getName()));
+        dateInputText.setText(String.valueOf(item.getDate()));
+        descriptionAdd.setText(String.valueOf(item.getDescription()));
+        addLocation.setText(String.valueOf(item.getLocation().getName()));
+
+    }
     private void init_toolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -120,7 +131,7 @@ public class NewItemActivity extends AppCompatActivity implements
                 int mMonth = mcurrentDate.get(Calendar.MONTH);
                 int mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog mDatePicker = new DatePickerDialog(NewItemActivity.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog mDatePicker = new DatePickerDialog(EditActivity.this, new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
                         dateInputText.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
                     }
@@ -138,7 +149,7 @@ public class NewItemActivity extends AppCompatActivity implements
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        startActivity(new Intent(NewItemActivity.this, CategoriesActivity.class));
+                        startActivity(new Intent(EditActivity.this, CategoriesActivity.class));
                         finish();
                     }
                 });
@@ -221,6 +232,7 @@ public class NewItemActivity extends AppCompatActivity implements
 
 
                     if (place == null) {
+                        //todo query location
                         if (addLocation.getText().toString().isEmpty()) {
                             addLocation.setError("Insert Location");
                             ok = false;
@@ -239,27 +251,30 @@ public class NewItemActivity extends AppCompatActivity implements
                     }
 
                     if (amountAdd.getText().toString().isEmpty()) {
-
                         ok = false;
                     } else {
-
-                            amount = Double.valueOf(amountAdd.getText().toString());
-
+                        amount = Double.valueOf(amountAdd.getText().toString());
                     }
 
                     if (ok) {
-                        locid = dbHelper.getDaoSession().insert(loc);
-                        MoneyItem mi = new MoneyItem(null, name, description, date, amount, catid, locid);
-                        moneyid = dbHelper.getDaoSession().insert(mi);
-                        Toast.makeText(NewItemActivity.this, "Added", Toast.LENGTH_LONG).show();
+                       // locid = dbHelper.getDaoSession().insert(loc);
+                        item.setAmount(amount);
+                        item.setName(name);
+                        item.setDescription(description);
+                        item.setDate(date);
+                        item.setCategoryID((long)0);
+                        item.setLocationID((long)0);
+                        dbHelper.getDaoSession().update(item);
+
+                        Toast.makeText(EditActivity.this, "Edited", Toast.LENGTH_LONG).show();
                         finish();
                     } else {
-                        Toast.makeText(NewItemActivity.this, "Please fill all input", Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditActivity.this, "Please fill all input", Toast.LENGTH_LONG).show();
                     }
                 }
             });
         } catch (NullPointerException x) {
-            Toast.makeText(NewItemActivity.this, "Please fill all input!", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditActivity.this, "Please fill all input!", Toast.LENGTH_LONG).show();
 
         }
     }
@@ -286,8 +301,7 @@ public class NewItemActivity extends AppCompatActivity implements
                 .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
                 .addConnectionCallbacks(this)
                 .build();
-        addLocation = (AutoCompleteTextView) findViewById(R.id
-                .addLocation);
+
         addLocation.setThreshold(3);
 
         addLocation.setOnItemClickListener(mAutocompleteClickListener);

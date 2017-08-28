@@ -6,6 +6,7 @@ import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.ToOne;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.greenrobot.greendao.annotation.Generated;
@@ -17,7 +18,15 @@ import org.greenrobot.greendao.DaoException;
 
 
 @Entity
-public class MoneyItem {
+public class MoneyItem implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    /*
+    * The serialVersionUID is a universal version identifier for a Serializable class. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized object. If no match is found, then an InvalidClassException is thrown.
+You fix the error by adding
+
+private static final long serialVersionUID = 7526472295622776147L;  // unique id
+*/
     @Id
     private Long id;
 
@@ -130,6 +139,8 @@ public class MoneyItem {
 
     @Generated(hash = 1372501278)
     private transient Long category__resolvedKey;
+
+
 
     /** To-one relationship, resolved on first access. */
     @Generated(hash = 1790867297)

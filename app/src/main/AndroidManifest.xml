@@ -7,9 +7,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-
     <uses-permission android:name="android.permission.INTERNET" />
+
+
+
 
 
     <application
@@ -26,6 +27,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA0br9k6Vs8TJuqFPguwXXwqo3C4n-gA2k" />
+
+
 
         <activity
             android:name=".MainActivity"
@@ -67,6 +70,10 @@
             android:label="Archive"
             android:parentActivityName=".MainActivity" />
 
+        <activity
+            android:name=".Activities.EditActivity"
+            android:label="Edit"
+            android:parentActivityName=".Activities.DetailActivity" />
 
         <provider
             android:name=".GenericFileProvider"
