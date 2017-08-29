@@ -3,17 +3,14 @@ package com.unibo.koci.moneytracking.Database;
 
 import android.content.Context;
 
-import com.amitshekhar.DebugDB;
 import com.unibo.koci.moneytracking.Entities.DaoMaster;
 import com.unibo.koci.moneytracking.Entities.DaoSession;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.Entities.MoneyItemDao;
 
 import org.greenrobot.greendao.database.Database;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -35,33 +32,36 @@ public class DBHelper {
         daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
     }
+
     public DaoSession getDaoSession() {
         return daoSession;
     }
 
-    public double getTotal(LocalDate start, LocalDate end){
+    public double getTotal(LocalDate start, LocalDate end) {
         List<MoneyItem> l = daoSession.getMoneyItemDao().queryBuilder().where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
         double total = 0.0;
         ListIterator<MoneyItem> listIterator = l.listIterator();
-        while(listIterator.hasNext()){
+        while (listIterator.hasNext()) {
             total += listIterator.next().getAmount();
         }
         return total;
     }
-    public double getTotalExpense(LocalDate start, LocalDate end){
+
+    public double getTotalExpense(LocalDate start, LocalDate end) {
         List<MoneyItem> l = daoSession.getMoneyItemDao().queryBuilder().where(MoneyItemDao.Properties.Amount.lt(0)).where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
         double total = 0.0;
         ListIterator<MoneyItem> listIterator = l.listIterator();
-        while(listIterator.hasNext()){
+        while (listIterator.hasNext()) {
             total += listIterator.next().getAmount();
         }
         return total;
     }
-    public double getTotalProfit(LocalDate start, LocalDate end){
+
+    public double getTotalProfit(LocalDate start, LocalDate end) {
         List<MoneyItem> l = daoSession.getMoneyItemDao().queryBuilder().where(MoneyItemDao.Properties.Amount.gt(0)).where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
         double total = 0.0;
         ListIterator<MoneyItem> listIterator = l.listIterator();
-        while(listIterator.hasNext()){
+        while (listIterator.hasNext()) {
             total += listIterator.next().getAmount();
         }
         return total;

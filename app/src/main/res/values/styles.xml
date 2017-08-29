@@ -31,6 +31,7 @@
     <style name="InputLayout" parent="TextAppearance.AppCompat">
 
     </style>
+
     <style name="PreferenceScreen" parent="Base.Theme.MTApp">
         <item name="android:textColor">@color/black</item>
     </style>
@@ -57,7 +58,6 @@
         <item name="android:textColorHint">@color/grey</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/green</item>
-
 
 
     </style>

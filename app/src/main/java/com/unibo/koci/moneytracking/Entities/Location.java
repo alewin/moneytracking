@@ -1,16 +1,15 @@
 package com.unibo.koci.moneytracking.Entities;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
-import org.greenrobot.greendao.annotation.Generated;
 
 import java.io.Serializable;
 
 /**
  * Created by koale on 14/08/17.
  */
-
 
 
 @Entity
@@ -29,7 +28,7 @@ public class Location implements Serializable {
 
     @Generated(hash = 2019704419)
     public Location(Long locationID, @NotNull String name, double latitude,
-            double longitude) {
+                    double longitude) {
         this.locationID = locationID;
         this.name = name;
         this.latitude = latitude;

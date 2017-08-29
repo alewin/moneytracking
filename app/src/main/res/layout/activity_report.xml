@@ -44,7 +44,7 @@
         android:layout_height="fill_parent"
         android:divider="@color/grey"
         android:dividerHeight="4px"
-        android:clickable="true"/>
+        android:clickable="true" />
 
 
 </LinearLayout>

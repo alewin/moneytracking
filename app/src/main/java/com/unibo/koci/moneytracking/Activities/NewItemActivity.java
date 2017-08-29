@@ -1,30 +1,21 @@
 package com.unibo.koci.moneytracking.Activities;
 
 import android.app.DatePickerDialog;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.ListIterator;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -41,10 +32,14 @@ import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
-import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
-import org.joda.time.DateTime;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -70,7 +65,7 @@ public class NewItemActivity extends AppCompatActivity implements
     private EditText amountAdd;
     private Button buttonAdd;
     private EditText dateInputText;
-    private EditText categoryInputText;
+    private Spinner categorySpinner;
     private Toolbar toolbar;
 
     private Place place;
@@ -89,7 +84,7 @@ public class NewItemActivity extends AppCompatActivity implements
 
         buttonAdd = (Button) findViewById(R.id.add_button);
         dateInputText = (EditText) findViewById(R.id.check_date);
-        categoryInputText = (EditText) findViewById(R.id.add_category);
+        categorySpinner = (Spinner) findViewById(R.id.add_category);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar2);
 
@@ -159,29 +154,23 @@ public class NewItemActivity extends AppCompatActivity implements
             listItems.add(categories_list.get(i++).getName().toString());
         }
 
-        final CharSequence[] categories_string = listItems.toArray(new CharSequence[listItems.size()]);
+        final String[] categories_string = listItems.toArray(new String[listItems.size()]);
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, categories_string);
 
-        categoryInputText
-                .setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (hasFocus) {
-                            new AlertDialog.Builder(v.getContext(), R.style.DialogStyle)
-                                    .setSingleChoiceItems(categories_string, 0, null)
-                                    .setPositiveButton("Select", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
-                                            int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                                            categoryInputText.setText(categories_list.get(selectedPosition).getName().toString());
-                                            catid = categories_list.get(selectedPosition).getCategoryID();
-                                        }
-                                    })
-                                    .show();
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(spinnerArrayAdapter);
 
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View selectedItemView, int position, long id) {
+                catid = categories_list.get(position).getCategoryID();
+            }
 
-                        }
-                    }
-                });
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+        });
 
 
     }
@@ -193,7 +182,6 @@ public class NewItemActivity extends AppCompatActivity implements
             buttonAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("debugkoci", "ok1");
                     String name, description;
 
                     double amount = 0;
@@ -214,8 +202,8 @@ public class NewItemActivity extends AppCompatActivity implements
                         ok = false;
                     }
 
-                    if (categoryInputText.getText().toString().isEmpty()) {
-                        categoryInputText.setError("Select category");
+                    if (categorySpinner.getSelectedItem().toString().isEmpty()) {
+                        //  categorySpinner.setError("Select category");
                         ok = false;
                     }
 
@@ -239,18 +227,17 @@ public class NewItemActivity extends AppCompatActivity implements
                     }
 
                     if (amountAdd.getText().toString().isEmpty()) {
-
                         ok = false;
                     } else {
 
-                            amount = Double.valueOf(amountAdd.getText().toString());
+                        amount = Double.valueOf(amountAdd.getText().toString());
 
                     }
 
                     if (ok) {
                         locid = dbHelper.getDaoSession().insert(loc);
                         MoneyItem mi = new MoneyItem(null, name, description, date, amount, catid, locid);
-                        moneyid = dbHelper.getDaoSession().insert(mi);
+                        dbHelper.getDaoSession().insert(mi);
                         Toast.makeText(NewItemActivity.this, "Added", Toast.LENGTH_LONG).show();
                         finish();
                     } else {

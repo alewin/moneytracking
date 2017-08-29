@@ -1,6 +1,5 @@
 package com.unibo.koci.moneytracking.Adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import com.unibo.koci.moneytracking.Activities.CategoriesActivity;
 import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

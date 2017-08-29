@@ -2,16 +2,6 @@ package com.unibo.koci.moneytracking.Activities;
 
 
 import android.app.DatePickerDialog;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.ListIterator;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,10 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -43,6 +35,12 @@ import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -67,11 +65,11 @@ public class EditActivity extends AppCompatActivity implements
     private EditText amountAdd;
     private Button buttonAdd;
     private EditText dateInputText;
-    private EditText categoryInputText;
+    private Spinner categorySpinner;
     private Toolbar toolbar;
 
     private Place place;
-    private long catid;
+    private long catid, locid;
     DBHelper dbHelper;
     MoneyItem item;
 
@@ -80,7 +78,7 @@ public class EditActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
-        item = (MoneyItem)(getIntent().getSerializableExtra("item"));
+        item = (MoneyItem) (getIntent().getSerializableExtra("item"));
         dbHelper = new DBHelper(this);
 
         init_editText();
@@ -93,7 +91,7 @@ public class EditActivity extends AppCompatActivity implements
     }
 
 
-    private void init_editText(){
+    private void init_editText() {
         item.__setDaoSession(dbHelper.getDaoSession());
 
         addLocation = (AutoCompleteTextView) findViewById(R.id.addLocation);
@@ -102,17 +100,23 @@ public class EditActivity extends AppCompatActivity implements
         amountAdd = (EditText) findViewById(R.id.add_amount);
         buttonAdd = (Button) findViewById(R.id.add_button);
         dateInputText = (EditText) findViewById(R.id.check_date);
-        categoryInputText = (EditText) findViewById(R.id.add_category);
+        categorySpinner = (Spinner) findViewById(R.id.add_category);
         buttonAdd.setText("Edit");
 
         nameAdd.setText(item.getName());
         amountAdd.setText(String.valueOf(item.getAmount()));
-        categoryInputText.setText((item.getCategory().getName()));
         dateInputText.setText(String.valueOf(item.getDate()));
         descriptionAdd.setText(String.valueOf(item.getDescription()));
+
         addLocation.setText(String.valueOf(item.getLocation().getName()));
+        //category spinner settato ininit_category per comodità ed efficienza
+
+
+        catid = item.getCategoryID();
+        locid = item.getLocationID();
 
     }
+
     private void init_toolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
@@ -122,7 +126,6 @@ public class EditActivity extends AppCompatActivity implements
     private void init_dateinput() {
 
         dateInputText.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 //To show current date in the datepicker
@@ -170,29 +173,31 @@ public class EditActivity extends AppCompatActivity implements
             listItems.add(categories_list.get(i++).getName().toString());
         }
 
-        final CharSequence[] categories_string = listItems.toArray(new CharSequence[listItems.size()]);
+        final String[] categories_string = listItems.toArray(new String[listItems.size()]);
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, categories_string);
 
-        categoryInputText
-                .setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (hasFocus) {
-                            new AlertDialog.Builder(v.getContext(), R.style.DialogStyle)
-                                    .setSingleChoiceItems(categories_string, 0, null)
-                                    .setPositiveButton("Select", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
-                                            int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                                            categoryInputText.setText(categories_list.get(selectedPosition).getName().toString());
-                                            catid = categories_list.get(selectedPosition).getCategoryID();
-                                        }
-                                    })
-                                    .show();
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(spinnerArrayAdapter);
 
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View selectedItemView, int position, long id) {
+                catid = categories_list.get(position).getCategoryID();
+            }
 
-                        }
-                    }
-                });
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+        });
+        i = 0;
+        while (i <= listItems.size()) {
+            if (item.getCategory().getName() == listItems.get(i)) {
+                categorySpinner.setSelection(i);
+                break;
+            }
+            i++;
+        }
 
 
     }
@@ -204,12 +209,9 @@ public class EditActivity extends AppCompatActivity implements
             buttonAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("debugkoci", "ok1");
                     String name, description;
-
                     double amount = 0;
                     Date date;
-                    long moneyid, locid;
                     boolean ok = true;
                     Location loc = new Location(null, "", 0, 0);
 
@@ -225,25 +227,16 @@ public class EditActivity extends AppCompatActivity implements
                         ok = false;
                     }
 
-                    if (categoryInputText.getText().toString().isEmpty()) {
-                        categoryInputText.setError("Select category");
+                    if (categorySpinner.getSelectedItem().toString().isEmpty()) {
+                        //  categorySpinner.setError("Select category");
                         ok = false;
                     }
 
 
-                    if (place == null) {
-                        //todo query location
-                        if (addLocation.getText().toString().isEmpty()) {
-                            addLocation.setError("Insert Location");
-                            ok = false;
-                        } else {
-                            loc = new Location(null, addLocation.getText().toString(), 0, 0);
-                        }
-                    } else {
-                        loc = new Location(null, place.getName().toString(), place.getLatLng().latitude, place.getLatLng().longitude);
+                    if ((addLocation.getText().toString().isEmpty())) {
+                        addLocation.setError("Insert Location");
+                        ok = false;
                     }
-
-
                     date = getDate(dateInputText.getText().toString());
                     if (date.toString().isEmpty()) {
                         dateInputText.setError("Insert Date");
@@ -256,14 +249,29 @@ public class EditActivity extends AppCompatActivity implements
                         amount = Double.valueOf(amountAdd.getText().toString());
                     }
 
+
                     if (ok) {
-                       // locid = dbHelper.getDaoSession().insert(loc);
+
+                        if (item.getLocation().getName() != addLocation.getText().toString()) {
+                            if (place != null && addLocation.getText().toString() != place.getName().toString()) {
+                                // place modificcato diverso dal testo del editbox che è diverso da quello originale di item, quindi aggiungo loc nullo
+                                loc = new Location(null, addLocation.getText().toString(), 0, 0);
+
+                            } else if (place != null && addLocation.getText().toString() == place.getName()) {
+                                //nuovo place aggiunto
+                                loc = new Location(null, place.getName().toString(), place.getLatLng().latitude, place.getLatLng().longitude);
+                            }
+                            // cancello vecchia locazione e aggiungo la nuova
+                            dbHelper.getDaoSession().delete(item.getLocation());
+                            locid = dbHelper.getDaoSession().insert(loc);
+                        }
                         item.setAmount(amount);
                         item.setName(name);
                         item.setDescription(description);
                         item.setDate(date);
-                        item.setCategoryID((long)0);
-                        item.setLocationID((long)0);
+
+                        item.setCategoryID(catid);
+                        item.setLocationID(locid);
                         dbHelper.getDaoSession().update(item);
 
                         Toast.makeText(EditActivity.this, "Edited", Toast.LENGTH_LONG).show();

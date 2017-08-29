@@ -1,6 +1,8 @@
 package com.unibo.koci.moneytracking.Entities;
 
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.NotNull;
@@ -8,9 +10,6 @@ import org.greenrobot.greendao.annotation.ToOne;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.DaoException;
 
 /**
  * Created by koale on 12/08/17.
@@ -56,18 +55,22 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
     @ToOne(joinProperty = "locationID")
     private Location location;
 
-    /** Used to resolve relations */
+    /**
+     * Used to resolve relations
+     */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
 
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 1993525430)
     private transient MoneyItemDao myDao;
 
     @Generated(hash = 673340660)
     public MoneyItem(Long id, @NotNull String name, @NotNull String description,
-            @NotNull Date date, double amount, @NotNull Long categoryID,
-            @NotNull Long locationID) {
+                     @NotNull Date date, double amount, @NotNull Long categoryID,
+                     @NotNull Long locationID) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -141,8 +144,9 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
     private transient Long category__resolvedKey;
 
 
-
-    /** To-one relationship, resolved on first access. */
+    /**
+     * To-one relationship, resolved on first access.
+     */
     @Generated(hash = 1790867297)
     public Category getCategory() {
         Long __key = this.categoryID;
@@ -161,7 +165,9 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
         return category;
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 264614216)
     public void setCategory(@NotNull Category category) {
         if (category == null) {
@@ -178,7 +184,9 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
     @Generated(hash = 1068795426)
     private transient Long location__resolvedKey;
 
-    /** To-one relationship, resolved on first access. */
+    /**
+     * To-one relationship, resolved on first access.
+     */
     @Generated(hash = 1847191610)
     public Location getLocation() {
         Long __key = this.locationID;
@@ -197,7 +205,9 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
         return location;
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 43823444)
     public void setLocation(@NotNull Location location) {
         if (location == null) {
@@ -247,7 +257,9 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
         myDao.update(this);
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 2043645194)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;

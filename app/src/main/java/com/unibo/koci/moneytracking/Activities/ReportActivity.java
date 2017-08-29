@@ -1,19 +1,16 @@
 package com.unibo.koci.moneytracking.Activities;
 
 import android.Manifest;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +30,6 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.CMYKColor;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
-import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.Entities.MoneyItemDao;
 import com.unibo.koci.moneytracking.R;
@@ -42,19 +38,10 @@ import org.joda.time.LocalDate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.security.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-
-import static android.provider.Settings.AUTHORITY;
-import static com.github.mikephil.charting.charts.Chart.LOG_TAG;
 
 
 public class ReportActivity extends AppCompatActivity {
@@ -274,7 +261,6 @@ public class ReportActivity extends AppCompatActivity {
         }
 
     }
-
 
 
     private void init_report_button() {

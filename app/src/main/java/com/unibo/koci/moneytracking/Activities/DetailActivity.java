@@ -6,36 +6,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.unibo.koci.moneytracking.Database.DBHelper;
-import com.unibo.koci.moneytracking.Entities.MoneyItem;
-import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Entities.Location;
-
-import com.unibo.koci.moneytracking.MainActivity;
+import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.R;
 
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -117,17 +105,17 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                         .show();
 
 
-
             }
         });
     }
 
-    private void delete_item(MoneyItem i){
+    private void delete_item(MoneyItem i) {
         Location l = i.getLocation();
         dbHelper.getDaoSession().delete(i);
         dbHelper.getDaoSession().delete(l);
         //todo refresh all
     }
+
     private void init_map() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 

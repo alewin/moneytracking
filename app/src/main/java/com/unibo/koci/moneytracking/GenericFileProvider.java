@@ -1,6 +1,5 @@
 package com.unibo.koci.moneytracking;
 
-import android.content.ContentProvider;
 import android.support.v4.content.FileProvider;
 
 /**

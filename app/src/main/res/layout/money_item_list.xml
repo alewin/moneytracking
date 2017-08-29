@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/card_view"
-android:layout_width="match_parent"
-android:layout_height="80dp"
-android:layout_marginBottom="8dp"
-android:layout_marginLeft="16dp"
-android:layout_marginRight="16dp"
-android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -30,14 +30,14 @@ android:theme="@style/ThemeOverlay.AppCompat.Dark">
             android:id="@+id/itemlist_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:text="Title "
-            android:textStyle="bold"
-            android:textAppearance="?attr/textAppearanceListItem"
-            android:textSize="16sp"
-            android:textColor="@color/textColorSecondary"
             android:layout_alignTop="@+id/itemlist_icon"
-            android:layout_toEndOf="@+id/itemlist_icon" />
+            android:layout_marginLeft="16dp"
+            android:layout_toEndOf="@+id/itemlist_icon"
+            android:text="Title "
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/itemlist_description"
@@ -45,11 +45,11 @@ android:theme="@style/ThemeOverlay.AppCompat.Dark">
             android:layout_height="wrap_content"
             android:layout_below="@+id/itemlist_title"
             android:layout_marginLeft="16dp"
-            android:textColor="@color/textColorSecondary"
             android:layout_toRightOf="@+id/itemlist_icon"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Description"
+            android:textColor="@color/textColorSecondary"
             android:textSize="14sp" />
 
         <TextView
@@ -58,31 +58,14 @@ android:theme="@style/ThemeOverlay.AppCompat.Dark">
             android:layout_height="wrap_content"
             android:layout_below="@+id/itemlist_description"
             android:layout_marginLeft="16dp"
-            android:textColor="@color/textColorSecondary"
-            android:textStyle="italic"
             android:layout_toRightOf="@+id/itemlist_icon"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="date"
-            android:textSize="14sp" />
+            android:textColor="@color/textColorSecondary"
+            android:textSize="14sp"
+            android:textStyle="italic" />
 
-
-
-
-        <ImageButton
-            android:id="@+id/setting_card"
-            android:layout_width="10dp"
-            android:layout_height="20dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/itemlist_title"
-            android:layout_marginEnd="10dp"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:elevation="0dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_dots" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

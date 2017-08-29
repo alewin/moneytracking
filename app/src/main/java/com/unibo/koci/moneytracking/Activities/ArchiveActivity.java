@@ -1,13 +1,10 @@
 package com.unibo.koci.moneytracking.Activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.unibo.koci.moneytracking.Adapters.MoneyItemAdapter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
@@ -20,8 +17,6 @@ import org.joda.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static com.unibo.koci.moneytracking.R.attr.layoutManager;
 
 public class ArchiveActivity extends AppCompatActivity {
 
@@ -63,8 +58,6 @@ public class ArchiveActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
-
-
 
 
 }

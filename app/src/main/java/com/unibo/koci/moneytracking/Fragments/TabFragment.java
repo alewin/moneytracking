@@ -2,8 +2,8 @@ package com.unibo.koci.moneytracking.Fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,17 +24,14 @@ import net.danlew.android.joda.JodaTimeAndroid;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
-
 import java.util.List;
-import android.os.Handler;
-import android.widget.TabHost;
 
 /*
  * Created by koale on 12/08/17.
  */
 
 
-public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
 
     DBHelper dbHelper;
@@ -44,6 +41,7 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     SwipeRefreshLayout swipeLayout;
 
     int current_selected_tab;
+
     public static TabFragment newInstance(int numtab) {
         TabFragment myFragment = new TabFragment();
         Bundle args = new Bundle();
@@ -62,18 +60,16 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         JodaTimeAndroid.init(getContext());
-        Log.w("ale","oncreate");
+        Log.w("ale", "oncreate");
 
     }
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Log.w("ale","onViewCreated");
+        Log.w("ale", "onViewCreated");
         super.onViewCreated(view, savedInstanceState);
     }
-
-
 
 
     void loadItems(int tab) {
@@ -81,19 +77,19 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         moneyItemDao = dbHelper.getDaoSession().getMoneyItemDao();
         input = new ArrayList<>();
         LocalDate dt = new LocalDate(LocalDate.now());
-        Log.w("ales",String.valueOf(tab));
+        Log.w("ales", String.valueOf(tab));
         switch (tab) {
             case 1:
                 input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.toDate(), dt.toDate())).list();
-                Log.w("aless","dayly");
+                Log.w("aless", "dayly");
                 break;
             case 2:
                 input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.dayOfWeek().withMinimumValue().toDate(), dt.dayOfWeek().withMaximumValue().toDate())).list();
-                Log.w("aless","week");
+                Log.w("aless", "week");
                 break;
             case 3:
                 input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.dayOfMonth().withMinimumValue().toDate(), dt.dayOfMonth().withMaximumValue().toDate())).list();
-                Log.w("aless","month");
+                Log.w("aless", "month");
                 break;
         }
     }
@@ -123,11 +119,10 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     }
 
 
-
     @Override
     public void onPause() {
         super.onPause();
-        if (swipeLayout!=null) {
+        if (swipeLayout != null) {
             swipeLayout.setRefreshing(false);
             swipeLayout.destroyDrawingCache();
             swipeLayout.clearAnimation();
@@ -136,20 +131,17 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
     @Override
     public void onRefresh() {
-        Log.w("okale","OK");
+        Log.w("okale", "OK");
 
         new Handler().postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 swipeLayout.setRefreshing(false);
                 adapter.notifyDataSetChanged();
 
             }
         }, 1000);
     }
-
-
-
-
 
 
 }

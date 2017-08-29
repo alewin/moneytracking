@@ -40,7 +40,7 @@ public class PlaceAdapter extends ArrayAdapter<PlaceAdapter.PlaceAutocomplete> i
      * @param filter   Used to specify place types
      */
     public PlaceAdapter(Context context, int resource, LatLngBounds bounds,
-                             AutocompleteFilter filter) {
+                        AutocompleteFilter filter) {
         super(context, resource);
         mBounds = bounds;
         mPlaceFilter = filter;
@@ -76,7 +76,7 @@ public class PlaceAdapter extends ArrayAdapter<PlaceAdapter.PlaceAutocomplete> i
                     .await(60, TimeUnit.SECONDS);
             final Status status = autocompletePredictions.getStatus();
             if (!status.isSuccess()) {
-                    Toast.makeText(getContext(), "We recommend using internet for better accuracy of the location! " ,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "We recommend using internet for better accuracy of the location! ", Toast.LENGTH_SHORT).show();
 
                 //     Toast.makeText(getContext(), "Error: " + status.toString(),Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Error getting place predictions: " + status
