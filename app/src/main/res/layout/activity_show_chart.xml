@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_show_chart"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_chart_detail1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chart Expense - Profit"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/show_chart_profitexpense"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp" />
+
+            <TextView
+                android:id="@+id/textView_chart_detail_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chart Categories"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/show_chart_category"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+
+</LinearLayout>

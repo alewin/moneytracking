@@ -69,6 +69,7 @@ public class DBHelper {
 
 
 
+
      /*  String pdfText = namePerson + "\n|Budget iniziale: " + initial_amount +
                 "€\n|Totale: " + String.valueOf(dbh.getTotal()) +
                 "€\n|Totale speso: " + String.valueOf(dbh.getTotalLoss()) +

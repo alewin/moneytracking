@@ -60,7 +60,10 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         JodaTimeAndroid.init(getContext());
-        Log.w("ale", "oncreate");
+
+        dbHelper = new DBHelper(getContext());
+        moneyItemDao = dbHelper.getDaoSession().getMoneyItemDao();
+
 
     }
 
@@ -73,43 +76,48 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
 
     void loadItems(int tab) {
-        dbHelper = new DBHelper(getContext());
-        moneyItemDao = dbHelper.getDaoSession().getMoneyItemDao();
+
         input = new ArrayList<>();
+        Log.w("ale", "oncreate");
+
         LocalDate dt = new LocalDate(LocalDate.now());
         Log.w("ales", String.valueOf(tab));
         switch (tab) {
             case 1:
                 input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.toDate(), dt.toDate())).list();
-                Log.w("aless", "dayly");
+                Log.w("xaless", "dayly");
                 break;
             case 2:
                 input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.dayOfWeek().withMinimumValue().toDate(), dt.dayOfWeek().withMaximumValue().toDate())).list();
-                Log.w("aless", "week");
+                Log.w("xaless", "week");
                 break;
             case 3:
                 input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.dayOfMonth().withMinimumValue().toDate(), dt.dayOfMonth().withMaximumValue().toDate())).list();
-                Log.w("aless", "month");
+                Log.w("xaless", "month");
                 break;
         }
+        adapter = new MoneyItemAdapter(input);
+
+        adapter.notifyDataSetChanged();
+
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        Log.w("ale", "onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_tab_money_item_list, container, false);
         int tab = getArguments().getInt("numtab");
         loadItems(tab);
 
         RecyclerView rv = (RecyclerView) rootView.findViewById(R.id.recycler_view_money);
-        adapter = new MoneyItemAdapter(input);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
+        container.destroyDrawingCache();
 
         swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container_money);
         swipeLayout.setOnRefreshListener(this);
@@ -121,6 +129,8 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
     @Override
     public void onPause() {
+        Log.w("ale", "onPause");
+
         super.onPause();
         if (swipeLayout != null) {
             swipeLayout.setRefreshing(false);
@@ -130,12 +140,32 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     }
 
     @Override
+    public void onResume() {
+        Log.w("ale", "onResume");
+
+        super.onResume();
+
+    }
+
+    public  void ciao() {
+
+    }
+    @Override
     public void onRefresh() {
-        Log.w("okale", "OK");
+        getActivity().getWindow().getDecorView().findViewById(android.R.id.content).invalidate();
+        loadItems(1); loadItems(2);loadItems(3);
+        adapter.notifyDataSetChanged();
+         getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+
+        Log.w("ale", "onRefresh");
+        adapter.notifyDataSetChanged();
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
+                loadItems(1); loadItems(2);loadItems(3);
+                adapter.notifyDataSetChanged();
                 swipeLayout.setRefreshing(false);
                 adapter.notifyDataSetChanged();
 

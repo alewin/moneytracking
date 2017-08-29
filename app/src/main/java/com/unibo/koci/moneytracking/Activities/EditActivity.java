@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +34,7 @@ import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
+import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
 import java.text.ParseException;
@@ -275,6 +277,7 @@ public class EditActivity extends AppCompatActivity implements
                         dbHelper.getDaoSession().update(item);
 
                         Toast.makeText(EditActivity.this, "Edited", Toast.LENGTH_LONG).show();
+
                         finish();
                     } else {
                         Toast.makeText(EditActivity.this, "Please fill all input", Toast.LENGTH_LONG).show();

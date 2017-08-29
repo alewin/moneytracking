@@ -9,10 +9,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-
-
-
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,7 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <external-path android:name="myApp" android:path="MoneyTrack/" />
+        <external-path
+            android:name="myApp"
+            android:path="MoneyTrack/" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -28,7 +27,15 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA0br9k6Vs8TJuqFPguwXXwqo3C4n-gA2k" />
 
-
+        <provider
+            android:name=".GenericFileProvider"
+            android:authorities="${applicationId}.my.package.name.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_path" />
+        </provider>
 
         <activity
             android:name=".MainActivity"
@@ -62,31 +69,24 @@
             android:label="Report"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".Activities.GraphActivity"
-            android:label="Graph"
-            android:parentActivityName=".MainActivity" />
-        <activity
             android:name=".Activities.ArchiveActivity"
             android:label="Archive"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".Activities.EditActivity"
             android:label="Edit"
             android:parentActivityName=".Activities.DetailActivity" />
+        <activity
+            android:name=".Activities.ChartTypeActivity"
+            android:label="Show Chart"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".Activities.ShowChartActivity"
+            android:label="Chart type"
+            android:parentActivityName=".Activities.ChartTypeActivity" />
 
-        <provider
-            android:name=".GenericFileProvider"
-            android:authorities="${applicationId}.my.package.name.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_path"/>
-        </provider>
 
 
     </application>
-
 
 </manifest>

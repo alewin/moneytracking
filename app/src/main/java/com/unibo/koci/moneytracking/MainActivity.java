@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +19,7 @@ import android.widget.TextView;
 
 import com.unibo.koci.moneytracking.Activities.ArchiveActivity;
 import com.unibo.koci.moneytracking.Activities.CategoriesActivity;
-import com.unibo.koci.moneytracking.Activities.GraphActivity;
+import com.unibo.koci.moneytracking.Activities.ChartTypeActivity;
 import com.unibo.koci.moneytracking.Activities.NewItemActivity;
 import com.unibo.koci.moneytracking.Activities.ReportActivity;
 import com.unibo.koci.moneytracking.Activities.SettingsActivity;
@@ -98,8 +99,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         vpage_adapter.addFragment(three, getResources().getString(R.string.tab_month));
         viewPager.setAdapter(vpage_adapter);
 
+
+
+
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                ViewPager viewpager = (ViewPager)findViewById(R.id.viewpager);
+                Log.w("ale",  tab.getText().toString() + tab.getPosition());
+                viewpager.setVisibility(View.GONE);
+                viewpager.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                ViewPager viewpager = (ViewPager)findViewById(R.id.viewpager);
+                Log.w("ale",  tab.getText().toString() + tab.getPosition());
+                viewpager.setVisibility(View.GONE);
+                viewpager.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                ViewPager viewpager = (ViewPager)findViewById(R.id.viewpager);
+                Log.w("ale",  tab.getText().toString() + tab.getPosition());
+                viewpager.setVisibility(View.GONE);
+                viewpager.setVisibility(View.VISIBLE);
+            }
+        });
         tabLayout.setupWithViewPager(viewPager);
 
     }
@@ -150,8 +179,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(MainActivity.this, CategoriesActivity.class));
 
         } else if (id == R.id.nav_graph) {
-            startActivity(new Intent(MainActivity.this, GraphActivity.class));
-
+            startActivity(new Intent(MainActivity.this, ChartTypeActivity.class));
 
         } else if (id == R.id.nav_archive) {
             startActivity(new Intent(MainActivity.this, ArchiveActivity.class));

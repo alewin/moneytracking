@@ -100,6 +100,7 @@ public class ReportActivity extends AppCompatActivity {
         File fileList = new File(path); // path which you want to read
         if (fileList != null) {
             File[] files = fileList.listFiles();
+
             for (File f : files) {
                 arrayAdapter.add(f.getName());
             }

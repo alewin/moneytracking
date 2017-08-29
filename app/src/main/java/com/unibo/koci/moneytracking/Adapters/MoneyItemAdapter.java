@@ -46,6 +46,8 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
     public void add(int position, MoneyItem item) {
         moneyItems.add(position, item);
         notifyItemInserted(position);
+        notifyDataSetChanged();
+
     }
 
     public void remove(int position) {
