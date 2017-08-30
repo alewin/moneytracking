@@ -26,6 +26,8 @@ import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.R;
 
+import org.joda.time.LocalDate;
+
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -64,7 +66,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         txt_amount.setText(String.valueOf(item.getAmount()));
 
         txt_category.setText((item.getCategory().getName()));
-        txt_date.setText(String.valueOf(item.getDate()));
+        LocalDate d = new LocalDate(item.getDate());
+        txt_date.setText(d.toString());
         txt_description.setText(String.valueOf(item.getDescription()));
         txt_postion.setText(String.valueOf(item.getLocation().getName()));
 

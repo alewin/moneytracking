@@ -37,6 +37,7 @@ public class DBHelper {
         return daoSession;
     }
 
+
     public double getTotal(LocalDate start, LocalDate end) {
         List<MoneyItem> l = daoSession.getMoneyItemDao().queryBuilder().where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
         double total = 0.0;
@@ -68,7 +69,7 @@ public class DBHelper {
     }
 
 
-
+    // TODO per ogni categoria restituisci profit e expense nella data prestabilià
 
      /*  String pdfText = namePerson + "\n|Budget iniziale: " + initial_amount +
                 "€\n|Totale: " + String.valueOf(dbh.getTotal()) +

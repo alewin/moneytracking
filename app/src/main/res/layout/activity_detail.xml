@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="@color/colorPrimary"
+            app:expandedTitleTextAppearance="@style/CollapsedAppBarTopic"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
@@ -55,6 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:drawableLeft="@drawable/ic_description"
                 android:text="description"
                 android:textSize="25dp" />
 
@@ -64,6 +66,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_amount"
+                android:drawableLeft="@drawable/ic_date"
+
                 android:layout_margin="10dp"
                 android:text="DATE"
                 android:textSize="25dp" />
@@ -73,6 +77,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_date"
+                android:drawableLeft="@drawable/ic_category"
+
                 android:layout_margin="10dp"
                 android:text="CATEG"
                 android:textSize="25dp" />
@@ -83,6 +89,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:drawableLeft="@drawable/ic_location"
+
                 android:text="Posizione:"
                 android:textSize="25dp" />
 
@@ -91,6 +99,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:drawableLeft="@drawable/ic_money"
+
                 android:text="Amount:"
                 android:textSize="25dp" />
 

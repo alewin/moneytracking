@@ -11,11 +11,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unibo.koci.moneytracking.Adapters.CategoriesAdapter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Entities.DaoSession;
+import com.unibo.koci.moneytracking.Entities.MoneyItemDao;
 import com.unibo.koci.moneytracking.R;
 
 import java.util.ArrayList;
@@ -99,13 +101,38 @@ public class CategoriesActivity extends AppCompatActivity {
     }
 
     public void deleteCat(View view) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View parent = (View) view.getParent();
         TextView catidTextView = (TextView) parent.findViewById(R.id.category_id);
-        String cat_id = String.valueOf(catidTextView.getText());
-        DaoSession daoSession = dbHelper.getDaoSession();
-        Category c = daoSession.getCategoryDao().load(Long.valueOf(cat_id));
-        daoSession.getCategoryDao().delete(c);
-        updateUI();
+        final TextView catTitleTextView = (TextView)parent.findViewById(R.id.category_title);
+        final String cat_id = String.valueOf(catidTextView.getText());
+        final DaoSession daoSession = dbHelper.getDaoSession();
+
+        builder.setTitle("Delete category")
+                .setMessage("Are you sure?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        //controllo che non ci siano elementi con questa categoria
+                        List moneyitemcat = daoSession.getMoneyItemDao().queryBuilder().where(MoneyItemDao.Properties.CategoryID.eq(Long.valueOf(cat_id))).list();
+                        if(moneyitemcat.size()==0) {
+                            Category c = daoSession.getCategoryDao().load(Long.valueOf(cat_id));
+                            daoSession.getCategoryDao().delete(c);
+                            updateUI();
+
+                            Toast.makeText(CategoriesActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }else{
+                            Toast.makeText(CategoriesActivity.this, "Impossible to delete: " + catTitleTextView.getText().toString() +"\nThere are some item associate to this category", Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
 

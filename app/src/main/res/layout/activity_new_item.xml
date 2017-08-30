@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
@@ -42,7 +42,8 @@
                     android:id="@+id/add_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:drawableLeft="@drawable/ic_title"
+                    android:inputType="textCapSentences" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -54,7 +55,9 @@
                     android:id="@+id/add_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:drawableLeft="@drawable/ic_description"
+                    android:inputType="text"
+                    android:maxLength="15" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -65,7 +68,8 @@
                 <AutoCompleteTextView
                     android:id="@+id/addLocation"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_location" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -74,11 +78,13 @@
                 android:hint="Date">
 
                 <EditText
+                    android:id="@+id/check_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+
+                    android:drawableLeft="@drawable/ic_date"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:id="@+id/check_date"
                     android:inputType="date" />
             </android.support.design.widget.TextInputLayout>
 
@@ -90,7 +96,8 @@
                 <Spinner
                     android:id="@+id/add_category"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="40dp"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -103,6 +110,8 @@
                     android:id="@+id/add_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+
+                    android:drawableLeft="@drawable/ic_money"
                     android:inputType="numberDecimal|numberSigned" />
             </android.support.design.widget.TextInputLayout>
 
