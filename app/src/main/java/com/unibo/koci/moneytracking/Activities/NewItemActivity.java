@@ -32,6 +32,7 @@ import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
+import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
 import java.text.ParseException;
@@ -244,7 +245,12 @@ public class NewItemActivity extends AppCompatActivity implements
                         MoneyItem mi = new MoneyItem(null, name, description, date, amount, catid, locid);
                         dbHelper.getDaoSession().insert(mi);
                         Toast.makeText(NewItemActivity.this, "Added", Toast.LENGTH_LONG).show();
-                        finish();
+
+                        Intent intent = new Intent(NewItemActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+
+
                     } else {
                         Toast.makeText(NewItemActivity.this, "Please fill all input", Toast.LENGTH_LONG).show();
                     }

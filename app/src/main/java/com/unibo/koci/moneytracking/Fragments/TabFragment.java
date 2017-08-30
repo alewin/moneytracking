@@ -31,16 +31,13 @@ import java.util.List;
  */
 
 
-public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class TabFragment extends Fragment {
 
 
     DBHelper dbHelper;
     MoneyItemDao moneyItemDao;
     MoneyItemAdapter adapter;
-    List<MoneyItem> input;
-    SwipeRefreshLayout swipeLayout;
 
-    int current_selected_tab;
 
     public static TabFragment newInstance(int numtab) {
         TabFragment myFragment = new TabFragment();
@@ -68,38 +65,24 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     }
 
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Log.w("ale", "onViewCreated");
-        super.onViewCreated(view, savedInstanceState);
-    }
 
-
-    void loadItems(int tab) {
-
-        input = new ArrayList<>();
-        Log.w("ale", "oncreate");
-
+    private List<MoneyItem> getItems() {
+        List<MoneyItem> input = new ArrayList<>();
+        int tab = getArguments().getInt("numtab");
         LocalDate dt = new LocalDate(LocalDate.now());
-        Log.w("ales", String.valueOf(tab));
+
         switch (tab) {
             case 1:
                 input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.toDate(), dt.toDate())).list();
-                Log.w("xaless", "dayly");
                 break;
             case 2:
                 input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.dayOfWeek().withMinimumValue().toDate(), dt.dayOfWeek().withMaximumValue().toDate())).list();
-                Log.w("xaless", "week");
                 break;
             case 3:
                 input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.dayOfMonth().withMinimumValue().toDate(), dt.dayOfMonth().withMaximumValue().toDate())).list();
-                Log.w("xaless", "month");
                 break;
         }
-        adapter = new MoneyItemAdapter(input);
-
-        adapter.notifyDataSetChanged();
-
+        return input;
     }
 
 
@@ -107,70 +90,16 @@ public class TabFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.w("ale", "onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_tab_money_item_list, container, false);
-        int tab = getArguments().getInt("numtab");
-        loadItems(tab);
+        List<MoneyItem> data = getItems();
 
+        adapter = new MoneyItemAdapter(data);
         RecyclerView rv = (RecyclerView) rootView.findViewById(R.id.recycler_view_money);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
-        container.destroyDrawingCache();
-
-        swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container_money);
-        swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
-
         return rootView;
-    }
-
-
-    @Override
-    public void onPause() {
-        Log.w("ale", "onPause");
-
-        super.onPause();
-        if (swipeLayout != null) {
-            swipeLayout.setRefreshing(false);
-            swipeLayout.destroyDrawingCache();
-            swipeLayout.clearAnimation();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        Log.w("ale", "onResume");
-
-        super.onResume();
-
-    }
-
-    public  void ciao() {
-
-    }
-    @Override
-    public void onRefresh() {
-        getActivity().getWindow().getDecorView().findViewById(android.R.id.content).invalidate();
-        loadItems(1); loadItems(2);loadItems(3);
-        adapter.notifyDataSetChanged();
-         getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-
-        Log.w("ale", "onRefresh");
-        adapter.notifyDataSetChanged();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                loadItems(1); loadItems(2);loadItems(3);
-                adapter.notifyDataSetChanged();
-                swipeLayout.setRefreshing(false);
-                adapter.notifyDataSetChanged();
-
-            }
-        }, 1000);
     }
 
 

@@ -154,7 +154,10 @@ public class EditActivity extends AppCompatActivity implements
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        startActivity(new Intent(EditActivity.this, CategoriesActivity.class));
+                        Intent intent = new Intent(EditActivity.this, CategoriesActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+
                         finish();
                     }
                 });
