@@ -1,7 +1,9 @@
 package com.unibo.koci.moneytracking;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -25,6 +27,7 @@ import com.unibo.koci.moneytracking.Activities.ReportActivity;
 import com.unibo.koci.moneytracking.Activities.SettingsActivity;
 import com.unibo.koci.moneytracking.Adapters.ViewPagerAdapter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
+import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Fragments.TabFragment;
 
 import org.joda.time.LocalDate;
@@ -48,10 +51,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         dbHelper = new DBHelper(this);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!prefs.getBoolean("firstTime", false)) {
+            init_firstTimeStart();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("firstTime", true);
+            editor.commit();
+        }
+
         init_tabview();
         init_toolbar();
         init_fab();
         init_navview();
+    }
+    private void init_firstTimeStart(){
+        String categories[] = getResources().getStringArray(R.array.categories_array);
+        for (String item : categories) {
+            Category c = new Category(null,item);
+            dbHelper.getDaoSession().getCategoryDao().insert(c);
+        }
     }
 
     private void init_navview() {

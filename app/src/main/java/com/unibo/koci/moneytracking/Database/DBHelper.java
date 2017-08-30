@@ -2,15 +2,24 @@ package com.unibo.koci.moneytracking.Database;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 
+import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Entities.DaoMaster;
 import com.unibo.koci.moneytracking.Entities.DaoSession;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.Entities.MoneyItemDao;
+import com.unibo.koci.moneytracking.MainActivity;
+import com.unibo.koci.moneytracking.R;
 
 import org.greenrobot.greendao.database.Database;
 import org.joda.time.LocalDate;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -19,16 +28,18 @@ import java.util.ListIterator;
  */
 
 
+
 public class DBHelper {
 
     private static final String DB_NAME = "moneytrackDB";
     private DaoMaster.DevOpenHelper helper;
     private DaoSession daoSession;
     private DaoMaster daoMaster;
-
+    private Database db;
     public DBHelper(Context context) {
         helper = new DaoMaster.DevOpenHelper(context, DB_NAME, null);
-        Database db = helper.getWritableDb();
+        db = helper.getWritableDb();
+
         daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
     }
@@ -112,16 +123,28 @@ public class DBHelper {
         return min;
     }
 
+    private void deleteFiles(String path) {
+
+        File file = new File(path);
+
+        if (file.exists()) {
+            String deleteCmd = "rm -r " + path;
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                runtime.exec(deleteCmd);
+            } catch (IOException e) { }
+        }
+    }
+    public void clearAllData(Context c){
+        daoMaster.dropAllTables(db,true);
+        daoMaster.createAllTables(db, true);
+
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "MoneyTrack";
+        deleteFiles(path);
+
+
+    }
     // TODO per ogni categoria restituisci profit e expense nella data prestabilià
 
-     /*  String pdfText = namePerson + "\n|Budget iniziale: " + initial_amount +
-                "€\n|Totale: " + String.valueOf(dbh.getTotal()) +
-                "€\n|Totale speso: " + String.valueOf(dbh.getTotalLoss()) +
-                "€\n|Totale guadagnato: " + String.valueOf(dbh.getTotalEarn()) +
-                "€\n|Media spesa: " + String.valueOf(dbh.avgLoss()) +
-                "€\n|Media entrata: " + String.valueOf(dbh.avgEarn()) +
-                "€\n|Massima spesa: " + String.valueOf(dbh.maxLoss()) +
-                "€\n|Massimo guadagno: " + String.valueOf(dbh.maxEarn()) + "€";
-                */
 
 }

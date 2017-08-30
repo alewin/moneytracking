@@ -106,7 +106,7 @@ public class ReportActivity extends AppCompatActivity {
     private void update_listreport() {
         arrayAdapter.clear();
         listItems.clear();
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "moneytrack";
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "MoneyTrack";
 
         File fileList = new File(path);
         if (fileList.exists() && fileList != null) {
