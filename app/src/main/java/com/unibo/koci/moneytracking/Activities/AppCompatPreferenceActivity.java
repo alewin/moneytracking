@@ -25,6 +25,8 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
@@ -33,6 +35,7 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
         getDelegate().onPostCreate(savedInstanceState);
     }
 
+
     public ActionBar getSupportActionBar() {
         return getDelegate().getSupportActionBar();
     }
@@ -40,7 +43,6 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
     public void setSupportActionBar(@Nullable Toolbar toolbar) {
         getDelegate().setSupportActionBar(toolbar);
     }
-
     @Override
     public MenuInflater getMenuInflater() {
         return getDelegate().getMenuInflater();

@@ -88,18 +88,6 @@
                     android:inputType="date" />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Category">
-
-                <Spinner
-                    android:id="@+id/add_category"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -114,6 +102,24 @@
                     android:drawableLeft="@drawable/ic_money"
                     android:inputType="numberDecimal|numberSigned" />
             </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+
+                android:hint="Category">
+
+                <Spinner
+                    android:id="@+id/add_category"
+                    android:layout_width="match_parent"
+
+                    android:layout_height="40dp"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            </android.support.design.widget.TextInputLayout>
+
 
             <Button
                 android:id="@+id/add_button"

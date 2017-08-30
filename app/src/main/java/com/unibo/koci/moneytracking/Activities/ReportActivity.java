@@ -95,16 +95,24 @@ public class ReportActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
         pdf_report_list.setAdapter(arrayAdapter);
 
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "MoneyTrack";
+        update_listreport();
+    }
 
-        File fileList = new File(path); // path which you want to read
-        if (fileList != null) {
+    private void update_listreport() {
+        arrayAdapter.clear();
+        listItems.clear();
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "moneytrack";
+
+        File fileList = new File(path);
+        if (fileList.exists() && fileList != null) {
             File[] files = fileList.listFiles();
 
             for (File f : files) {
                 arrayAdapter.add(f.getName());
             }
             arrayAdapter.notifyDataSetChanged();
+
+
         }
     }
 
@@ -280,9 +288,10 @@ public class ReportActivity extends AppCompatActivity {
                     } else {
                         createPdf(pdfText);
                         Toast.makeText(ReportActivity.this, "Pdf created", Toast.LENGTH_LONG).show();
+                        update_listreport();
+
                     }
                 }
-                arrayAdapter.notifyDataSetChanged();
 
 
             }
