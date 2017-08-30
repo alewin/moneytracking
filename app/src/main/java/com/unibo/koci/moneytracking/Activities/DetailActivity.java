@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
+import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
 import org.joda.time.LocalDate;
@@ -81,7 +82,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 Intent intent = new Intent(DetailActivity.this, EditActivity.class);
                 intent.putExtra("item", item);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -89,25 +89,23 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         fabdelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-                builder
-                        .setTitle("Delete item")
+                builder.setTitle("Delete item")
                         .setMessage("Are you sure?")
-                        .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 delete_item(item);
                                 Toast.makeText(DetailActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
-                                finish();
+
+                                Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
 
                             }
                         })
                         .setNegativeButton("No", null)
                         .show();
-
-
             }
         });
     }

@@ -118,7 +118,8 @@ public class NewItemActivity extends AppCompatActivity implements
 
                 DatePickerDialog mDatePicker = new DatePickerDialog(NewItemActivity.this, new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                        dateInputText.setText(selectedday + "/" + (selectedmonth + 1) + "/" + selectedyear);
+                        //int: the month between 0-11.
+                        dateInputText.setText(selectedday  + "/" + (selectedmonth+1)  + "/" + selectedyear);
                     }
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select date");

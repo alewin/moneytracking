@@ -33,6 +33,7 @@ import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
+import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
 import java.text.ParseException;
@@ -105,7 +106,12 @@ public class EditActivity extends AppCompatActivity implements
 
         nameAdd.setText(item.getName());
         amountAdd.setText(String.valueOf(item.getAmount()));
-        dateInputText.setText(String.valueOf(item.getDate()));
+
+        Date d = item.getDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+
+        dateInputText.setText(String.valueOf(sdf.format(d.getTime())));
         descriptionAdd.setText(String.valueOf(item.getDescription()));
 
         addLocation.setText(String.valueOf(item.getLocation().getName()));
@@ -278,8 +284,7 @@ public class EditActivity extends AppCompatActivity implements
 
                         Toast.makeText(EditActivity.this, "Edited", Toast.LENGTH_LONG).show();
 
-                        Intent intent = new Intent(EditActivity.this, DetailActivity.class);
-                        intent.putExtra("item", item);
+                        Intent intent = new Intent(EditActivity.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     } else {

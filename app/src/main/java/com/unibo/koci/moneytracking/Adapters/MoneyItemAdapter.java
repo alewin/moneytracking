@@ -6,6 +6,7 @@ package com.unibo.koci.moneytracking.Adapters;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,7 +19,10 @@ import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.R;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -91,11 +95,12 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
 
         String name = moneyItems.get(holder.getAdapterPosition()).getName().toString();
         String description = String.valueOf(moneyItems.get(holder.getAdapterPosition()).getAmount());
-        DateTime date = new DateTime(moneyItems.get(holder.getAdapterPosition()).getDate());
+        Date d = (moneyItems.get(holder.getAdapterPosition()).getDate());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
         holder.txtTitle.setText(name);
         holder.txtDescription.setText(description + "€");
-        holder.txtDate.setText(date.toString("dd/MM/yy"));
+        holder.txtDate.setText(sdf.format(d.getTime()));
 
 
         if (moneyItems.get(holder.getAdapterPosition()).getAmount() > 0) {
