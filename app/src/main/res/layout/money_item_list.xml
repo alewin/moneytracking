@@ -40,14 +40,14 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/itemlist_description"
+            android:id="@+id/itemlist_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/itemlist_title"
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@+id/itemlist_icon"
             android:ellipsize="end"
-            android:maxLines="1"
+
             android:text="Description"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp" />
@@ -56,11 +56,10 @@
             android:id="@+id/itemlist_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/itemlist_description"
+            android:layout_below="@+id/itemlist_amount"
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@+id/itemlist_icon"
             android:ellipsize="end"
-            android:maxLines="1"
             android:text="date"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"

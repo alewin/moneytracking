@@ -18,6 +18,16 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     </android.support.design.widget.AppBarLayout>
 
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:fillViewport="true"
+    android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
     <include
         android:id="@+id/horizontal_line"
         layout="@layout/horizontal_line" />
@@ -108,7 +118,8 @@
         android:divider="@color/grey"
         android:dividerHeight="4px"
         android:clickable="true" />
-
+        </LinearLayout>
+</ScrollView>
 
 </LinearLayout>
 

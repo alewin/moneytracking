@@ -42,6 +42,7 @@
                     android:id="@+id/add_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="20"
                     android:drawableLeft="@drawable/ic_title"
                     android:inputType="textCapSentences" />
             </android.support.design.widget.TextInputLayout>
@@ -57,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_description"
                     android:inputType="text"
-                    android:maxLength="15" />
+                    android:maxLength="30" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -69,6 +70,7 @@
                     android:id="@+id/addLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="200"
                     android:drawableLeft="@drawable/ic_location" />
             </android.support.design.widget.TextInputLayout>
 
@@ -81,7 +83,6 @@
                     android:id="@+id/check_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:drawableLeft="@drawable/ic_date"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
@@ -98,7 +99,7 @@
                     android:id="@+id/add_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
+                    android:maxLength="10"
                     android:drawableLeft="@drawable/ic_money"
                     android:inputType="numberDecimal|numberSigned" />
             </android.support.design.widget.TextInputLayout>
@@ -108,18 +109,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="5dp"
-
                 android:hint="Category">
 
                 <Spinner
                     android:id="@+id/add_category"
                     android:layout_width="match_parent"
-
                     android:layout_height="40dp"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
             </android.support.design.widget.TextInputLayout>
-
 
             <Button
                 android:id="@+id/add_button"

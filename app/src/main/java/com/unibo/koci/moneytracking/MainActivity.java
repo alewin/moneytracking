@@ -99,9 +99,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void init_toolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         total_amount = (TextView) findViewById(R.id.available_amount);
-        LocalDate dt = new LocalDate(LocalDate.now());
-        LocalDate start = new LocalDate(0);
-        total_amount.setText(String.valueOf(dbHelper.getTotal(start, dt)) + "€");
+
+        String amount =  (String.format("%.0f", dbHelper.getTotal(new LocalDate(0), LocalDate.now())));
+
+
+        total_amount.setText(String.valueOf(amount + "€"));
         setSupportActionBar(toolbar);
     }
 

@@ -46,9 +46,7 @@ public class ReportActivity extends AppCompatActivity {
     Button report_button;
     ListView pdf_report_list;
     DBHelper dbHelper;
-
     MoneyItemDao moneyItemDao;
-    List<MoneyItem> money_list;
 
     ArrayList<String> listItems = new ArrayList<String>();
     ArrayAdapter<String> arrayAdapter;
@@ -63,12 +61,14 @@ public class ReportActivity extends AppCompatActivity {
         dbHelper = new DBHelper(this);
         moneyItemDao = dbHelper.getDaoSession().getMoneyItemDao();
 
+
         init_listview();
         init_toolbar();
         init_spinner();
+
+        loadReportData(); // check if there are some item
         init_report_button();
 
-        loadReportData();
 
     }
 
@@ -118,10 +118,8 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void loadReportData() {
-        LocalDate s = new LocalDate(new Date(0));
-        LocalDate e = new LocalDate();
-        money_list = new ArrayList<>();
-        money_list = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(s.toDate(), e.toDate())).list();
+        LocalDate s = new LocalDate(new Date(0)), e = new LocalDate();
+
         TextView textView_report = (TextView) findViewById(R.id.textView_report);
         String reportText = "Total: " + String.valueOf(dbHelper.getTotal(s, e)) +
                 "€\nTotal expense: " + String.valueOf(dbHelper.getTotalExpense(s, e)) +
@@ -188,8 +186,6 @@ public class ReportActivity extends AppCompatActivity {
             p2.setFont(normalFont);
             doc.add(p2);
 
-            money_list = new ArrayList<>();
-            money_list = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
 
 
             ArrayList<String> arrayStringReport = new ArrayList<>();
@@ -230,17 +226,23 @@ public class ReportActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                LocalDate dt = new LocalDate(LocalDate.now());
-                if (start.toString().isEmpty() || end.toString().isEmpty()) {
-                    Toast.makeText(ReportActivity.this, "Please fill all input", Toast.LENGTH_LONG).show();
-                } else {
-                    if (!isStoragePermissionGranted()) {
-                        finish();
-                    } else {
-                        createPdf();
-                        Toast.makeText(ReportActivity.this, "Pdf created", Toast.LENGTH_LONG).show();
-                        update_listreport();
+                long item_count = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).count();
 
+                if(item_count == 0){
+                    Toast.makeText(ReportActivity.this, "There aren't sufficient item for a report ", Toast.LENGTH_LONG).show();
+                }else {
+                    LocalDate dt = new LocalDate(LocalDate.now());
+                    if (start.toString().isEmpty() || end.toString().isEmpty()) {
+                        Toast.makeText(ReportActivity.this, "Please fill all input", Toast.LENGTH_LONG).show();
+                    } else {
+                        if (!isStoragePermissionGranted()) {
+                            finish();
+                        } else {
+                            createPdf();
+                            Toast.makeText(ReportActivity.this, "Pdf created", Toast.LENGTH_LONG).show();
+                            update_listreport();
+
+                        }
                     }
                 }
 

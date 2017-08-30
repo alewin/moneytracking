@@ -9,10 +9,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.unibo.koci.moneytracking.Database.DBHelper;
+import com.unibo.koci.moneytracking.Entities.MoneyItemDao;
 import com.unibo.koci.moneytracking.R;
 
 import org.joda.time.LocalDate;
+
+import java.util.Date;
 
 
 public class ChartTypeActivity extends AppCompatActivity {
@@ -21,11 +26,16 @@ public class ChartTypeActivity extends AppCompatActivity {
     Spinner chart_spinner;
     Button chart_button;
     LocalDate start, end;
+    DBHelper dbHelper;
 
+    MoneyItemDao moneyItemDao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_type_chart);
+
+        dbHelper = new DBHelper(this);
+        moneyItemDao = dbHelper.getDaoSession().getMoneyItemDao();
 
         init_toolbar();
         init_spinner();
@@ -38,11 +48,18 @@ public class ChartTypeActivity extends AppCompatActivity {
         chart_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChartTypeActivity.this, ShowChartActivity.class);
-                intent.putExtra("start", start);
-                intent.putExtra("end", end);
-                startActivity(intent);
-                //  finish();
+
+                long item_count = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).count();
+
+                if(item_count == 0){
+                    Toast.makeText(ChartTypeActivity.this, "There aren't sufficient item for a chart ", Toast.LENGTH_LONG).show();
+
+                }else {
+                    Intent intent = new Intent(ChartTypeActivity.this, ShowChartActivity.class);
+                    intent.putExtra("start", start);
+                    intent.putExtra("end", end);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -50,7 +67,7 @@ public class ChartTypeActivity extends AppCompatActivity {
     private void init_toolbar() {
         type_chart_toolbar = (Toolbar) findViewById(R.id.toolbar_type_chart);
         setSupportActionBar(type_chart_toolbar);
-        getSupportActionBar().setTitle("Graph");
+        getSupportActionBar().setTitle("Generate Charts");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }

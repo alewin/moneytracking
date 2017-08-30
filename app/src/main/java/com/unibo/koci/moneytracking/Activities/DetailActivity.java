@@ -29,6 +29,9 @@ import com.unibo.koci.moneytracking.R;
 
 import org.joda.time.LocalDate;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -64,11 +67,19 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         txt_description = (TextView) findViewById(R.id.detail_description);
         txt_postion = (TextView) findViewById(R.id.detail_position);
 
-        txt_amount.setText(String.valueOf(item.getAmount()));
+
+        String amount =  (String.format("%.0f", item.getAmount()));
+        txt_amount.setText(amount+ "€");
 
         txt_category.setText((item.getCategory().getName()));
-        LocalDate d = new LocalDate(item.getDate());
-        txt_date.setText(d.toString());
+
+        Date d = item.getDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+
+        txt_date.setText(String.valueOf(sdf.format(d.getTime())));
+
+
         txt_description.setText(String.valueOf(item.getDescription()));
         txt_postion.setText(String.valueOf(item.getLocation().getName()));
 

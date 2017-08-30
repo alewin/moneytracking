@@ -105,7 +105,10 @@ public class EditActivity extends AppCompatActivity implements
         buttonAdd.setText("Edit");
 
         nameAdd.setText(item.getName());
-        amountAdd.setText(String.valueOf(item.getAmount()));
+
+        String amount =  (String.format("%.0f", item.getAmount()));
+        amountAdd.setText(amount);
+
 
         Date d = item.getDate();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");

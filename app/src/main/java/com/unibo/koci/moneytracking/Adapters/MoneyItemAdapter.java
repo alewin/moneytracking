@@ -32,7 +32,7 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView txtTitle;
-        public TextView txtDescription;
+        public TextView txtAmount;
         public TextView txtDate;
         public ImageView iconitem;
         public View layout;
@@ -41,7 +41,7 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
             super(v);
             layout = v;
             txtTitle = (TextView) v.findViewById(R.id.itemlist_title);
-            txtDescription = (TextView) v.findViewById(R.id.itemlist_description);
+            txtAmount = (TextView) v.findViewById(R.id.itemlist_amount);
             txtDate = (TextView) v.findViewById(R.id.itemlist_date);
             iconitem = (ImageView) v.findViewById(R.id.itemlist_icon);
         }
@@ -94,12 +94,17 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
 
 
         String name = moneyItems.get(holder.getAdapterPosition()).getName().toString();
-        String description = String.valueOf(moneyItems.get(holder.getAdapterPosition()).getAmount());
+
+
+
+        String amount =  (String.format("%.0f", moneyItems.get(holder.getAdapterPosition()).getAmount()));
+
+
         Date d = (moneyItems.get(holder.getAdapterPosition()).getDate());
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
         holder.txtTitle.setText(name);
-        holder.txtDescription.setText(description + "€");
+        holder.txtAmount.setText(amount + "€");
         holder.txtDate.setText(sdf.format(d.getTime()));
 
 
