@@ -37,6 +37,7 @@
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="bold" />
+
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/show_chart_profitexpense"
                 android:layout_width="match_parent"

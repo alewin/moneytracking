@@ -105,7 +105,7 @@ public class CategoriesActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View parent = (View) view.getParent();
         TextView catidTextView = (TextView) parent.findViewById(R.id.category_id);
-        final TextView catTitleTextView = (TextView)parent.findViewById(R.id.category_title);
+        final TextView catTitleTextView = (TextView) parent.findViewById(R.id.category_title);
         final String cat_id = String.valueOf(catidTextView.getText());
         final DaoSession daoSession = dbHelper.getDaoSession();
 
@@ -117,15 +117,15 @@ public class CategoriesActivity extends AppCompatActivity {
 
                         //controllo che non ci siano elementi con questa categoria
                         List moneyitemcat = daoSession.getMoneyItemDao().queryBuilder().where(MoneyItemDao.Properties.CategoryID.eq(Long.valueOf(cat_id))).list();
-                        if(moneyitemcat.size()==0) {
+                        if (moneyitemcat.size() == 0) {
                             Category c = daoSession.getCategoryDao().load(Long.valueOf(cat_id));
                             daoSession.getCategoryDao().delete(c);
                             updateUI();
 
                             Toast.makeText(CategoriesActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
                             finish();
-                        }else{
-                            Toast.makeText(CategoriesActivity.this, "Impossible to delete: " + catTitleTextView.getText().toString() +"\nThere are some item associate to this category", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(CategoriesActivity.this, "Impossible to delete: " + catTitleTextView.getText().toString() + "\nThere are some item associate to this category", Toast.LENGTH_LONG).show();
 
                         }
 

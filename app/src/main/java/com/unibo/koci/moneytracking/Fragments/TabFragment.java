@@ -1,11 +1,7 @@
 package com.unibo.koci.moneytracking.Fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -63,7 +59,6 @@ public class TabFragment extends Fragment {
 
 
     }
-
 
 
     private List<MoneyItem> getItems() {

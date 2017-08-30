@@ -257,7 +257,9 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
         myDao.update(this);
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 2043645194)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;

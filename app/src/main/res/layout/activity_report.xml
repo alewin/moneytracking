@@ -84,7 +84,6 @@
     </LinearLayout>
 
 
-
     <include
         android:id="@+id/horizontal_line"
         layout="@layout/horizontal_line" />

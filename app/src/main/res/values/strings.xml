@@ -42,7 +42,6 @@
     <string name="pref_header_data_sync">Data &amp; sync</string>
 
 
-
     <string-array name="report_values">
         <item>Daily</item>
         <item>Weekly</item>

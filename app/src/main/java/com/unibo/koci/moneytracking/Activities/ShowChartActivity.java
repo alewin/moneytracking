@@ -1,10 +1,9 @@
 package com.unibo.koci.moneytracking.Activities;
 
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -18,12 +17,9 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.unibo.koci.moneytracking.Database.DBHelper;
-import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.R;
 
 import org.joda.time.LocalDate;
@@ -90,16 +86,16 @@ public class ShowChartActivity extends AppCompatActivity {
         colors.add(Color.RED);
         colors.add(Color.GREEN);
 
-        createChart(x,colors);
+        createChart(x, colors);
 
     }
 
     private float getDataCategory(LocalDate start, LocalDate end) {
 
-            return Math.abs((float) (dbHelper.getTotalExpense(start, end)));
+        return Math.abs((float) (dbHelper.getTotalExpense(start, end)));
     }
 
-    private void  init_chart_category(){
+    private void init_chart_category() {
         BarChart barChart = (BarChart) findViewById(R.id.show_chart_category);
 
         barChart.setDrawBarShadow(false);
@@ -122,7 +118,6 @@ public class ShowChartActivity extends AppCompatActivity {
         });
 
         YAxis leftAxis = barChart.getAxisLeft();
-
 
 
         leftAxis.setDrawGridLines(false);
@@ -157,8 +152,8 @@ public class ShowChartActivity extends AppCompatActivity {
         BarDataSet set1, set2;
 
         if (barChart.getData() != null && barChart.getData().getDataSetCount() > 0) {
-            set1 = (BarDataSet)barChart.getData().getDataSetByIndex(0);
-            set2 = (BarDataSet)barChart.getData().getDataSetByIndex(1);
+            set1 = (BarDataSet) barChart.getData().getDataSetByIndex(0);
+            set2 = (BarDataSet) barChart.getData().getDataSetByIndex(1);
             set1.setValues(yVals1);
             set2.setValues(yVals2);
             barChart.getData().notifyDataChanged();
@@ -166,11 +161,11 @@ public class ShowChartActivity extends AppCompatActivity {
         } else {
             // create 2 datasets with different types
             set1 = new BarDataSet(yVals1, "Expense");
-            set1.setStackLabels(new String[]{"Births", "Divorces", "Marriages","ok","ppp"});
+            set1.setStackLabels(new String[]{"Births", "Divorces", "Marriages", "ok", "ppp"});
 
             set1.setColor(Color.RED);
             set2 = new BarDataSet(yVals2, "Profit");
-            set2.setStackLabels(new String[]{"Births", "Divorces", "Marriages","ok","ppp"});
+            set2.setStackLabels(new String[]{"Births", "Divorces", "Marriages", "ok", "ppp"});
 
             set2.setColor(Color.GREEN);
 
@@ -212,7 +207,6 @@ public class ShowChartActivity extends AppCompatActivity {
         }
 
 
-
         // create 2 datasets
         BarDataSet set1 = new BarDataSet(yVals1, "Men");
         set1.setColor(Color.BLUE);
@@ -234,13 +228,10 @@ public class ShowChartActivity extends AppCompatActivity {
         barChart.invalidate(); // refresh
 
 
-
-
-
     }
 
 
-    private void createChart(ArrayList<PieEntry> yEntrys, ArrayList<Integer> colors ) {
+    private void createChart(ArrayList<PieEntry> yEntrys, ArrayList<Integer> colors) {
 
         //create the data set
         PieDataSet pieDataSet = new PieDataSet(yEntrys, "");

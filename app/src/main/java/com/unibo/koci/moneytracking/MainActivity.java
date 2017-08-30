@@ -64,10 +64,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         init_fab();
         init_navview();
     }
-    private void init_firstTimeStart(){
+
+    private void init_firstTimeStart() {
         String categories[] = getResources().getStringArray(R.array.categories_array);
         for (String item : categories) {
-            Category c = new Category(null,item);
+            Category c = new Category(null, item);
             dbHelper.getDaoSession().getCategoryDao().insert(c);
         }
     }
@@ -118,31 +119,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewPager.setAdapter(vpage_adapter);
 
 
-
-
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                ViewPager viewpager = (ViewPager)findViewById(R.id.viewpager);
-                Log.w("ale",  tab.getText().toString() + tab.getPosition());
+                ViewPager viewpager = (ViewPager) findViewById(R.id.viewpager);
+                Log.w("ale", tab.getText().toString() + tab.getPosition());
                 viewpager.setVisibility(View.GONE);
                 viewpager.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                ViewPager viewpager = (ViewPager)findViewById(R.id.viewpager);
-                Log.w("ale",  tab.getText().toString() + tab.getPosition());
+                ViewPager viewpager = (ViewPager) findViewById(R.id.viewpager);
+                Log.w("ale", tab.getText().toString() + tab.getPosition());
                 viewpager.setVisibility(View.GONE);
                 viewpager.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                ViewPager viewpager = (ViewPager)findViewById(R.id.viewpager);
-                Log.w("ale",  tab.getText().toString() + tab.getPosition());
+                ViewPager viewpager = (ViewPager) findViewById(R.id.viewpager);
+                Log.w("ale", tab.getText().toString() + tab.getPosition());
                 viewpager.setVisibility(View.GONE);
                 viewpager.setVisibility(View.VISIBLE);
             }
@@ -211,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return false;
     }
 
 }

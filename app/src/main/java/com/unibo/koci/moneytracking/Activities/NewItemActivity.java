@@ -156,14 +156,11 @@ public class NewItemActivity extends AppCompatActivity implements
         }
 
 
-
-
         final String[] categories_string = listItems.toArray(new String[listItems.size()]);
-        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_row,  R.id.text_spinner, categories_string);
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_row, R.id.text_spinner, categories_string);
 
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_row);
         categorySpinner.setAdapter(spinnerArrayAdapter);
-
 
 
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

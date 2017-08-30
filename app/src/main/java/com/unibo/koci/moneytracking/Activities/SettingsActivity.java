@@ -139,7 +139,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
+        LinearLayout root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
         Toolbar bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar_setting, root, false);
         root.addView(bar, 0); // insert at top
         bar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -259,6 +259,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class DataSyncPreferenceFragment extends PreferenceFragment {
         DBHelper dbHelper;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -297,7 +298,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
 
-            @Override
+        @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {

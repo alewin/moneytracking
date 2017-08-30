@@ -2,18 +2,12 @@ package com.unibo.koci.moneytracking.Database;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Environment;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 
-import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Entities.DaoMaster;
 import com.unibo.koci.moneytracking.Entities.DaoSession;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.Entities.MoneyItemDao;
-import com.unibo.koci.moneytracking.MainActivity;
-import com.unibo.koci.moneytracking.R;
 
 import org.greenrobot.greendao.database.Database;
 import org.joda.time.LocalDate;
@@ -28,7 +22,6 @@ import java.util.ListIterator;
  */
 
 
-
 public class DBHelper {
 
     private static final String DB_NAME = "moneytrackDB";
@@ -36,6 +29,7 @@ public class DBHelper {
     private DaoSession daoSession;
     private DaoMaster daoMaster;
     private Database db;
+
     public DBHelper(Context context) {
         helper = new DaoMaster.DevOpenHelper(context, DB_NAME, null);
         db = helper.getWritableDb();
@@ -81,22 +75,31 @@ public class DBHelper {
 
     public double getAVGProfit(LocalDate start, LocalDate end) {
         List<MoneyItem> l = daoSession.getMoneyItemDao().queryBuilder().where(MoneyItemDao.Properties.Amount.gt(0)).where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
-        double total = 0.0;
-        ListIterator<MoneyItem> listIterator = l.listIterator();
-        while (listIterator.hasNext()) {
-            total += listIterator.next().getAmount();
+        if (l.size() == 0)
+            return 0.0;
+        else {
+            double total = 0.0;
+            ListIterator<MoneyItem> listIterator = l.listIterator();
+            while (listIterator.hasNext()) {
+                total += listIterator.next().getAmount();
+            }
+            return total / l.size();
         }
-        return total/l.size();
     }
 
     public double getAVGExpense(LocalDate start, LocalDate end) {
         List<MoneyItem> l = daoSession.getMoneyItemDao().queryBuilder().where(MoneyItemDao.Properties.Amount.lt(0)).where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
-        double total = 0.0;
-        ListIterator<MoneyItem> listIterator = l.listIterator();
-        while (listIterator.hasNext()) {
-            total += listIterator.next().getAmount();
+        if (l.size() == 0)
+            return 0.0;
+        else {
+            double total = 0.0;
+
+            ListIterator<MoneyItem> listIterator = l.listIterator();
+            while (listIterator.hasNext()) {
+                total += listIterator.next().getAmount();
+            }
+            return total / l.size();
         }
-        return total/l.size();
     }
 
     public double getMAXProfit(LocalDate start, LocalDate end) {
@@ -105,7 +108,7 @@ public class DBHelper {
         ListIterator<MoneyItem> listIterator = l.listIterator();
         while (listIterator.hasNext()) {
             amount = listIterator.next().getAmount();
-            if(amount > max)
+            if (amount > max)
                 max = amount;
         }
         return max;
@@ -113,18 +116,22 @@ public class DBHelper {
 
     public double getMINExpense(LocalDate start, LocalDate end) {
         List<MoneyItem> l = daoSession.getMoneyItemDao().queryBuilder().where(MoneyItemDao.Properties.Amount.lt(0)).where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
-        double min = Double.MAX_VALUE, amount = 0.0;
-        ListIterator<MoneyItem> listIterator = l.listIterator();
-        while (listIterator.hasNext()) {
-            amount = listIterator.next().getAmount();
-            if(amount < min)
-                min = amount;
+        if (l.size() == 0)
+            return 0.0;
+        else {
+            double min = 0.0, amount = 0.0;
+            ListIterator<MoneyItem> listIterator = l.listIterator();
+            while (listIterator.hasNext()) {
+                amount = listIterator.next().getAmount();
+                if (amount < min)
+                    min = amount;
+            }
+            return min;
         }
-        return min;
     }
 
     private void deleteFiles(String path) {
-
+//todo testare
         File file = new File(path);
 
         if (file.exists()) {
@@ -132,11 +139,13 @@ public class DBHelper {
             Runtime runtime = Runtime.getRuntime();
             try {
                 runtime.exec(deleteCmd);
-            } catch (IOException e) { }
+            } catch (IOException e) {
+            }
         }
     }
-    public void clearAllData(Context c){
-        daoMaster.dropAllTables(db,true);
+
+    public void clearAllData(Context c) {
+        daoMaster.dropAllTables(db, true);
         daoMaster.createAllTables(db, true);
 
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "MoneyTrack";
