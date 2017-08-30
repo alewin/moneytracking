@@ -220,7 +220,7 @@ public class NewItemActivity extends AppCompatActivity implements
                             loc = new Location(null, addLocation.getText().toString(), 0, 0);
                         }
                     } else {
-                        loc = new Location(null, place.getName().toString(), place.getLatLng().latitude, place.getLatLng().longitude);
+                        loc = new Location(null, place.getAddress().toString(), place.getLatLng().latitude, place.getLatLng().longitude);
                     }
 
 

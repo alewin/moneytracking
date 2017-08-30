@@ -115,6 +115,8 @@
                     android:id="@+id/add_category"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:popupBackground="@color/white"
+                    android:background="@color/white"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
             </android.support.design.widget.TextInputLayout>

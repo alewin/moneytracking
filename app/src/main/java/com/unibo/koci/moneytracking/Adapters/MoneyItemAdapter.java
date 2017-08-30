@@ -101,7 +101,7 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
 
 
         Date d = (moneyItems.get(holder.getAdapterPosition()).getDate());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         holder.txtTitle.setText(name);
         holder.txtAmount.setText(amount + "€");

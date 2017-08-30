@@ -106,12 +106,12 @@ public class EditActivity extends AppCompatActivity implements
 
         nameAdd.setText(item.getName());
 
-        String amount =  (String.format("%.0f", item.getAmount()));
+        String amount = (String.format("%.0f", item.getAmount()));
         amountAdd.setText(amount);
 
 
         Date d = item.getDate();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 
         dateInputText.setText(String.valueOf(sdf.format(d.getTime())));
@@ -263,14 +263,16 @@ public class EditActivity extends AppCompatActivity implements
 
                     if (ok) {
 
-                        if (item.getLocation().getName() != addLocation.getText().toString()) {
-                            if (place != null && addLocation.getText().toString() != place.getName().toString()) {
-                                // place modificcato diverso dal testo del editbox che è diverso da quello originale di item, quindi aggiungo loc nullo
-                                loc = new Location(null, addLocation.getText().toString(), 0, 0);
-
-                            } else if (place != null && addLocation.getText().toString() == place.getName()) {
-                                //nuovo place aggiunto
-                                loc = new Location(null, place.getName().toString(), place.getLatLng().latitude, place.getLatLng().longitude);
+                        if (!item.getLocation().getName().equals(addLocation.getText().toString())) {
+                            if (place != null) {
+                                if (addLocation.getText().toString().equals(place.getAddress().toString())) {
+                                    //nuovo place aggiunto
+                                    loc = new Location(null, place.getAddress().toString(), place.getLatLng().latitude, place.getLatLng().longitude);
+                                }
+                               else{
+                                    // place modificcato diverso dal testo del editbox che è diverso da quello originale di item, quindi aggiungo loc nullo
+                                    loc = new Location(null, addLocation.getText().toString(), 0, 0);
+                                    }
                             }
                             // cancello vecchia locazione e aggiungo la nuova
                             dbHelper.getDaoSession().delete(item.getLocation());
@@ -314,9 +316,7 @@ public class EditActivity extends AppCompatActivity implements
 
     public static Date getDate(String datestring) {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        Date date;
-
-        date = new Date();
+        Date date = new Date();
 
         try {
             date = format.parse(datestring);
@@ -337,36 +337,35 @@ public class EditActivity extends AppCompatActivity implements
         addLocation.setThreshold(3);
 
         addLocation.setOnItemClickListener(mAutocompleteClickListener);
-        mPlaceArrayAdapter = new PlaceAdapter(this, android.R.layout.simple_list_item_1,
-                BOUNDS_MOUNTAIN_VIEW, null);
+        mPlaceArrayAdapter = new PlaceAdapter(this, android.R.layout.simple_list_item_1, BOUNDS_MOUNTAIN_VIEW, null);
         addLocation.setAdapter(mPlaceArrayAdapter);
     }
 
-    private AdapterView.OnItemClickListener mAutocompleteClickListener
-            = new AdapterView.OnItemClickListener() {
+    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final PlaceAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
             final String placeId = String.valueOf(item.placeId);
-            Log.i(LOG_TAG, "Selected: " + item.description);
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                    .getPlaceById(mGoogleApiClient, placeId);
+            Log.i(LOG_TAG, "Selected: " + item.description );
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(mGoogleApiClient, placeId);
             placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
             Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
+
         }
     };
 
-    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
-            = new ResultCallback<PlaceBuffer>() {
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
         @Override
         public void onResult(PlaceBuffer places) {
             if (!places.getStatus().isSuccess()) {
-                Log.e(LOG_TAG, "Place query did not complete. Error: " +
-                        places.getStatus().toString());
+                Log.e(LOG_TAG, "Place query did not complete. Error: " + places.getStatus().toString());
                 return;
             }
             // Selecting the first object buffer.
             place = places.get(0);
+            addLocation.setText(place.getAddress().toString());
+            return;
+
 
         }
     };

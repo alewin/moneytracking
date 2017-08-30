@@ -267,6 +267,33 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             setHasOptionsMenu(true);
             dbHelper = new DBHelper(context);
             init_resetdata();
+            init_clearreport();
+        }
+
+
+        private void init_clearreport() {
+            Preference reset = findPreference("Clear_Report");
+            reset.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Delete all reports?")
+                            .setMessage("Are you sure?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    dbHelper.clearReport();
+                                    Intent intent = new Intent(context, MainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                    return true;
+                }
+            });
         }
 
         private void init_resetdata() {

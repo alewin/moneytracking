@@ -74,7 +74,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         txt_category.setText((item.getCategory().getName()));
 
         Date d = item.getDate();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 
         txt_date.setText(String.valueOf(sdf.format(d.getTime())));

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,105 +21,108 @@
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:fillViewport="true"
-    android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-    <include
-        android:id="@+id/horizontal_line"
-        layout="@layout/horizontal_line" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textViewSummary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Global Summary"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+            <include
+                android:id="@+id/horizontal_line"
+                layout="@layout/horizontal_line" />
 
-    <include
-        android:id="@+id/horizontal_line"
-        layout="@layout/horizontal_line" />
+            <TextView
+                android:id="@+id/textViewSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Global Summary"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-
-    <TextView
-        android:id="@+id/textView_report"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:textAlignment="center"
-        android:text="TextView" />
-
-    <include
-        android:id="@+id/horizontal_line"
-        layout="@layout/horizontal_line" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Generate Report"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <include
-        android:id="@+id/horizontal_line"
-        layout="@layout/horizontal_line" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Spinner
-            android:id="@+id/report_spinner"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="6dp"
-            android:layout_marginTop="6dp"
-            android:layout_weight="1" />
+            <include
+                android:id="@+id/horizontal_line"
+                layout="@layout/horizontal_line" />
 
 
-        <Button
-            android:id="@+id/report_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Create report" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textView_report"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="15sp" />
+
+            <include
+                android:id="@+id/horizontal_line"
+                layout="@layout/horizontal_line" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Generate Report"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <include
+                android:id="@+id/horizontal_line"
+                layout="@layout/horizontal_line" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/report_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:popupBackground="@color/white" />
 
 
-    <include
-        android:id="@+id/horizontal_line"
-        layout="@layout/horizontal_line" />
+                <Button
+                    android:id="@+id/report_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Create report" />
+            </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView_report_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Report list"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:textStyle="bold" />
 
-    <include
-        android:id="@+id/horizontal_line"
-        layout="@layout/horizontal_line" />
+            <include
+                android:id="@+id/horizontal_line"
+                layout="@layout/horizontal_line" />
 
-    <ListView
-        android:id="@+id/pdf_report_list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:divider="@color/grey"
-        android:dividerHeight="4px"
-        android:clickable="true" />
+            <TextView
+                android:id="@+id/textView_report_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Report list"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <include
+                android:id="@+id/horizontal_line"
+                layout="@layout/horizontal_line" />
+
+            <ListView
+                android:id="@+id/pdf_report_list"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:clickable="true"
+                android:divider="@color/grey"
+                android:dividerHeight="4px" />
         </LinearLayout>
-</ScrollView>
+    </ScrollView>
 
 </LinearLayout>
 

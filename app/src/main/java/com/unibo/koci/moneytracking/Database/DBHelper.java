@@ -130,20 +130,24 @@ public class DBHelper {
         }
     }
 
-    private void deleteFiles(String path) {
-//todo testare
+    private boolean deleteFiles(String path) {
         File file = new File(path);
-
         if (file.exists()) {
             String deleteCmd = "rm -r " + path;
             Runtime runtime = Runtime.getRuntime();
             try {
                 runtime.exec(deleteCmd);
+                return true;
             } catch (IOException e) {
+                return false;
             }
         }
+        return false;
     }
-
+    public boolean clearReport(){
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "MoneyTrack";
+        return deleteFiles(path);
+    }
     public void clearAllData(Context c) {
         daoMaster.dropAllTables(db, true);
         daoMaster.createAllTables(db, true);

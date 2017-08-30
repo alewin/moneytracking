@@ -123,7 +123,7 @@ public class CategoriesActivity extends AppCompatActivity {
                             updateUI();
 
                             Toast.makeText(CategoriesActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
-                            finish();
+
                         } else {
                             Toast.makeText(CategoriesActivity.this, "Impossible to delete: " + catTitleTextView.getText().toString() + "\nThere are some item associate to this category", Toast.LENGTH_LONG).show();
 

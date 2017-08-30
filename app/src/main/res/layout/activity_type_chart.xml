@@ -21,6 +21,8 @@
 
     <Spinner
         android:id="@+id/chart_spinner"
+        android:popupBackground="@color/white"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_marginBottom="6dp"
         android:layout_marginTop="6dp"

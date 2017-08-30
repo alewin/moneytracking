@@ -114,7 +114,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="8dp"
-        android:src="@drawable/ic_delete"
+        android:src="@drawable/ic_delete_white"
         app:borderWidth="0dp"
         app:fabSize="normal"
         app:layout_anchorGravity="center|right|end" />

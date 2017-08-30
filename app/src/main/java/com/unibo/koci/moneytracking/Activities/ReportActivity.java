@@ -1,6 +1,7 @@
 package com.unibo.koci.moneytracking.Activities;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -8,8 +9,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,10 +23,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
@@ -52,6 +62,41 @@ public class ReportActivity extends AppCompatActivity {
     ArrayAdapter<String> arrayAdapter;
 
     LocalDate start, end;
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_report_delete, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_delete_reports:
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setTitle("Remove all reports?")
+                        .setMessage("Are you sure?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(dbHelper.clearReport()) {
+                                    Toast.makeText(ReportActivity.this, "Reports deleted", Toast.LENGTH_LONG).show();
+                                    update_listreport();
+                                }
+
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .create();
+                dialog.show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,10 +156,9 @@ public class ReportActivity extends AppCompatActivity {
                     arrayAdapter.add(f.getName());
                 }
             }
-            arrayAdapter.notifyDataSetChanged();
-
-
         }
+        arrayAdapter.notifyDataSetChanged();
+
     }
 
     private void loadReportData() {
@@ -155,11 +199,9 @@ public class ReportActivity extends AppCompatActivity {
 
 
     private boolean createPdf() {
-        Document doc = new Document();
-        Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
 
-        Font normalFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.ITALIC);
-        // Font font = new Font(Font.FontFamily.TIMES_ROMAN, 30.0f);
+        Document doc = new Document();
+        Font normalFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.ITALIC);
 
         try {
             String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "MoneyTrack";
@@ -172,21 +214,23 @@ public class ReportActivity extends AppCompatActivity {
             File file = new File(dir, "Report-" + start.toString() + "-" + end.toString() + ".pdf");
             FileOutputStream fOut = new FileOutputStream(file);
             PdfWriter.getInstance(doc, fOut);
-
-
             doc.open();
 
-            Paragraph p1 = new Paragraph("Report MoneyTrack");
+
+            Font bold_red = new Font(Font.FontFamily.HELVETICA, 24, Font.BOLD, BaseColor.RED);
+            Chunk TitleText = new Chunk("Report MoneyTrack ", bold_red);
+            Paragraph p1 = new Paragraph(TitleText);
             p1.setAlignment(Paragraph.ALIGN_CENTER);
-            p1.setFont(boldFont);
             doc.add(p1);
 
-            Paragraph p2 = new Paragraph(start.toString() + " - " + end.toString());
+            Font bold = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLDITALIC, BaseColor.BLACK);
+            Chunk SubTitleText = new Chunk(start.toString() + " - " + end.toString(), bold);
+            Paragraph p2 = new Paragraph(SubTitleText);
             p2.setAlignment(Paragraph.ALIGN_CENTER);
-            p2.setFont(normalFont);
             doc.add(p2);
 
-
+            doc.add(Chunk.NEWLINE);
+            doc.add(Chunk.NEWLINE);
 
             ArrayList<String> arrayStringReport = new ArrayList<>();
             arrayStringReport.add("Total: " + String.valueOf(dbHelper.getTotal(start, end)) + "€");
@@ -197,14 +241,52 @@ public class ReportActivity extends AppCompatActivity {
             arrayStringReport.add("Min expense: " + String.valueOf(dbHelper.getMINExpense(start, end)) + "€");
             arrayStringReport.add("Max profit: " + String.valueOf(dbHelper.getMAXProfit(start, end)) + "€");
 
-
-            for (int i = 0; i < 10; i++) {
-
+            for (int i = 0; i < arrayStringReport.size(); i++) {
                 Paragraph p = new Paragraph(arrayStringReport.get(i));
-                p.setAlignment(Paragraph.ALIGN_LEFT);
+                p.setAlignment(Paragraph.ALIGN_CENTER);
                 p.setFont(normalFont);
                 doc.add(p);
             }
+            doc.add(Chunk.NEWLINE);
+            doc.add(Chunk.NEWLINE);
+
+            List<MoneyItem> moneyItemList = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
+
+
+            PdfPTable table = new PdfPTable(new float[]{1, 3, 4, 3, 3, 4, 2});
+            table.setTotalWidth(PageSize.A4.getWidth());
+            table.setLockedWidth(true);
+
+            table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell("ID");
+            table.addCell("Name");
+            table.addCell("Description");
+            table.addCell("Category");
+            table.addCell("Date");
+            table.addCell("Location");
+            table.addCell("Amount");
+            table.setHeaderRows(1);
+
+            PdfPCell[] cells = table.getRow(0).getCells();
+            for (int j = 0; j < cells.length; j++) {
+                cells[j].setBackgroundColor(BaseColor.GRAY);
+            }
+
+
+            for (int i = 0; i < moneyItemList.size(); i++) {
+                MoneyItem mi = moneyItemList.get(i);
+
+                table.addCell(String.valueOf(i));
+                table.addCell(mi.getName());
+                table.addCell(mi.getDescription());
+                table.addCell(mi.getCategory().getName());
+                table.addCell(new LocalDate(mi.getDate()).toString());
+                table.addCell(mi.getLocation().getName());
+                table.addCell(mi.getAmount() + "€");
+
+
+            }
+            doc.add(table);
 
 
         } catch (DocumentException de) {
@@ -228,9 +310,9 @@ public class ReportActivity extends AppCompatActivity {
 
                 long item_count = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).count();
 
-                if(item_count == 0){
+                if (item_count == 0) {
                     Toast.makeText(ReportActivity.this, "There aren't sufficient item for a report ", Toast.LENGTH_LONG).show();
-                }else {
+                } else {
                     LocalDate dt = new LocalDate(LocalDate.now());
                     if (start.toString().isEmpty() || end.toString().isEmpty()) {
                         Toast.makeText(ReportActivity.this, "Please fill all input", Toast.LENGTH_LONG).show();

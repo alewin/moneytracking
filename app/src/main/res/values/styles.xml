@@ -6,18 +6,32 @@
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
+
         -->
+    </style>
+
+
+
+
+    <style name="AppTheme.Button" parent="android:Widget.Material.Button">
+        <item name="android:background">@color/colorAccent</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
+
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:buttonStyle">@style/AppTheme.Button</item>
 
     </style>
 
 
+
+
+
     <style name="DialogStyle" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:colorAccent">@color/colorPrimary</item>
         <item name="android:textColor">@color/textColorPrimary</item>
         <item name="android:textColorPrimary">@color/textColorSecondary</item>
     </style>
@@ -62,7 +76,6 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:listViewStyle">@style/ListViewStyle</item>
-
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
 
