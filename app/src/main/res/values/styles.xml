@@ -36,6 +36,13 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="HorizontalLine">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:background">@color/grey</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
 
     <style name="ListViewStyle" parent="@android:style/Widget.Holo.Light.ListView">
         <item name="android:background">@color/windowBackground</item>

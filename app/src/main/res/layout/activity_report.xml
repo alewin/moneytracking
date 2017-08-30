@@ -18,25 +18,89 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     </android.support.design.widget.AppBarLayout>
 
+    <include
+        android:id="@+id/horizontal_line"
+        layout="@layout/horizontal_line" />
 
-    <Spinner
-        android:id="@+id/report_spinner"
+    <TextView
+        android:id="@+id/textViewSummary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Global Summary"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
-        />
+    <include
+        android:id="@+id/horizontal_line"
+        layout="@layout/horizontal_line" />
 
-    <Button
-        android:id="@+id/report_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Create report" />
 
     <TextView
         android:id="@+id/textView_report"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textAlignment="center"
         android:text="TextView" />
+
+    <include
+        android:id="@+id/horizontal_line"
+        layout="@layout/horizontal_line" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Generate Report"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <include
+        android:id="@+id/horizontal_line"
+        layout="@layout/horizontal_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/report_spinner"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_weight="1" />
+
+
+        <Button
+            android:id="@+id/report_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create report" />
+    </LinearLayout>
+
+
+
+    <include
+        android:id="@+id/horizontal_line"
+        layout="@layout/horizontal_line" />
+
+    <TextView
+        android:id="@+id/textView_report_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Report list"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <include
+        android:id="@+id/horizontal_line"
+        layout="@layout/horizontal_line" />
 
     <ListView
         android:id="@+id/pdf_report_list"

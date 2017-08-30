@@ -41,6 +41,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -59,7 +60,6 @@ public class ReportActivity extends AppCompatActivity {
     ArrayAdapter<String> arrayAdapter;
 
     LocalDate start, end;
-    String pdfText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +67,15 @@ public class ReportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_report);
 
         dbHelper = new DBHelper(this);
+        moneyItemDao = dbHelper.getDaoSession().getMoneyItemDao();
+
         init_listview();
         init_toolbar();
         init_spinner();
         init_report_button();
+
+        loadReportData();
+
     }
 
 
@@ -108,7 +113,9 @@ public class ReportActivity extends AppCompatActivity {
             File[] files = fileList.listFiles();
 
             for (File f : files) {
-                arrayAdapter.add(f.getName());
+                if(f.getName().contains("Report-") && f.getName().contains("pdf")) {
+                    arrayAdapter.add(f.getName());
+                }
             }
             arrayAdapter.notifyDataSetChanged();
 
@@ -116,22 +123,21 @@ public class ReportActivity extends AppCompatActivity {
         }
     }
 
-    private void loadReportData(LocalDate start, LocalDate end) {
-        moneyItemDao = dbHelper.getDaoSession().getMoneyItemDao();
+    private void loadReportData() {
+        LocalDate s = new LocalDate(new Date(0));
+        LocalDate e = new LocalDate();
         money_list = new ArrayList<>();
-        money_list = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
+        money_list = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(s.toDate(), e.toDate())).list();
         TextView textView_report = (TextView) findViewById(R.id.textView_report);
-        pdfText = "Totale: " + String.valueOf(dbHelper.getTotal(start, end)) +
-                "€\n|Totale speso: " + String.valueOf(dbHelper.getTotalExpense(start, end)) +
-                "€\n|Totale guadagnato: " + String.valueOf(dbHelper.getTotalProfit(start, end));
-                /*
-                +
-                "€\n|Media spesa: " + String.valueOf(dbh.avgLoss()) +
-                "€\n|Media entrata: " + String.valueOf(dbh.avgEarn()) +
-                "€\n|Massima spesa: " + String.valueOf(dbh.maxLoss()) +
-                "€\n|Massimo guadagno: " + String.valueOf(dbh.maxEarn()) + "€";
-                */
-        textView_report.setText(pdfText);
+        String reportText = "Total: " + String.valueOf(dbHelper.getTotal(s, e)) +
+                "€\nTotal expense: " + String.valueOf(dbHelper.getTotalExpense(s, e)) +
+                "€\nTotal profit: " + String.valueOf(dbHelper.getTotalProfit(s, e)) +
+                "€\nAverange expense: " + String.valueOf(dbHelper.getAVGExpense(s, e)) +
+                "€\nAverange profit: " + String.valueOf(dbHelper.getAVGProfit(s, e)) +
+                "€\nMin expense: " + String.valueOf(dbHelper.getMINExpense(s, e)) +
+                "€\nMax profit: " + String.valueOf(dbHelper.getMAXProfit(s, e)) + "€";
+
+        textView_report.setText(reportText);
     }
 
     private void viewPdf(File pdf_file) {
@@ -155,69 +161,8 @@ public class ReportActivity extends AppCompatActivity {
         }
     }
 
-    private boolean createPdf2(String text) {
-        com.itextpdf.text.Document document = new com.itextpdf.text.Document();
 
-        try {
-            String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/moneytrack";
-
-            File dir = new File(path);
-            if (!dir.exists())
-                dir.mkdirs();
-
-            Log.d("PDFCreator", "PDF Path: " + path);
-
-
-            File file = new File(dir, "sample.pdf");
-            FileOutputStream fOut = new FileOutputStream(file);
-
-            PdfWriter.getInstance(document, fOut);
-
-            //open the document
-            document.open();
-
-
-            Paragraph p1 = new Paragraph("Sample PDF CREATION USING IText");
-            Font paraFont = new Font(Font.FontFamily.COURIER);
-            p1.setAlignment(Paragraph.ALIGN_CENTER);
-            p1.setFont(paraFont);
-
-            //add paragraph to document
-            document.add(p1);
-
-            Paragraph p2 = new Paragraph("This is an example of a simple paragraph");
-            Font paraFont2 = new Font(Font.FontFamily.COURIER, 14.0f, 0, CMYKColor.GREEN);
-            p2.setAlignment(Paragraph.ALIGN_CENTER);
-            p2.setFont(paraFont2);
-
-            document.add(p2);
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            Bitmap bitmap = BitmapFactory.decodeResource(getBaseContext().getResources(), R.drawable.ic_action_name);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            Image myImg = Image.getInstance(stream.toByteArray());
-            myImg.setAlignment(Image.MIDDLE);
-
-            //add image to document
-            document.add(myImg);
-
-
-        } catch (DocumentException de) {
-            Log.e("PDFCreator", "DocumentException:" + de);
-            return false;
-
-        } catch (IOException e) {
-            Log.e("PDFCreator", "ioException:" + e);
-            return false;
-
-        } finally {
-            document.close();
-            return true;
-        }
-
-    }
-
-    private boolean createPdf(String text) {
+    private boolean createPdf() {
         Document doc = new Document();
         Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
 
@@ -249,11 +194,23 @@ public class ReportActivity extends AppCompatActivity {
             p2.setFont(normalFont);
             doc.add(p2);
 
-            String[] arrayS = pdfText.split("\\|");
+            money_list = new ArrayList<>();
+            money_list = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
+
+
+            ArrayList<String> arrayStringReport = new ArrayList<>();
+            arrayStringReport.add("Total: " + String.valueOf(dbHelper.getTotal(start, end)) + "€");
+            arrayStringReport.add("Total expense " + String.valueOf(dbHelper.getTotalExpense(start, end)) + "€");
+            arrayStringReport.add("Total profit: " + String.valueOf(dbHelper.getTotalProfit(start, end)) + "€");
+            arrayStringReport.add("Averange expense: " + String.valueOf(dbHelper.getAVGExpense(start, end)) + "€");
+            arrayStringReport.add("Averange profit: " + String.valueOf(dbHelper.getAVGProfit(start, end)) + "€");
+            arrayStringReport.add("Min expense: " + String.valueOf(dbHelper.getMINExpense(start, end)) + "€");
+            arrayStringReport.add("Max profit: " + String.valueOf(dbHelper.getMAXProfit(start, end)) + "€");
+
 
             for (int i = 0; i < 10; i++) {
 
-                Paragraph p = new Paragraph(arrayS[i]);
+                Paragraph p = new Paragraph(arrayStringReport.get(i));
                 p.setAlignment(Paragraph.ALIGN_LEFT);
                 p.setFont(normalFont);
                 doc.add(p);
@@ -273,6 +230,7 @@ public class ReportActivity extends AppCompatActivity {
 
 
     private void init_report_button() {
+
         report_button = (Button) findViewById(R.id.report_button);
         report_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -282,11 +240,10 @@ public class ReportActivity extends AppCompatActivity {
                 if (start.toString().isEmpty() || end.toString().isEmpty()) {
                     Toast.makeText(ReportActivity.this, "Please fill all input", Toast.LENGTH_LONG).show();
                 } else {
-                    loadReportData(start, end);
                     if (!isStoragePermissionGranted()) {
                         finish();
                     } else {
-                        createPdf(pdfText);
+                        createPdf();
                         Toast.makeText(ReportActivity.this, "Pdf created", Toast.LENGTH_LONG).show();
                         update_listreport();
 

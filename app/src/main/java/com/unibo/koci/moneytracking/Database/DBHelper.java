@@ -68,6 +68,49 @@ public class DBHelper {
         return total;
     }
 
+    public double getAVGProfit(LocalDate start, LocalDate end) {
+        List<MoneyItem> l = daoSession.getMoneyItemDao().queryBuilder().where(MoneyItemDao.Properties.Amount.gt(0)).where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
+        double total = 0.0;
+        ListIterator<MoneyItem> listIterator = l.listIterator();
+        while (listIterator.hasNext()) {
+            total += listIterator.next().getAmount();
+        }
+        return total/l.size();
+    }
+
+    public double getAVGExpense(LocalDate start, LocalDate end) {
+        List<MoneyItem> l = daoSession.getMoneyItemDao().queryBuilder().where(MoneyItemDao.Properties.Amount.lt(0)).where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
+        double total = 0.0;
+        ListIterator<MoneyItem> listIterator = l.listIterator();
+        while (listIterator.hasNext()) {
+            total += listIterator.next().getAmount();
+        }
+        return total/l.size();
+    }
+
+    public double getMAXProfit(LocalDate start, LocalDate end) {
+        List<MoneyItem> l = daoSession.getMoneyItemDao().queryBuilder().where(MoneyItemDao.Properties.Amount.gt(0)).where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
+        double max = 0.0, amount = 0.0;
+        ListIterator<MoneyItem> listIterator = l.listIterator();
+        while (listIterator.hasNext()) {
+            amount = listIterator.next().getAmount();
+            if(amount > max)
+                max = amount;
+        }
+        return max;
+    }
+
+    public double getMINExpense(LocalDate start, LocalDate end) {
+        List<MoneyItem> l = daoSession.getMoneyItemDao().queryBuilder().where(MoneyItemDao.Properties.Amount.lt(0)).where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).list();
+        double min = Double.MAX_VALUE, amount = 0.0;
+        ListIterator<MoneyItem> listIterator = l.listIterator();
+        while (listIterator.hasNext()) {
+            amount = listIterator.next().getAmount();
+            if(amount < min)
+                min = amount;
+        }
+        return min;
+    }
 
     // TODO per ogni categoria restituisci profit e expense nella data prestabilià
 
