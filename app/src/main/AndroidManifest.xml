@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -28,7 +29,7 @@
             android:value="AIzaSyA0br9k6Vs8TJuqFPguwXXwqo3C4n-gA2k" />
 
         <provider
-            android:name=".GenericFileProvider"
+            android:name=".Utils.GenericFileProvider"
             android:authorities="${applicationId}.my.package.name.provider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -36,6 +37,12 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_path" />
         </provider>
+
+        <receiver android:name=".Broadcast.MoneyReminder">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".MainActivity"
@@ -84,9 +91,9 @@
             android:name=".Activities.ShowChartActivity"
             android:label="Chart type"
             android:parentActivityName=".Activities.ChartTypeActivity" />
-
-
-
+        <activity android:name=".Activities.PlannedActivity"
+            android:label="Planned "
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

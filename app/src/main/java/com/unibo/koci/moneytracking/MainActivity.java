@@ -2,7 +2,6 @@ package com.unibo.koci.moneytracking;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -23,21 +22,17 @@ import android.widget.TextView;
 import com.unibo.koci.moneytracking.Activities.ArchiveActivity;
 import com.unibo.koci.moneytracking.Activities.CategoriesActivity;
 import com.unibo.koci.moneytracking.Activities.ChartTypeActivity;
+import com.unibo.koci.moneytracking.Activities.DetailActivity;
 import com.unibo.koci.moneytracking.Activities.NewItemActivity;
+import com.unibo.koci.moneytracking.Activities.PlannedActivity;
 import com.unibo.koci.moneytracking.Activities.ReportActivity;
 import com.unibo.koci.moneytracking.Activities.SettingsActivity;
 import com.unibo.koci.moneytracking.Adapters.ViewPagerAdapter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
-import com.unibo.koci.moneytracking.Entities.DaoSession;
 import com.unibo.koci.moneytracking.Fragments.TabFragment;
 
 import org.joda.time.LocalDate;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,12 +55,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Ø Periodic reminders should be shown 1 and 2 days
     before (e.g. through notifications or alert dialogs)
 
-
     Display locations on the Google Maps
 
-    Compute and visualize useful statistics about weekly
-    and monthly expenses (e.g. total expenses for each
-    category, budget over weeks, etc).
+    export graph image
 
     cLEAR CODE
     *
@@ -216,12 +208,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_category) {
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
+        }else if (id == R.id.nav_planned) {
+            startActivity(new Intent(MainActivity.this, PlannedActivity.class));
+
+        }
+        else if (id == R.id.nav_category) {
             startActivity(new Intent(MainActivity.this, CategoriesActivity.class));
 
         } else if (id == R.id.nav_graph) {
@@ -230,10 +228,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_archive) {
             startActivity(new Intent(MainActivity.this, ArchiveActivity.class));
 
-
         } else if (id == R.id.nav_report) {
             startActivity(new Intent(MainActivity.this, ReportActivity.class));
-
 
         }
 

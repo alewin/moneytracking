@@ -43,10 +43,10 @@
             android:layout_toRightOf="@id/imageView"
             android:gravity="center"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:text="MoneyTrack"
+            android:text="MONEYTRACK"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:textStyle="bold" />
 
 

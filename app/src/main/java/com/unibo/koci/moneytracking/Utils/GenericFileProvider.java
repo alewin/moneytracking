@@ -1,4 +1,4 @@
-package com.unibo.koci.moneytracking;
+package com.unibo.koci.moneytracking.Utils;
 
 import android.support.v4.content.FileProvider;
 

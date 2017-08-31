@@ -11,6 +11,10 @@
             android:icon="@drawable/ic_category"
             android:title="Categories" />
         <item
+            android:id="@+id/nav_planned"
+            android:icon="@drawable/ic_planned"
+            android:title="Planned" />
+        <item
             android:id="@+id/nav_archive"
             android:icon="@drawable/ic_description"
             android:title="Archive" />
