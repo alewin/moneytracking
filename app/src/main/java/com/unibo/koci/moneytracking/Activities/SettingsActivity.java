@@ -2,6 +2,8 @@ package com.unibo.koci.moneytracking.Activities;
 
 
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +20,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +29,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.unibo.koci.moneytracking.Broadcast.MoneyReminder;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
@@ -229,16 +234,40 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class NotificationPreferenceFragment extends PreferenceFragment {
         @Override
+
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+
+            init_notification_switch();
+        }
+
+        private void init_notification_switch() {
+            SwitchPreference mEnableNotification = (SwitchPreference) findPreference("notifications_switch");
+
+            mEnableNotification.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if (!((Boolean) newValue)) {
+                        Intent intent = new Intent(context, MoneyReminder.class);
+                        PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+                        alarmManager.cancel(sender);
+                        Toast.makeText(context, "Notification disabled", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        MoneyReminder moneyReminder = new MoneyReminder();
+                        moneyReminder.setAlarm(context);
+                        Toast.makeText(context, "Notification Enabled", Toast.LENGTH_SHORT).show();
+
+                    }
+                    return true;
+                }
+            });
+
+
         }
 
         @Override

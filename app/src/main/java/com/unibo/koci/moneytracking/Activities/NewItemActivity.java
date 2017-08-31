@@ -35,6 +35,8 @@ import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
+import org.joda.time.LocalDate;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -119,7 +121,10 @@ public class NewItemActivity extends AppCompatActivity implements
                 DatePickerDialog mDatePicker = new DatePickerDialog(NewItemActivity.this, new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
                         //int: the month between 0-11.
-                        dateInputText.setText(selectedday  + "/" + (selectedmonth+1)  + "/" + selectedyear);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        LocalDate lo = new LocalDate(selectedyear,(selectedmonth + 1),selectedday);
+                        String date_string = sdf.format(lo.toDate());
+                        dateInputText.setText(date_string);
                     }
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select date");

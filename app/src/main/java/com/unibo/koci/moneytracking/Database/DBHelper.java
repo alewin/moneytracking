@@ -2,8 +2,10 @@ package com.unibo.koci.moneytracking.Database;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.unibo.koci.moneytracking.Entities.DaoMaster;
@@ -152,7 +154,12 @@ public class DBHelper {
         return false;
     }
 
-
+    private void clear_preference(SharedPreferences prefs)
+    {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.commit();
+    }
     public boolean clearReport(){
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "MoneyTrack";
         return deleteFiles(path);
@@ -162,8 +169,12 @@ public class DBHelper {
     public void clearAllData(Context c) {
         daoMaster.dropAllTables(db, true);
         daoMaster.createAllTables(db, true);
+
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "MoneyTrack";
         deleteFiles(path);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+        clear_preference(prefs);
     }
 
 

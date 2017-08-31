@@ -1,8 +1,6 @@
 package com.unibo.koci.moneytracking.Entities;
 
-import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.NotNull;
@@ -10,14 +8,15 @@ import org.greenrobot.greendao.annotation.ToOne;
 
 import java.io.Serializable;
 import java.util.Date;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.DaoException;
 
 /**
- * Created by koale on 12/08/17.
+ * Created by koale on 31/08/17.
  */
 
-
 @Entity
-public class MoneyItem implements Serializable {
+public class PlannedItem implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /*
@@ -55,16 +54,25 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
     @ToOne(joinProperty = "locationID")
     private Location location;
 
+    @NotNull
+    private String occurrence; // daily - weekly - monthly - yearly
+
+    @NotNull
+    private Integer repeat; // how much time repeat this planned item
+
+    @NotNull
+    private Date plannedDate;
+
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
 
     /** Used for active entity operations. */
-    @Generated(hash = 1993525430)
-    private transient MoneyItemDao myDao;
+    @Generated(hash = 1660658002)
+    private transient PlannedItemDao myDao;
 
-    @Generated(hash = 673340660)
-    public MoneyItem(Long id, @NotNull String name, @NotNull String description, @NotNull Date date, double amount, @NotNull Long categoryID, @NotNull Long locationID) {
+    @Generated(hash = 909737551)
+    public PlannedItem(Long id, @NotNull String name, @NotNull String description, @NotNull Date date, double amount, @NotNull Long categoryID, @NotNull Long locationID, @NotNull String occurrence, @NotNull Integer repeat, @NotNull Date plannedDate) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -72,10 +80,13 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
         this.amount = amount;
         this.categoryID = categoryID;
         this.locationID = locationID;
+        this.occurrence = occurrence;
+        this.repeat = repeat;
+        this.plannedDate = plannedDate;
     }
 
-    @Generated(hash = 2145621404)
-    public MoneyItem() {
+    @Generated(hash = 1232195301)
+    public PlannedItem() {
     }
 
     public Long getId() {
@@ -132,6 +143,30 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
 
     public void setLocationID(Long locationID) {
         this.locationID = locationID;
+    }
+
+    public String getOccurrence() {
+        return this.occurrence;
+    }
+
+    public void setOccurrence(String occurrence) {
+        this.occurrence = occurrence;
+    }
+
+    public Integer getRepeat() {
+        return this.repeat;
+    }
+
+    public void setRepeat(Integer repeat) {
+        this.repeat = repeat;
+    }
+
+    public Date getPlannedDate() {
+        return this.plannedDate;
+    }
+
+    public void setPlannedDate(Date plannedDate) {
+        this.plannedDate = plannedDate;
     }
 
     @Generated(hash = 1372501278)
@@ -241,10 +276,10 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
     }
 
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 2043645194)
+    @Generated(hash = 243494952)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getMoneyItemDao() : null;
+        myDao = daoSession != null ? daoSession.getPlannedItemDao() : null;
     }
 
-   }
+}

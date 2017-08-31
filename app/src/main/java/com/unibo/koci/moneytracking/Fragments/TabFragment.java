@@ -17,9 +17,11 @@ import com.unibo.koci.moneytracking.R;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -64,11 +66,16 @@ public class TabFragment extends Fragment {
     private List<MoneyItem> getItems() {
         List<MoneyItem> input = new ArrayList<>();
         int tab = getArguments().getInt("numtab");
-        LocalDate dt = new LocalDate(LocalDate.now());
+        Date date = new Date();
+        DateTimeZone datetimeZone = DateTimeZone.forID("Etc/GMT+2");
 
+        LocalDate dt = new LocalDate(LocalDate.now(),datetimeZone);
+        LocalDate dt2 = new LocalDate();
+
+        long nino = date.getTime();
         switch (tab) {
             case 1:
-                input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.toDate(), dt.toDate())).list();
+                input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(date, date)).list();
                 break;
             case 2:
                 input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.dayOfWeek().withMinimumValue().toDate(), dt.dayOfWeek().withMaximumValue().toDate())).list();

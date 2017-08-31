@@ -1,9 +1,14 @@
 package com.unibo.koci.moneytracking;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -18,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unibo.koci.moneytracking.Activities.ArchiveActivity;
 import com.unibo.koci.moneytracking.Activities.CategoriesActivity;
@@ -28,11 +34,15 @@ import com.unibo.koci.moneytracking.Activities.PlannedActivity;
 import com.unibo.koci.moneytracking.Activities.ReportActivity;
 import com.unibo.koci.moneytracking.Activities.SettingsActivity;
 import com.unibo.koci.moneytracking.Adapters.ViewPagerAdapter;
+import com.unibo.koci.moneytracking.Broadcast.MoneyReminder;
+import com.unibo.koci.moneytracking.Broadcast.ReminderService;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Fragments.TabFragment;
 
 import org.joda.time.LocalDate;
+
+import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,8 +70,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     export graph image
 
     cLEAR CODE
+
+    bug chart only one profit no expense
     *
     * */
+
+    Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,11 +90,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             editor.putBoolean("firstTime", true);
             editor.commit();
         }
-
+        context = this;
         init_tabview();
         init_toolbar();
         init_fab();
         init_navview();
+        init_planned();
+
+    }
+
+
+
+    private void init_planned() {
+       /*
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        SharedPreferences prefs = context.getSharedPreferences("com.unibo.koci.moneytracking", Context.MODE_PRIVATE);
+        Boolean ok = prefs.getBoolean("notifications_switch",true);
+        int storedPreference = preferences.getInt("storedInt", 0);
+
+
+        if (prefs.getString("notifications_switch", "true").equals("true")){
+            startService(new Intent(MainActivity.this, ReminderService.class));
+        }else {
+        }
+*/
 
 
     }
@@ -120,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         total_amount = (TextView) findViewById(R.id.available_amount);
 
         String amount = (String.format("%.0f", dbHelper.getTotal(new LocalDate(0), LocalDate.now())));
-
+//bugged 1septemer
 
         total_amount.setText(String.valueOf(amount + "€"));
         setSupportActionBar(toolbar);

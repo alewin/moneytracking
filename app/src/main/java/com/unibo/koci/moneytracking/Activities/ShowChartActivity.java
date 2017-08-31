@@ -84,7 +84,6 @@ public class ShowChartActivity extends AppCompatActivity {
         colors.add(Color.GREEN);
 
         createPieChart(x, colors);
-
     }
 
 
@@ -96,10 +95,7 @@ public class ShowChartActivity extends AppCompatActivity {
         List<BarEntry> yVals2 = new ArrayList<BarEntry>();
         final JSONArray jsonarray = dbHelper.getCategoryProfitExpense(start, end);
 
-
         try {
-
-
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject jsonobject = jsonarray.getJSONObject(i);
                 String name = jsonobject.getString("name");
@@ -140,8 +136,7 @@ public class ShowChartActivity extends AppCompatActivity {
         barChart.setDrawGridBackground(false);
 
         XAxis xl = barChart.getXAxis();
-
-       xl.setTextSize(2);
+        xl.setTextSize(2);
         xl.setTextColor(Color.BLACK);
         xl.setGranularity(1f);
         xl.setCenterAxisLabels(true);
@@ -186,9 +181,9 @@ public class ShowChartActivity extends AppCompatActivity {
         } else {
             set1 = new BarDataSet(yVals1, "Expense");
             set1.setColor(Color.RED);
-
             set2 = new BarDataSet(yVals2, "Profit");
             set2.setColor(Color.GREEN);
+
             ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
             dataSets.add(set1);
             dataSets.add(set2);
@@ -200,6 +195,10 @@ public class ShowChartActivity extends AppCompatActivity {
         barChart.getBarData().setBarWidth(barWidth);
         barChart.getXAxis().setAxisMinValue(0);
         barChart.groupBars(0, groupSpace, barSpace);
+
+       xl.setAxisMaximum(jsonarray.length());
+
+
         barChart.invalidate();
 
     }
