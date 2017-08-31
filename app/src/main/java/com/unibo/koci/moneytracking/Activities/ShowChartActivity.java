@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
@@ -23,6 +23,9 @@ import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.R;
 
 import org.joda.time.LocalDate;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +34,8 @@ public class ShowChartActivity extends AppCompatActivity {
 
     Toolbar show_chart_toolbar;
     PieChart pieChart;
-    BarChart barChart;
+    HorizontalBarChart barChart;
     DBHelper dbHelper;
-    String[] xData = {
-            "January", "February", "March",
-            "April", "May", "June", "July",
-            "August", "September", "October",
-            "November", "December"};
-
 
     LocalDate start, end;
 
@@ -86,18 +83,56 @@ public class ShowChartActivity extends AppCompatActivity {
         colors.add(Color.RED);
         colors.add(Color.GREEN);
 
-        createChart(x, colors);
+        createPieChart(x, colors);
 
     }
 
-    private float getDataCategory(LocalDate start, LocalDate end) {
-
-        return Math.abs((float) (dbHelper.getTotalExpense(start, end)));
-    }
 
     private void init_chart_category() {
-        BarChart barChart = (BarChart) findViewById(R.id.show_chart_category);
 
+        barChart = (HorizontalBarChart) findViewById(R.id.show_chart_category);
+
+        List<BarEntry> yVals1 = new ArrayList<BarEntry>();
+        List<BarEntry> yVals2 = new ArrayList<BarEntry>();
+        final JSONArray jsonarray = dbHelper.getCategoryProfitExpense(start, end);
+
+
+        try {
+
+
+            for (int i = 0; i < jsonarray.length(); i++) {
+                JSONObject jsonobject = jsonarray.getJSONObject(i);
+                String name = jsonobject.getString("name");
+                String profit = jsonobject.getString("profit");
+                String expense = jsonobject.getString("expense");
+                yVals1.add(new BarEntry(i, Math.abs(Float.valueOf(expense))));
+                yVals2.add(new BarEntry(i, Math.abs(Float.valueOf(profit))));
+
+            }
+        } catch (JSONException e) {
+
+        }
+
+        createBarChart(yVals1, yVals2, jsonarray);
+    }
+
+
+    private void createBarChart(List<BarEntry> yVals1, List<BarEntry> yVals2, final JSONArray jsonarray) {
+
+        BarDataSet set1, set2;
+        Description d = new Description();
+        d.setText("");
+
+        float groupSpace = 0.04f;
+        float barSpace = 0.02f;
+        float barWidth = 0.46f;
+
+        barChart.setPinchZoom(true);
+        barChart.animateY(3000);
+        barChart.animateX(3000);
+        barChart.setNoDataTextColor(Color.GRAY);
+
+        barChart.setDescription(d);
         barChart.setDrawBarShadow(false);
         barChart.setDrawValueAboveBar(true);
         barChart.setMaxVisibleValueCount(50);
@@ -105,51 +140,41 @@ public class ShowChartActivity extends AppCompatActivity {
         barChart.setDrawGridBackground(false);
 
         XAxis xl = barChart.getXAxis();
+
+       xl.setTextSize(2);
+        xl.setTextColor(Color.BLACK);
         xl.setGranularity(1f);
         xl.setCenterAxisLabels(true);
-        xl.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
-        xl.setAxisMinimum(0f);
-
         xl.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return "ok" + value;
+                try {
+                    int i = (int) value;
+                    JSONObject jsonobject = jsonarray.getJSONObject(i);
+                    return jsonobject.getString("name");
+
+                } catch (JSONException e) {
+
+                }
+                return "";
+
             }
         });
-
         YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setTextSize(2);
+        leftAxis.setTextColor(Color.BLACK);
+        leftAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return String.valueOf((int) value) + "€";
+            }
 
-
+        });
         leftAxis.setDrawGridLines(false);
         leftAxis.setSpaceTop(30f);
-        leftAxis.setAxisMinValue(0f); // this replaces setStartAtZero(true
+        leftAxis.setAxisMinValue(0f);
         barChart.getAxisRight().setEnabled(false);
 
-        //data
-        float groupSpace = 0.04f;
-        float barSpace = 0.02f; // x2 dataset
-        float barWidth = 0.46f; // x2 dataset
-        // (0.46 + 0.02) * 2 + 0.04 = 1.00 -> interval per "group"
-
-        int startYear = 1;
-        int endYear = 10;
-
-
-        List<BarEntry> yVals1 = new ArrayList<BarEntry>();
-        List<BarEntry> yVals2 = new ArrayList<BarEntry>();
-
-
-        for (int i = startYear; i < endYear; i++) {
-            yVals1.add(new BarEntry(i, 0.4f));
-
-        }
-
-        for (int i = startYear; i < endYear; i++) {
-            yVals2.add(new BarEntry(i, 0.7f));
-        }
-
-
-        BarDataSet set1, set2;
 
         if (barChart.getData() != null && barChart.getData().getDataSetCount() > 0) {
             set1 = (BarDataSet) barChart.getData().getDataSetByIndex(0);
@@ -159,79 +184,27 @@ public class ShowChartActivity extends AppCompatActivity {
             barChart.getData().notifyDataChanged();
             barChart.notifyDataSetChanged();
         } else {
-            // create 2 datasets with different types
             set1 = new BarDataSet(yVals1, "Expense");
-            set1.setStackLabels(new String[]{"Births", "Divorces", "Marriages", "ok", "ppp"});
-
             set1.setColor(Color.RED);
+
             set2 = new BarDataSet(yVals2, "Profit");
-            set2.setStackLabels(new String[]{"Births", "Divorces", "Marriages", "ok", "ppp"});
-
             set2.setColor(Color.GREEN);
-
             ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
             dataSets.add(set1);
             dataSets.add(set2);
-
             BarData data = new BarData(dataSets);
             barChart.setData(data);
         }
 
-        barChart.setPinchZoom(true);
-
-        barChart.animateY(3000);
-        barChart.animateX(3000);
 
         barChart.getBarData().setBarWidth(barWidth);
-        barChart.getXAxis().setAxisMinValue(startYear);
-        barChart.groupBars(startYear, groupSpace, barSpace);
+        barChart.getXAxis().setAxisMinValue(0);
+        barChart.groupBars(0, groupSpace, barSpace);
         barChart.invalidate();
-    }
-
-    private void init_chart_category2() {
-
-
-        barChart = (BarChart) findViewById(R.id.show_chart_category);
-
-        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
-        ArrayList<BarEntry> yVals2 = new ArrayList<BarEntry>();
-
-        for (int i = 0; i < 10; i++) {
-            yVals2.add(new BarEntry(i, 4));
-            yVals1.add(new BarEntry(i, 5));
-        }
-
-        for (int i = 10; i < 20; i++) {
-            yVals2.add(new BarEntry(i, 3));
-            yVals1.add(new BarEntry(i, 7));
-        }
-
-
-        // create 2 datasets
-        BarDataSet set1 = new BarDataSet(yVals1, "Men");
-        set1.setColor(Color.BLUE);
-        BarDataSet set2 = new BarDataSet(yVals2, "Women");
-        set2.setColor(Color.RED);
-
-        BarData data = new BarData(set1, set2);
-
-        barChart.setPinchZoom(true);
-
-        barChart.animateY(3000);
-        barChart.animateX(3000);
-
-        barChart.setDrawGridBackground(false);
-
-        float barWidth = 0.45f; // x2 dataset
-        data.setBarWidth(barWidth); // set the width of each bar
-        barChart.setData(data);
-        barChart.invalidate(); // refresh
-
 
     }
 
-
-    private void createChart(ArrayList<PieEntry> yEntrys, ArrayList<Integer> colors) {
+    private void createPieChart(ArrayList<PieEntry> yEntrys, ArrayList<Integer> colors) {
 
         //create the data set
         PieDataSet pieDataSet = new PieDataSet(yEntrys, "");
@@ -239,8 +212,9 @@ public class ShowChartActivity extends AppCompatActivity {
         pieDataSet.setValueTextSize(12);
         pieDataSet.setColors(colors);
 
-        pieChart.setCenterText("X");
+        pieChart.setCenterText(start.toString() + "\n" + end.toString());
         pieChart.setCenterTextColor(Color.BLACK);
+        pieChart.setCenterTextSize(20);
 
         pieChart.animateY(2000);
         pieChart.animateX(2000);

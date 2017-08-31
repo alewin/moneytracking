@@ -2,6 +2,7 @@ package com.unibo.koci.moneytracking;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -28,9 +29,15 @@ import com.unibo.koci.moneytracking.Activities.SettingsActivity;
 import com.unibo.koci.moneytracking.Adapters.ViewPagerAdapter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
+import com.unibo.koci.moneytracking.Entities.DaoSession;
 import com.unibo.koci.moneytracking.Fragments.TabFragment;
 
 import org.joda.time.LocalDate;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,7 +51,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     DBHelper dbHelper;
 
+    /*TODO
 
+    Functionality2: Manage periodic/planned expenses
+    Ø Add information about periodic expenses (e.g. loan)
+    Ø Add information about planned expenses (e.g. bill)
+    Ø Budget must be updated at the payment date
+    Ø Periodic reminders should be shown 1 and 2 days
+    before (e.g. through notifications or alert dialogs)
+
+
+    Display locations on the Google Maps
+
+    Compute and visualize useful statistics about weekly
+    and monthly expenses (e.g. total expenses for each
+    category, budget over weeks, etc).
+
+    cLEAR CODE
+    *
+    * */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         init_toolbar();
         init_fab();
         init_navview();
+
+
     }
 
     private void init_firstTimeStart() {
@@ -100,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         total_amount = (TextView) findViewById(R.id.available_amount);
 
-        String amount =  (String.format("%.0f", dbHelper.getTotal(new LocalDate(0), LocalDate.now())));
+        String amount = (String.format("%.0f", dbHelper.getTotal(new LocalDate(0), LocalDate.now())));
 
 
         total_amount.setText(String.valueOf(amount + "€"));

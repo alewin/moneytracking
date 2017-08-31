@@ -346,12 +346,10 @@ public class ReportActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View selectedItemView, int position, long id) {
 
                 LocalDate dt = new LocalDate(LocalDate.now());
-
-
                 switch (position) {
                     case 0: // Day
-                        start = dt.minusDays(1);
-                        end = dt.plusDays(1);
+                        start = dt;
+                        end = dt;
                         break;
                     case 1: // week
                         start = dt.dayOfWeek().withMinimumValue();

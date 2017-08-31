@@ -88,8 +88,8 @@ public class ChartTypeActivity extends AppCompatActivity {
 
                 switch (position) {
                     case 0: // Day
-                        start = dt.minusDays(1);
-                        end = dt.plusDays(1);
+                        start = dt;
+                        end = dt;
                         break;
                     case 1: // week
                         start = dt.dayOfWeek().withMinimumValue();
