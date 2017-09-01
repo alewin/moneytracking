@@ -159,7 +159,6 @@
                         android:layout_height="40dp"
                         android:background="@color/white"
                         android:popupBackground="@color/white"
-                        android:spinnerMode="dialog"
                         android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 </android.support.design.widget.TextInputLayout>

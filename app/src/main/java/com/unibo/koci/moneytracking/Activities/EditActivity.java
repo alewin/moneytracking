@@ -77,7 +77,10 @@ public class EditActivity extends AppCompatActivity implements
     private LinearLayout li_planned;
     private Place place;
     private long catid, locid;
-    MoneyItem item;
+
+    MoneyItem money_item;
+    PlannedItem planned_item;
+
     String occurrence_type = "";
     DBHelper dbHelper;
     Boolean isPlanned = false;
@@ -87,10 +90,19 @@ public class EditActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
-        item = (MoneyItem) (getIntent().getSerializableExtra("item"));
         isPlanned = (Boolean) getIntent().getExtras().getSerializable("planned");
-
+        li_planned = (LinearLayout) findViewById(R.id.planned_layout);
         dbHelper = new DBHelper(this);
+
+        if (isPlanned) {
+            li_planned.setVisibility(View.VISIBLE);
+            planned_item = (PlannedItem) (getIntent().getSerializableExtra("planned_item"));
+
+        } else {
+            li_planned.setVisibility(View.GONE);
+            money_item = (MoneyItem) (getIntent().getSerializableExtra("money_item"));
+
+        }
 
         init_editText();
 
@@ -99,14 +111,6 @@ public class EditActivity extends AppCompatActivity implements
         init_addbutton();
         init_selectategory();
         init_placeAPI();
-
-
-        if (isPlanned) {
-            li_planned.setVisibility(View.VISIBLE);
-            init_planned_occurrence();
-        } else {
-            li_planned.setVisibility(View.GONE);
-        }
 
     }
 
@@ -129,10 +133,8 @@ public class EditActivity extends AppCompatActivity implements
             }
         });
     }
-    private void init_editText() {
-        item.__setDaoSession(dbHelper.getDaoSession());
 
-        li_planned = (LinearLayout) findViewById(R.id.planned_layout);
+    private void init_editText() {
         addLocation = (AutoCompleteTextView) findViewById(R.id.addLocation);
         nameAdd = (EditText) findViewById(R.id.add_name);
         descriptionAdd = (EditText) findViewById(R.id.add_description);
@@ -143,33 +145,36 @@ public class EditActivity extends AppCompatActivity implements
         toolbar = (Toolbar) findViewById(R.id.toolbar2);
         buttonAdd.setText("Edit");
 
-
         if (isPlanned) {
+            planned_item.__setDaoSession(dbHelper.getDaoSession());
             occurrenceSpinner = (Spinner) findViewById(R.id.add_occurrence);
+            init_planned_occurrence();
             repeatPlanned = (EditText) findViewById(R.id.add_repeat);
+            nameAdd.setText(planned_item.getName());
+            String amount = (String.format("%.0f", planned_item.getAmount()));
+            amountAdd.setText(amount);
+            Date d = planned_item.getDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            dateInputText.setText(String.valueOf(sdf.format(d.getTime())));
+            descriptionAdd.setText(String.valueOf(planned_item.getDescription()));
+            addLocation.setText(String.valueOf(planned_item.getLocation().getName()));
+            repeatPlanned.setText(String.valueOf(planned_item.getRepeat()));
+            catid = planned_item.getCategoryID();
+            locid = planned_item.getLocationID();
+        } else {
+            money_item.__setDaoSession(dbHelper.getDaoSession());
+
+            nameAdd.setText(money_item.getName());
+            String amount = (String.format("%.0f", money_item.getAmount()));
+            amountAdd.setText(amount);
+            Date d = money_item.getDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            dateInputText.setText(String.valueOf(sdf.format(d.getTime())));
+            descriptionAdd.setText(String.valueOf(money_item.getDescription()));
+            addLocation.setText(String.valueOf(money_item.getLocation().getName()));
+            catid = money_item.getCategoryID();
+            locid = money_item.getLocationID();
         }
-
-
-        nameAdd.setText(item.getName());
-
-        String amount = (String.format("%.0f", item.getAmount()));
-        amountAdd.setText(amount);
-
-
-        Date d = item.getDate();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-
-        dateInputText.setText(String.valueOf(sdf.format(d.getTime())));
-        descriptionAdd.setText(String.valueOf(item.getDescription()));
-
-        addLocation.setText(String.valueOf(item.getLocation().getName()));
-        //category spinner settato ininit_category per comodità ed efficienza
-
-
-        catid = item.getCategoryID();
-        locid = item.getLocationID();
-
     }
 
     private void init_toolbar() {
@@ -249,13 +254,18 @@ public class EditActivity extends AppCompatActivity implements
             }
         });
         i = 0;
-        while (i <= listItems.size()) {
-            if (item.getCategory().getName() == listItems.get(i)) {
-                categorySpinner.setSelection(i);
-                break;
+        if (isPlanned) {
+            while (i <= listItems.size() && !planned_item.getCategory().getName().equals(listItems.get(i))) {
+                i++;
             }
-            i++;
+        } else {
+            while (i <= listItems.size() && !money_item.getCategory().getName().equals(listItems.get(i))) {
+                i++;
+            }
         }
+
+
+        categorySpinner.setSelection(i);
 
 
     }
@@ -323,8 +333,10 @@ public class EditActivity extends AppCompatActivity implements
 
                     }
                     if (ok) {
+                        Location tmp = isPlanned ? planned_item.getLocation() : money_item.getLocation();
+                        String item_loc_name = tmp.getName();
 
-                        if (!item.getLocation().getName().equals(addLocation.getText().toString())) {
+                        if (!item_loc_name.equals(addLocation.getText().toString())) {
                             if (place != null) {
                                 if (addLocation.getText().toString().equals(place.getAddress().toString())) {
                                     //nuovo place aggiunto
@@ -335,26 +347,38 @@ public class EditActivity extends AppCompatActivity implements
                                 }
                             }
                             // cancello vecchia locazione e aggiungo la nuova
-                            dbHelper.getDaoSession().delete(item.getLocation());
+                            dbHelper.getDaoSession().delete(tmp);
                             locid = dbHelper.getDaoSession().insert(loc);
                         }
 
                         if (isPlanned) {
                             Date planned_date = createPlannedDate(occurrence_type, date);
-                            PlannedItem pi = new PlannedItem(null, name, description, date, amount, catid, locid, occurrence_type, repeat, planned_date);
-                            dbHelper.getDaoSession().insert(pi);
-                        } else {
-                            MoneyItem mi = new MoneyItem(null, name, description, date, amount, catid, locid);
-                            dbHelper.getDaoSession().insert(mi);
-                        }
-                        item.setAmount(amount);
-                        item.setName(name);
-                        item.setDescription(description);
-                        item.setDate(date);
 
-                        item.setCategoryID(catid);
-                        item.setLocationID(locid);
-                        dbHelper.getDaoSession().update(item);
+                            planned_item.setAmount(amount);
+                            planned_item.setName(name);
+                            planned_item.setDescription(description);
+                            planned_item.setDate(date);
+                            planned_item.setCategoryID(catid);
+                            planned_item.setLocationID(locid);
+
+                            //planned
+                            planned_item.setRepeat(repeat);
+                            planned_item.setOccurrence(occurrence_type);
+                            planned_item.setPlannedDate(planned_date);
+
+                            dbHelper.getDaoSession().update(planned_item);
+
+
+                        } else {
+                            money_item.setAmount(amount);
+                            money_item.setName(name);
+                            money_item.setDescription(description);
+                            money_item.setDate(date);
+                            money_item.setCategoryID(catid);
+                            money_item.setLocationID(locid);
+                            dbHelper.getDaoSession().update(money_item);
+                        }
+
 
                         Toast.makeText(EditActivity.this, "Edited", Toast.LENGTH_LONG).show();
 
@@ -400,7 +424,11 @@ public class EditActivity extends AppCompatActivity implements
     public void onBackPressed() {
         super.onBackPressed();  // optional depending on your needs
         Intent intent = new Intent(EditActivity.this, DetailActivity.class);
-        intent.putExtra("item", item);
+        if (isPlanned) {
+            intent.putExtra("planned_item", planned_item);
+        } else {
+            intent.putExtra("money_item", money_item);
+        }
         intent.putExtra("planned", isPlanned);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

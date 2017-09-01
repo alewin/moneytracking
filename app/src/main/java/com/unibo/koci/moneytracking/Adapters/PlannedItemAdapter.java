@@ -88,7 +88,7 @@ public class PlannedItemAdapter extends RecyclerView.Adapter<PlannedItemAdapter.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), DetailActivity.class);
-                intent.putExtra("item", plannedItems.get(position));
+                intent.putExtra("planned_item", plannedItems.get(position));
                 intent.putExtra("planned", true);
                 v.getContext().startActivity(intent);
                 notifyDataSetChanged();

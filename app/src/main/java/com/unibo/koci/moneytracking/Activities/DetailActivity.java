@@ -11,6 +11,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
+import com.unibo.koci.moneytracking.Entities.PlannedItem;
 import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
@@ -35,22 +39,28 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private GoogleMap mMap;
     Toolbar toolbar_detail;
     SupportMapFragment mapFragment;
-    TextView txt_description, txt_amount, txt_category, txt_date, txt_postion;
-    MoneyItem item;
+    TextView txt_description, txt_amount, txt_category, txt_date, txt_postion, txt_repeat, txt_occurence, txt_nextdate;
+    MoneyItem money_item;
+    PlannedItem planned_item;
     DBHelper dbHelper;
     final Context context = this;
     Boolean isPlanned = false;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-        item = (MoneyItem) getIntent().getExtras().getSerializable("item");
+        dbHelper = new DBHelper(this);
         isPlanned = (Boolean) getIntent().getExtras().getSerializable("planned");
 
-        dbHelper = new DBHelper(this);
+        if (isPlanned) {
+            planned_item = (PlannedItem) (getIntent().getSerializableExtra("planned_item"));
+        } else {
+            money_item = (MoneyItem) (getIntent().getSerializableExtra("money_item"));
 
+        }
 
         init_toolbar();
         init_textviews();
@@ -60,29 +70,42 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     private void init_textviews() {
-        item.__setDaoSession(dbHelper.getDaoSession());
-
         txt_amount = (TextView) findViewById(R.id.detail_amount);
         txt_category = (TextView) findViewById(R.id.detail_category);
         txt_date = (TextView) findViewById(R.id.detail_date);
         txt_description = (TextView) findViewById(R.id.detail_description);
         txt_postion = (TextView) findViewById(R.id.detail_position);
+        txt_repeat = (TextView) findViewById(R.id.detail_planned_repeat);
+        txt_occurence = (TextView) findViewById(R.id.detail_planned_occurence);
+        txt_nextdate = (TextView) findViewById(R.id.detail_planned_nextDate);
 
 
-        String amount = (String.format("%.0f", item.getAmount()));
-        txt_amount.setText(amount + "€");
+        if (isPlanned) {
+            planned_item.__setDaoSession(dbHelper.getDaoSession());
+            String amount = (String.format("%.0f", planned_item.getAmount()));
+            txt_amount.setText(amount + "€");
+            txt_category.setText((planned_item.getCategory().getName()));
+            Date d = planned_item.getDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            txt_date.setText(String.valueOf(sdf.format(d.getTime())));
+            txt_description.setText(String.valueOf(planned_item.getDescription()));
+            txt_postion.setText(String.valueOf(planned_item.getLocation().getName()));
+            txt_occurence.setText(String.valueOf(planned_item.getOccurrence()));
+            txt_repeat.setText(String.valueOf(planned_item.getRepeat()));
+            d = planned_item.getPlannedDate();
+            txt_nextdate.setText(String.valueOf(sdf.format(d.getTime())));
+        } else {
+            money_item.__setDaoSession(dbHelper.getDaoSession());
+            String amount = (String.format("%.0f", money_item.getAmount()));
+            txt_amount.setText(amount + "€");
+            txt_category.setText((money_item.getCategory().getName()));
+            Date d = money_item.getDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            txt_date.setText(String.valueOf(sdf.format(d.getTime())));
+            txt_description.setText(String.valueOf(money_item.getDescription()));
+            txt_postion.setText(String.valueOf(money_item.getLocation().getName()));
+        }
 
-        txt_category.setText((item.getCategory().getName()));
-
-        Date d = item.getDate();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-
-        txt_date.setText(String.valueOf(sdf.format(d.getTime())));
-
-
-        txt_description.setText(String.valueOf(item.getDescription()));
-        txt_postion.setText(String.valueOf(item.getLocation().getName()));
 
     }
 
@@ -92,7 +115,12 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DetailActivity.this, EditActivity.class);
-                intent.putExtra("item", item);
+                if (isPlanned) {
+                    intent.putExtra("planned_item", planned_item);
+                } else {
+                    intent.putExtra("money_item", money_item);
+                }
+                intent.putExtra("planned", isPlanned);
                 startActivity(intent);
             }
         });
@@ -107,7 +135,11 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                         .setMessage("Are you sure?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                delete_item(item);
+                                if (isPlanned) {
+                                    delete_PlannedItem(planned_item);
+                                } else {
+                                    delete_Moneyitem(money_item);
+                                }
                                 Toast.makeText(DetailActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
 
                                 Intent intent = new Intent(DetailActivity.this, MainActivity.class);
@@ -122,11 +154,16 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         });
     }
 
-    private void delete_item(MoneyItem i) {
+    private void delete_PlannedItem(PlannedItem i) {
         Location l = i.getLocation();
         dbHelper.getDaoSession().delete(i);
         dbHelper.getDaoSession().delete(l);
-        //todo refresh all
+    }
+
+    private void delete_Moneyitem(MoneyItem i) {
+        Location l = i.getLocation();
+        dbHelper.getDaoSession().delete(i);
+        dbHelper.getDaoSession().delete(l);
     }
 
     private void init_map() {
@@ -139,12 +176,15 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        Location tmp = isPlanned ? planned_item.getLocation() : money_item.getLocation();
 
-        LatLng item_pos = new LatLng(item.getLocation().getLatitude(), item.getLocation().getLongitude());
+        LatLng item_pos = new LatLng(tmp.getLatitude(), tmp.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.zoomIn());
         mMap.animateCamera(CameraUpdateFactory.zoomOut());
 
-        mMap.addMarker(new MarkerOptions().position(item_pos).title(item.getName().toString()));
+        String tmpname = isPlanned ? planned_item.getName() : money_item.getName();
+
+        mMap.addMarker(new MarkerOptions().position(item_pos).title(tmpname));
         CameraPosition cameraPosition = new CameraPosition.Builder().target(item_pos).zoom(15).build();
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMapToolbarEnabled(true);
@@ -156,9 +196,10 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private void init_toolbar() {
         toolbar_detail = (Toolbar) findViewById(R.id.toolbar_detail);
         setSupportActionBar(toolbar_detail);
+        String tmpname = isPlanned ? planned_item.getName() : money_item.getName();
 
 
-        getSupportActionBar().setTitle(item.getName());
+        getSupportActionBar().setTitle(tmpname);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }

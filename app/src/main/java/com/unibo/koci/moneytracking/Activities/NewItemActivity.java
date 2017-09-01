@@ -68,18 +68,21 @@ public class NewItemActivity extends AppCompatActivity implements
     private EditText nameAdd;
     private EditText descriptionAdd;
     private EditText amountAdd;
-    private EditText repeatPlanned;
+
     private Button buttonAdd;
     private EditText dateInputText;
     private Spinner categorySpinner;
-    private Spinner occurrenceSpinner;
     private Toolbar toolbar;
     private LinearLayout li_planned;
+    private EditText repeatPlanned;
+    private Spinner occurrenceSpinner;
+
     private Place place;
     private long catid;
-    String occurrence_type = "";
     DBHelper dbHelper;
     Boolean isPlanned = false;
+
+    String occurrence_type = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
