@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unibo.koci.moneytracking.Activities.ArchiveActivity;
 import com.unibo.koci.moneytracking.Activities.CategoriesActivity;
@@ -28,6 +29,7 @@ import com.unibo.koci.moneytracking.Activities.PlannedActivity;
 import com.unibo.koci.moneytracking.Activities.ReportActivity;
 import com.unibo.koci.moneytracking.Activities.SettingsActivity;
 import com.unibo.koci.moneytracking.Adapters.ViewPagerAdapter;
+import com.unibo.koci.moneytracking.Broadcast.MoneyReminder;
 import com.unibo.koci.moneytracking.Broadcast.ReminderService;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
@@ -53,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     set planned date, and times -- every notification check
 
     cheange notificatonbar text
+
+    add to detail view planned
+    add to edit view planned
+
 
     Ø Budget must be updated at the payment date
     Ø Periodic reminders should be shown 1 and 2 days
@@ -90,7 +96,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void init_planned_notification() {
         if (prefs.getBoolean("notifications_switch", true)) {
-            startService(new Intent(MainActivity.this, ReminderService.class));
+            MoneyReminder moneyReminder = new MoneyReminder();
+            moneyReminder.setAlarm(context);
+
         }
 
     }
@@ -107,6 +115,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         editor.putBoolean("firstTime", false);
         editor.putString("notifications_ringtone", "content://settings/system/notification_sound");
         editor.putBoolean("notifications_switch", true);
+        editor.putInt("notification_reminder", 1);
+        editor.putInt("notifications_sync", 1);
+
 
         editor.commit();
 

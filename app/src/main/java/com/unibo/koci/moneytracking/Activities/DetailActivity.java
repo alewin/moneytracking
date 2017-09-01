@@ -27,8 +27,6 @@ import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
-import org.joda.time.LocalDate;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,6 +39,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     MoneyItem item;
     DBHelper dbHelper;
     final Context context = this;
+    Boolean isPlanned = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +47,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         setContentView(R.layout.activity_detail);
 
         item = (MoneyItem) getIntent().getExtras().getSerializable("item");
+        isPlanned = (Boolean) getIntent().getExtras().getSerializable("planned");
+
         dbHelper = new DBHelper(this);
 
 
@@ -68,8 +69,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         txt_postion = (TextView) findViewById(R.id.detail_position);
 
 
-        String amount =  (String.format("%.0f", item.getAmount()));
-        txt_amount.setText(amount+ "€");
+        String amount = (String.format("%.0f", item.getAmount()));
+        txt_amount.setText(amount + "€");
 
         txt_category.setText((item.getCategory().getName()));
 

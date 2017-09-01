@@ -212,11 +212,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
 
             init_notification_switch();
-            init_notification_many();
+            init_notification_sync();
+
         }
 
-        private void init_notification_many(){
-            SwitchPreference mEnableNotification = (SwitchPreference) findPreference("notifications_many");
+        private void init_notification_sync(){
+            SwitchPreference mSyncNotification = (SwitchPreference) findPreference("notifications_sync");
+            SwitchPreference mReminderNotification = (SwitchPreference) findPreference("notification_reminder");
+
 
 
         }

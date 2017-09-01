@@ -20,11 +20,23 @@
         android:dependency="notifications_switch"
         android:defaultValue="1"
         android:inputType="number"
-        android:key="notification_manytimes"
+        android:key="notification_sync"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:summary="How many hours check the planned notification?"
-        android:title="Reminder" />
+        android:title="Sync" />
 
+<!---
+    <EditTextPreference
+        android:dependency="notifications_switch"
+        android:defaultValue="1"
+        android:inputType="number"
+        android:key="notification_reminder"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="Day before recive planned notification?"
+        android:title="Reminder" />
+-->
 </PreferenceScreen>

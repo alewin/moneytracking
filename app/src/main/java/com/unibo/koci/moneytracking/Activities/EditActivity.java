@@ -16,6 +16,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -33,8 +34,11 @@ import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
+import com.unibo.koci.moneytracking.Entities.PlannedItem;
 import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
+
+import org.joda.time.LocalDate;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -64,15 +68,19 @@ public class EditActivity extends AppCompatActivity implements
     private EditText nameAdd;
     private EditText descriptionAdd;
     private EditText amountAdd;
+    private EditText repeatPlanned;
     private Button buttonAdd;
     private EditText dateInputText;
     private Spinner categorySpinner;
+    private Spinner occurrenceSpinner;
     private Toolbar toolbar;
-
+    private LinearLayout li_planned;
     private Place place;
     private long catid, locid;
-    DBHelper dbHelper;
     MoneyItem item;
+    String occurrence_type = "";
+    DBHelper dbHelper;
+    Boolean isPlanned = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +88,8 @@ public class EditActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_new_item);
 
         item = (MoneyItem) (getIntent().getSerializableExtra("item"));
+        isPlanned = (Boolean) getIntent().getExtras().getSerializable("planned");
+
         dbHelper = new DBHelper(this);
 
         init_editText();
@@ -89,12 +99,40 @@ public class EditActivity extends AppCompatActivity implements
         init_addbutton();
         init_selectategory();
         init_placeAPI();
+
+
+        if (isPlanned) {
+            li_planned.setVisibility(View.VISIBLE);
+            init_planned_occurrence();
+        } else {
+            li_planned.setVisibility(View.GONE);
+        }
+
     }
 
+    private void init_planned_occurrence() {
 
+        final String[] stringArray = getResources().getStringArray(R.array.occurrence);
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_row, R.id.text_spinner, stringArray);
+
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_row);
+        occurrenceSpinner.setAdapter(spinnerArrayAdapter);
+        occurrenceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View selectedItemView, int position, long id) {
+                occurrence_type = stringArray[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+        });
+    }
     private void init_editText() {
         item.__setDaoSession(dbHelper.getDaoSession());
 
+        li_planned = (LinearLayout) findViewById(R.id.planned_layout);
         addLocation = (AutoCompleteTextView) findViewById(R.id.addLocation);
         nameAdd = (EditText) findViewById(R.id.add_name);
         descriptionAdd = (EditText) findViewById(R.id.add_description);
@@ -102,7 +140,15 @@ public class EditActivity extends AppCompatActivity implements
         buttonAdd = (Button) findViewById(R.id.add_button);
         dateInputText = (EditText) findViewById(R.id.check_date);
         categorySpinner = (Spinner) findViewById(R.id.add_category);
+        toolbar = (Toolbar) findViewById(R.id.toolbar2);
         buttonAdd.setText("Edit");
+
+
+        if (isPlanned) {
+            occurrenceSpinner = (Spinner) findViewById(R.id.add_occurrence);
+            repeatPlanned = (EditText) findViewById(R.id.add_repeat);
+        }
+
 
         nameAdd.setText(item.getName());
 
@@ -224,6 +270,7 @@ public class EditActivity extends AppCompatActivity implements
                     String name, description;
                     double amount = 0;
                     Date date;
+                    Integer repeat = 0;
                     boolean ok = true;
                     Location loc = new Location(null, "", 0, 0);
 
@@ -261,7 +308,20 @@ public class EditActivity extends AppCompatActivity implements
                         amount = Double.valueOf(amountAdd.getText().toString());
                     }
 
+                    if (isPlanned) {
 
+                        if (repeatPlanned.getText().toString().isEmpty()) {
+                            repeatPlanned.setError("Insert Repeat time values");
+                            ok = false;
+                        } else {
+                            repeat = Integer.valueOf(repeatPlanned.getText().toString());
+                        }
+
+                        if (occurrence_type.isEmpty()) {
+                            ok = false;
+                        }
+
+                    }
                     if (ok) {
 
                         if (!item.getLocation().getName().equals(addLocation.getText().toString())) {
@@ -269,15 +329,23 @@ public class EditActivity extends AppCompatActivity implements
                                 if (addLocation.getText().toString().equals(place.getAddress().toString())) {
                                     //nuovo place aggiunto
                                     loc = new Location(null, place.getAddress().toString(), place.getLatLng().latitude, place.getLatLng().longitude);
-                                }
-                               else{
+                                } else {
                                     // place modificcato diverso dal testo del editbox che è diverso da quello originale di item, quindi aggiungo loc nullo
                                     loc = new Location(null, addLocation.getText().toString(), 0, 0);
-                                    }
+                                }
                             }
                             // cancello vecchia locazione e aggiungo la nuova
                             dbHelper.getDaoSession().delete(item.getLocation());
                             locid = dbHelper.getDaoSession().insert(loc);
+                        }
+
+                        if (isPlanned) {
+                            Date planned_date = createPlannedDate(occurrence_type, date);
+                            PlannedItem pi = new PlannedItem(null, name, description, date, amount, catid, locid, occurrence_type, repeat, planned_date);
+                            dbHelper.getDaoSession().insert(pi);
+                        } else {
+                            MoneyItem mi = new MoneyItem(null, name, description, date, amount, catid, locid);
+                            dbHelper.getDaoSession().insert(mi);
                         }
                         item.setAmount(amount);
                         item.setName(name);
@@ -304,12 +372,36 @@ public class EditActivity extends AppCompatActivity implements
         }
     }
 
+    private Date createPlannedDate(String type, Date d) {
+
+        LocalDate lo = LocalDate.fromDateFields(d);
+        // LocalDate llw = LocalDate.parse("01/09/2017", DateTimeFormat.forPattern("dd/MM/yyyy"));
+        //  long llro = llw.toDate().getTime();
+        //  Date fssds = llw.toDate();
+
+        switch (type) {
+            case "Daily":
+                lo = lo.plusDays(1);
+                break;
+            case "Weekly":
+                lo = lo.plusWeeks(1);
+                break;
+            case "Monthly":
+                lo = lo.plusMonths(1);
+                break;
+            case "Yearly":
+                lo = lo.plusYears(1);
+                break;
+        }
+        return lo.toDate();
+    }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();  // optional depending on your needs
         Intent intent = new Intent(EditActivity.this, DetailActivity.class);
         intent.putExtra("item", item);
+        intent.putExtra("planned", isPlanned);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
@@ -347,7 +439,7 @@ public class EditActivity extends AppCompatActivity implements
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final PlaceAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
             final String placeId = String.valueOf(item.placeId);
-            Log.i(LOG_TAG, "Selected: " + item.description );
+            Log.i(LOG_TAG, "Selected: " + item.description);
             PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(mGoogleApiClient, placeId);
             placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
             Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);

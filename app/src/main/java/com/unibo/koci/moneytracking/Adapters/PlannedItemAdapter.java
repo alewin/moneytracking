@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.unibo.koci.moneytracking.Activities.DetailActivity;
-import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.Entities.PlannedItem;
 import com.unibo.koci.moneytracking.R;
 
@@ -43,11 +42,11 @@ public class PlannedItemAdapter extends RecyclerView.Adapter<PlannedItemAdapter.
             layout = v;
             txtTitle = (TextView) v.findViewById(R.id.planned_itemlist_title);
             txtAmount = (TextView) v.findViewById(R.id.planned_itemlist_amount);
-            txtDate = (TextView) v.findViewById(R.id.planned_itemlist_date);
             iconitem = (ImageView) v.findViewById(R.id.planned_itemlist_icon);
 
             //planned
             txtRepeat = (TextView) v.findViewById(R.id.planned_itemlist_repeat);
+            txtDate = (TextView) v.findViewById(R.id.planned_itemlist_date);
             txtOccurrence = (TextView) v.findViewById(R.id.planned_itemlist_occurrence);
         }
     }
@@ -90,6 +89,7 @@ public class PlannedItemAdapter extends RecyclerView.Adapter<PlannedItemAdapter.
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), DetailActivity.class);
                 intent.putExtra("item", plannedItems.get(position));
+                intent.putExtra("planned", true);
                 v.getContext().startActivity(intent);
                 notifyDataSetChanged();
 
@@ -103,7 +103,7 @@ public class PlannedItemAdapter extends RecyclerView.Adapter<PlannedItemAdapter.
         String occurrence = plannedItems.get(holder.getAdapterPosition()).getOccurrence();
         String repeat = plannedItems.get(holder.getAdapterPosition()).getRepeat().toString();
 
-        Date d = (plannedItems.get(holder.getAdapterPosition()).getDate());
+        Date d = (plannedItems.get(holder.getAdapterPosition()).getPlannedDate());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         holder.txtTitle.setText(name);

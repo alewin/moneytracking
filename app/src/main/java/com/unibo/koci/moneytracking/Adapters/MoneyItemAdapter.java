@@ -6,7 +6,6 @@ package com.unibo.koci.moneytracking.Adapters;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,9 +16,6 @@ import android.widget.TextView;
 import com.unibo.koci.moneytracking.Activities.DetailActivity;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.R;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -85,6 +81,7 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), DetailActivity.class);
                 intent.putExtra("item", moneyItems.get(position));
+                intent.putExtra("planned", false);
                 v.getContext().startActivity(intent);
                 notifyDataSetChanged();
 
@@ -96,8 +93,7 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
         String name = moneyItems.get(holder.getAdapterPosition()).getName().toString();
 
 
-
-        String amount =  (String.format("%.0f", moneyItems.get(holder.getAdapterPosition()).getAmount()));
+        String amount = (String.format("%.0f", moneyItems.get(holder.getAdapterPosition()).getAmount()));
 
 
         Date d = (moneyItems.get(holder.getAdapterPosition()).getDate());

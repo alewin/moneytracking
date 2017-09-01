@@ -28,7 +28,6 @@ import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.itextpdf.text.pdf.parser.Line;
 import com.unibo.koci.moneytracking.Adapters.PlaceAdapter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
@@ -80,7 +79,6 @@ public class NewItemActivity extends AppCompatActivity implements
     private long catid;
     String occurrence_type = "";
     DBHelper dbHelper;
-
     Boolean isPlanned = false;
 
     @Override
@@ -100,22 +98,22 @@ public class NewItemActivity extends AppCompatActivity implements
         if (isPlanned) {
             li_planned.setVisibility(View.VISIBLE);
             init_planned_occurrence();
-        }else{
+        } else {
             li_planned.setVisibility(View.GONE);
         }
 
     }
 
     private void init_editText() {
-        li_planned = (LinearLayout)findViewById(R.id.planned_layout);
+        li_planned = (LinearLayout) findViewById(R.id.planned_layout);
         nameAdd = (EditText) findViewById(R.id.add_name);
         descriptionAdd = (EditText) findViewById(R.id.add_description);
         amountAdd = (EditText) findViewById(R.id.add_amount);
         buttonAdd = (Button) findViewById(R.id.add_button);
         dateInputText = (EditText) findViewById(R.id.check_date);
         categorySpinner = (Spinner) findViewById(R.id.add_category);
-
         toolbar = (Toolbar) findViewById(R.id.toolbar2);
+
         if (isPlanned) {
             occurrenceSpinner = (Spinner) findViewById(R.id.add_occurrence);
             repeatPlanned = (EditText) findViewById(R.id.add_repeat);
@@ -166,7 +164,6 @@ public class NewItemActivity extends AppCompatActivity implements
                         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                         LocalDate lo = new LocalDate(selectedyear, (selectedmonth + 1), selectedday);
                         Date date_ciao = lo.toDateTimeAtStartOfDay().toDate();
-                        long datelong = date_ciao.getTime();
 
                         String date_string = sdf.format(lo.toDate());
                         dateInputText.setText(date_string);
@@ -276,7 +273,6 @@ public class NewItemActivity extends AppCompatActivity implements
 
 
                     date = getDate(dateInputText.getText().toString());
-                    long datelong = date.getTime();
                     if (date.toString().isEmpty()) {
                         dateInputText.setError("Insert Date");
                         ok = false;
@@ -304,10 +300,11 @@ public class NewItemActivity extends AppCompatActivity implements
                     }
                     if (ok) {
                         locid = dbHelper.getDaoSession().insert(loc);
-                        if(isPlanned){
-                            PlannedItem pi = new PlannedItem(null, name, description, date, amount, catid, locid,occurrence_type,repeat,date);
+                        if (isPlanned) {
+                            Date planned_date = createPlannedDate(occurrence_type, date);
+                            PlannedItem pi = new PlannedItem(null, name, description, date, amount, catid, locid, occurrence_type, repeat, planned_date);
                             dbHelper.getDaoSession().insert(pi);
-                        }else {
+                        } else {
                             MoneyItem mi = new MoneyItem(null, name, description, date, amount, catid, locid);
                             dbHelper.getDaoSession().insert(mi);
                         }
@@ -328,6 +325,29 @@ public class NewItemActivity extends AppCompatActivity implements
         }
     }
 
+    private Date createPlannedDate(String type, Date d) {
+
+        LocalDate lo = LocalDate.fromDateFields(d);
+        // LocalDate llw = LocalDate.parse("01/09/2017", DateTimeFormat.forPattern("dd/MM/yyyy"));
+        //  long llro = llw.toDate().getTime();
+        //  Date fssds = llw.toDate();
+
+        switch (type) {
+            case "Daily":
+                lo = lo.plusDays(1);
+                break;
+            case "Weekly":
+                lo = lo.plusWeeks(1);
+                break;
+            case "Monthly":
+                lo = lo.plusMonths(1);
+                break;
+            case "Yearly":
+                lo = lo.plusYears(1);
+                break;
+        }
+        return lo.toDate();
+    }
 
     public static Date getDate(String datestring) {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");

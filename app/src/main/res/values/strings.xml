@@ -23,7 +23,7 @@
 
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
+    <string name="pref_header_data_sync">Data</string>
 
 
     <string-array name="report_values">
