@@ -66,16 +66,14 @@ public class TabFragment extends Fragment {
     private List<MoneyItem> getItems() {
         List<MoneyItem> input = new ArrayList<>();
         int tab = getArguments().getInt("numtab");
-        Date date = new Date();
-        DateTimeZone datetimeZone = DateTimeZone.forID("Etc/GMT+2");
+       LocalDate dt = new LocalDate();
+        java.util.Date date = java.sql.Date.valueOf(dt.toString());
 
-        LocalDate dt = new LocalDate(LocalDate.now(),datetimeZone);
-        LocalDate dt2 = new LocalDate();
-
-        long nino = date.getTime();
         switch (tab) {
             case 1:
-                input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(date, date)).list();
+
+                long gg = dt.now().toDate().getTime();
+                input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.toDate(), dt.toDate())).list();
                 break;
             case 2:
                 input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.dayOfWeek().withMinimumValue().toDate(), dt.dayOfWeek().withMaximumValue().toDate())).list();

@@ -85,7 +85,7 @@ public class ChartTypeActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View selectedItemView, int position, long id) {
 
                 LocalDate dt = new LocalDate(LocalDate.now());
-
+                long ll = dt.toDate().getTime();
                 switch (position) {
                     case 0: // Day
                         start = dt;

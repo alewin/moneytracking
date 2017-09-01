@@ -1,23 +1,26 @@
 package com.unibo.koci.moneytracking.Activities;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.unibo.koci.moneytracking.Adapters.MoneyItemAdapter;
+import com.unibo.koci.moneytracking.Adapters.PlannedItemAdapter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
-import com.unibo.koci.moneytracking.Entities.MoneyItemDao;
 import com.unibo.koci.moneytracking.Entities.PlannedItem;
 import com.unibo.koci.moneytracking.Entities.PlannedItemDao;
 import com.unibo.koci.moneytracking.R;
 
 import org.joda.time.LocalDate;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class PlannedActivity extends AppCompatActivity {
@@ -27,9 +30,11 @@ public class PlannedActivity extends AppCompatActivity {
 
     DBHelper dbHelper;
     PlannedItemDao plannedItemDao;
-    MoneyItemAdapter adapter;
-    List<MoneyItem> input;
+    PlannedItemAdapter adapter;
+    List<PlannedItem> input;
     private Toolbar toolbar_planned;
+
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,7 @@ public class PlannedActivity extends AppCompatActivity {
 
         dbHelper = new DBHelper(this);
         plannedItemDao = dbHelper.getDaoSession().getPlannedItemDao();
+        init_fab();
         input = new ArrayList<>();
         LocalDate dt = new LocalDate(LocalDate.now());
 
@@ -46,10 +52,24 @@ public class PlannedActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        //input = plannedItemDao.queryBuilder().where(PlannedItem.Properties.Date.between(new Date(0), dt.toDate())).list();
 
-        //adapter = new MoneyItemAdapter(input);
-       // recyclerView.setAdapter(adapter);
+        input = plannedItemDao.queryBuilder().where(PlannedItemDao.Properties.Date.between(new Date(0), dt.toDate())).list();
+
+        adapter = new PlannedItemAdapter(input);
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void init_fab() {
+        fab = (FloatingActionButton) findViewById(R.id.fab_add_planned);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(PlannedActivity.this, NewItemActivity.class);
+                intent.putExtra("planned", true);
+                startActivity(intent);
+            }
+        });
     }
 
     private void init_toolbar() {
@@ -57,8 +77,6 @@ public class PlannedActivity extends AppCompatActivity {
         setSupportActionBar(toolbar_planned);
         getSupportActionBar().setTitle("Planned");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
     }
 
 

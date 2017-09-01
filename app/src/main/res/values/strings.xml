@@ -6,6 +6,12 @@
 
     <string name="action_settings">Settings</string>
 
+    <string-array name="occurrence">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+    </string-array>
 
     <string name="tab_month">Month</string>
     <string name="tab_week">Week</string>

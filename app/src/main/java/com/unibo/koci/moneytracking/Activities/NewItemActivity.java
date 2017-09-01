@@ -15,6 +15,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -27,11 +28,13 @@ import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.itextpdf.text.pdf.parser.Line;
 import com.unibo.koci.moneytracking.Adapters.PlaceAdapter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
+import com.unibo.koci.moneytracking.Entities.PlannedItem;
 import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
@@ -66,39 +69,78 @@ public class NewItemActivity extends AppCompatActivity implements
     private EditText nameAdd;
     private EditText descriptionAdd;
     private EditText amountAdd;
+    private EditText repeatPlanned;
     private Button buttonAdd;
     private EditText dateInputText;
     private Spinner categorySpinner;
+    private Spinner occurrenceSpinner;
     private Toolbar toolbar;
-
+    private LinearLayout li_planned;
     private Place place;
     private long catid;
+    String occurrence_type = "";
     DBHelper dbHelper;
 
+    Boolean isPlanned = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
-        nameAdd = (EditText) findViewById(R.id.add_name);
-        descriptionAdd = (EditText) findViewById(R.id.add_description);
-        amountAdd = (EditText) findViewById(R.id.add_amount);
-
-        buttonAdd = (Button) findViewById(R.id.add_button);
-        dateInputText = (EditText) findViewById(R.id.check_date);
-        categorySpinner = (Spinner) findViewById(R.id.add_category);
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar2);
-
+        isPlanned = (Boolean) getIntent().getExtras().getSerializable("planned");
         dbHelper = new DBHelper(this);
 
+        init_editText();
         init_placeAPI();
         init_toolbar();
         init_dateinput();
         init_addbutton();
         init_selectategory();
+        if (isPlanned) {
+            li_planned.setVisibility(View.VISIBLE);
+            init_planned_occurrence();
+        }else{
+            li_planned.setVisibility(View.GONE);
+        }
 
+    }
+
+    private void init_editText() {
+        li_planned = (LinearLayout)findViewById(R.id.planned_layout);
+        nameAdd = (EditText) findViewById(R.id.add_name);
+        descriptionAdd = (EditText) findViewById(R.id.add_description);
+        amountAdd = (EditText) findViewById(R.id.add_amount);
+        buttonAdd = (Button) findViewById(R.id.add_button);
+        dateInputText = (EditText) findViewById(R.id.check_date);
+        categorySpinner = (Spinner) findViewById(R.id.add_category);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar2);
+        if (isPlanned) {
+            occurrenceSpinner = (Spinner) findViewById(R.id.add_occurrence);
+            repeatPlanned = (EditText) findViewById(R.id.add_repeat);
+        }
+    }
+
+
+    private void init_planned_occurrence() {
+
+        final String[] stringArray = getResources().getStringArray(R.array.occurrence);
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_row, R.id.text_spinner, stringArray);
+
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_row);
+        occurrenceSpinner.setAdapter(spinnerArrayAdapter);
+        occurrenceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View selectedItemView, int position, long id) {
+                occurrence_type = stringArray[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+        });
     }
 
     private void init_toolbar() {
@@ -122,7 +164,10 @@ public class NewItemActivity extends AppCompatActivity implements
                     public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
                         //int: the month between 0-11.
                         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                        LocalDate lo = new LocalDate(selectedyear,(selectedmonth + 1),selectedday);
+                        LocalDate lo = new LocalDate(selectedyear, (selectedmonth + 1), selectedday);
+                        Date date_ciao = lo.toDateTimeAtStartOfDay().toDate();
+                        long datelong = date_ciao.getTime();
+
                         String date_string = sdf.format(lo.toDate());
                         dateInputText.setText(date_string);
                     }
@@ -195,9 +240,10 @@ public class NewItemActivity extends AppCompatActivity implements
 
                     double amount = 0;
                     Date date;
-                    long moneyid, locid;
+                    long locid;
                     boolean ok = true;
                     Location loc = new Location(null, "", 0, 0);
+                    Integer repeat = 0;
 
                     name = nameAdd.getText().toString();
                     if (name.isEmpty()) {
@@ -230,6 +276,7 @@ public class NewItemActivity extends AppCompatActivity implements
 
 
                     date = getDate(dateInputText.getText().toString());
+                    long datelong = date.getTime();
                     if (date.toString().isEmpty()) {
                         dateInputText.setError("Insert Date");
                         ok = false;
@@ -238,17 +285,33 @@ public class NewItemActivity extends AppCompatActivity implements
                     if (amountAdd.getText().toString().isEmpty()) {
                         ok = false;
                     } else {
-
                         amount = Double.valueOf(amountAdd.getText().toString());
-
                     }
 
+                    if (isPlanned) {
+
+                        if (repeatPlanned.getText().toString().isEmpty()) {
+                            repeatPlanned.setError("Insert Repeat time values");
+                            ok = false;
+                        } else {
+                            repeat = Integer.valueOf(repeatPlanned.getText().toString());
+                        }
+
+                        if (occurrence_type.isEmpty()) {
+                            ok = false;
+                        }
+
+                    }
                     if (ok) {
                         locid = dbHelper.getDaoSession().insert(loc);
-                        MoneyItem mi = new MoneyItem(null, name, description, date, amount, catid, locid);
-                        dbHelper.getDaoSession().insert(mi);
+                        if(isPlanned){
+                            PlannedItem pi = new PlannedItem(null, name, description, date, amount, catid, locid,occurrence_type,repeat,date);
+                            dbHelper.getDaoSession().insert(pi);
+                        }else {
+                            MoneyItem mi = new MoneyItem(null, name, description, date, amount, catid, locid);
+                            dbHelper.getDaoSession().insert(mi);
+                        }
                         Toast.makeText(NewItemActivity.this, "Added", Toast.LENGTH_LONG).show();
-
                         Intent intent = new Intent(NewItemActivity.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
