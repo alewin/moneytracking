@@ -5,18 +5,26 @@
     <SwitchPreference
         android:defaultValue="true"
         android:key="@string/notifications_switch"
+        android:summary="Recive notification of planned transiction "
         android:title="Enable Notification" />
 
-    <!-- Allows the user to choose a ringtone in the 'notification' category. -->
-    <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
-    <!-- NOTE: RingtonePreference's summary should be set to its value by the activity code. -->
     <RingtonePreference
         android:defaultValue="content://settings/system/notification_sound"
         android:dependency="notifications_switch"
+        android:summary="Notification ringtone"
         android:key="notifications_ringtone"
         android:ringtoneType="notification"
         android:title="@string/pref_title_ringtone" />
 
-
+    <EditTextPreference
+        android:dependency="notifications_switch"
+        android:defaultValue="1"
+        android:inputType="number"
+        android:key="notification_manytimes"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="How many hours check the planned notification?"
+        android:title="Reminder" />
 
 </PreferenceScreen>

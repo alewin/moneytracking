@@ -1,14 +1,10 @@
 package com.unibo.koci.moneytracking;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.preference.SwitchPreference;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -23,26 +19,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.unibo.koci.moneytracking.Activities.ArchiveActivity;
 import com.unibo.koci.moneytracking.Activities.CategoriesActivity;
 import com.unibo.koci.moneytracking.Activities.ChartTypeActivity;
-import com.unibo.koci.moneytracking.Activities.DetailActivity;
 import com.unibo.koci.moneytracking.Activities.NewItemActivity;
 import com.unibo.koci.moneytracking.Activities.PlannedActivity;
 import com.unibo.koci.moneytracking.Activities.ReportActivity;
 import com.unibo.koci.moneytracking.Activities.SettingsActivity;
 import com.unibo.koci.moneytracking.Adapters.ViewPagerAdapter;
-import com.unibo.koci.moneytracking.Broadcast.MoneyReminder;
 import com.unibo.koci.moneytracking.Broadcast.ReminderService;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Fragments.TabFragment;
 
 import org.joda.time.LocalDate;
-
-import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -55,15 +46,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView total_amount;
 
     DBHelper dbHelper;
+    SharedPreferences prefs;
 
     /*TODO
 
-    Functionality2: Manage periodic/planned expenses
-    Ø Add information about periodic expenses (e.g. loan)
-    Ø Add information about planned expenses (e.g. bill)
+    set planned date, and times -- every notification check
+
+    cheange notificatonbar text
+
     Ø Budget must be updated at the payment date
     Ø Periodic reminders should be shown 1 and 2 days
-    before (e.g. through notifications or alert dialogs)
 
     Display locations on the Google Maps
 
@@ -71,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     cLEAR CODE
 
-    bug chart only one profit no expense
     *
     * */
 
@@ -82,41 +73,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         dbHelper = new DBHelper(this);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!prefs.getBoolean("firstTime", false)) {
+        if (prefs.getBoolean("firstTime", true)) {
             init_firstTimeStart();
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean("firstTime", true);
-            editor.commit();
         }
         context = this;
         init_tabview();
         init_toolbar();
         init_fab();
         init_navview();
-        init_planned();
+        init_planned_notification();
 
     }
 
 
-
-    private void init_planned() {
-       /*
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        SharedPreferences prefs = context.getSharedPreferences("com.unibo.koci.moneytracking", Context.MODE_PRIVATE);
-        Boolean ok = prefs.getBoolean("notifications_switch",true);
-        int storedPreference = preferences.getInt("storedInt", 0);
-
-
-        if (prefs.getString("notifications_switch", "true").equals("true")){
+    private void init_planned_notification() {
+        if (prefs.getBoolean("notifications_switch", true)) {
             startService(new Intent(MainActivity.this, ReminderService.class));
-        }else {
         }
-*/
-
 
     }
 
@@ -126,6 +101,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Category c = new Category(null, item);
             dbHelper.getDaoSession().getCategoryDao().insert(c);
         }
+
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putBoolean("firstTime", false);
+        editor.putString("notifications_ringtone", "content://settings/system/notification_sound");
+        editor.putBoolean("notifications_switch", true);
+
+        editor.commit();
+
     }
 
     private void init_navview() {
@@ -253,11 +237,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
-        }else if (id == R.id.nav_planned) {
+        } else if (id == R.id.nav_planned) {
             startActivity(new Intent(MainActivity.this, PlannedActivity.class));
 
-        }
-        else if (id == R.id.nav_category) {
+        } else if (id == R.id.nav_category) {
             startActivity(new Intent(MainActivity.this, CategoriesActivity.class));
 
         } else if (id == R.id.nav_graph) {
