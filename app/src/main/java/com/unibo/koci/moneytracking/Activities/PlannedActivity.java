@@ -20,9 +20,6 @@ import com.unibo.koci.moneytracking.Entities.PlannedItem;
 import com.unibo.koci.moneytracking.Entities.PlannedItemDao;
 import com.unibo.koci.moneytracking.R;
 
-import org.joda.time.LocalDate;
-
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,17 +43,21 @@ public class PlannedActivity extends AppCompatActivity {
         init_toolbar();
 
         dbHelper = new DBHelper(this);
-        plannedItemDao = dbHelper.getDaoSession().getPlannedItemDao();
         init_fab();
+        init_list();
+
+    }
+
+    private void init_list() {
+        plannedItemDao = dbHelper.getDaoSession().getPlannedItemDao();
         input = new ArrayList<>();
-        LocalDate dt = new LocalDate(LocalDate.now());
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview_planned);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        input = plannedItemDao.queryBuilder().where(PlannedItemDao.Properties.Date.between(new Date(0), dt.toDate())).list();
+        input = plannedItemDao.queryBuilder().orderAsc(PlannedItemDao.Properties.PlannedDate).list();
 
         adapter = new PlannedItemAdapter(input);
         recyclerView.setAdapter(adapter);

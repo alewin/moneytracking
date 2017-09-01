@@ -29,8 +29,6 @@ public class ReminderService extends Service
     public void onStart(Intent intent, int startId)
     {
         alarm.setAlarm(this);
-        Log.w("DEBUGKOCI","ALLARME4");
-
     }
 
     @Override

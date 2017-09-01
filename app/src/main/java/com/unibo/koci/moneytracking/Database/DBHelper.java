@@ -6,12 +6,13 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.unibo.koci.moneytracking.Entities.DaoMaster;
 import com.unibo.koci.moneytracking.Entities.DaoSession;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.Entities.MoneyItemDao;
+import com.unibo.koci.moneytracking.Entities.PlannedItem;
+import com.unibo.koci.moneytracking.Entities.PlannedItemDao;
 
 import org.greenrobot.greendao.database.Database;
 import org.joda.time.LocalDate;
@@ -21,8 +22,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -139,6 +138,17 @@ public class DBHelper {
         }
     }
 
+    public PlannedItem popPlanned() {
+        PlannedItemDao plannedItemDao = getDaoSession().getPlannedItemDao();
+        List<PlannedItem> plannedItemList = plannedItemDao.queryBuilder().orderAsc(PlannedItemDao.Properties.PlannedDate).list();
+
+        // p is the first item with near planned date
+        PlannedItem p = plannedItemList.listIterator().next();
+
+        return p;
+    }
+
+
     private boolean deleteFiles(String path) {
         File file = new File(path);
         if (file.exists()) {
@@ -154,13 +164,13 @@ public class DBHelper {
         return false;
     }
 
-    private void clear_preference(SharedPreferences prefs)
-    {
+    private void clear_preference(SharedPreferences prefs) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.clear();
         editor.commit();
     }
-    public boolean clearReport(){
+
+    public boolean clearReport() {
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "MoneyTrack";
         return deleteFiles(path);
     }
@@ -180,20 +190,8 @@ public class DBHelper {
 
     public JSONArray getCategoryProfitExpense(LocalDate start, LocalDate end) {
 
-        /*
-               SELECT CATEGORY.NAME,  ( SELECT SUM(G.AMOUNT)   FROM MONEY_ITEM G WHERE G.AMOUNT > 0 AND A.CATEGORY_ID == G.CATEGORY_ID  )    AS PROFIT , ( SELECT SUM(B.AMOUNT)   FROM MONEY_ITEM B WHERE B.AMOUNT < 0 AND A.CATEGORY_ID == B.CATEGORY_ID  )    AS EXPENSE                        FROM MONEY_ITEM A INNER JOIN CATEGORY ON A.CATEGORY_ID = CATEGORY._id GROUP BY A.CATEGORY_ID
-                String megaQuery = "SELECT CATEGORY.NAME,  ( SELECT SUM(G.AMOUNT)   FROM MONEY_ITEM G WHERE G.AMOUNT > 0 AND A.CATEGORY_ID == G.CATEGORY_ID  )    AS PROFIT , ( SELECT SUM(B.AMOUNT)   FROM MONEY_ITEM B WHERE B.AMOUNT < 0 AND A.CATEGORY_ID == B.CATEGORY_ID  )    AS EXPENSE                        FROM MONEY_ITEM A INNER JOIN CATEGORY ON A.CATEGORY_ID = CATEGORY._id GROUP BY A.CATEGORY_ID";
-
-
- JSONArray arr = new JSONArray();
-        String queryProfit =  "( SELECT SUM(G.AMOUNT) FROM MONEY_ITEM G WHERE G.AMOUNT > 0 AND A.CATEGORY_ID == G.CATEGORY_ID AND G.DATE > " + String.valueOf(start.toDate().getTime()) + " AND G.DATE < " + String.valueOf(end.toDate().getTime()) + " ) AS PROFIT  ";
-        String queryExpense = "( SELECT SUM(B.AMOUNT) FROM MONEY_ITEM B WHERE B.AMOUNT < 0 AND A.CATEGORY_ID == B.CATEGORY_ID AND B.DATE > " + String.valueOf(start.toDate().getTime()) + " AND B.DATE < " + String.valueOf(end.toDate().getTime()) + " ) AS EXPENSE ";
-        String megaQuery = "SELECT CATEGORY.NAME, " + queryProfit + " , " + queryExpense + " FROM MONEY_ITEM A INNER JOIN CATEGORY ON A.CATEGORY_ID = CATEGORY._id GROUP BY A.CATEGORY_ID ";
-
-
-         */
         JSONArray arr = new JSONArray();
-        String queryProfit =  "( SELECT SUM(G.AMOUNT) FROM MONEY_ITEM G WHERE G.AMOUNT >= 0 AND A.CATEGORY_ID == G.CATEGORY_ID  AND G.DATE >= " + String.valueOf(start.toDate().getTime()) + " AND G.DATE <= " + String.valueOf(end.toDate().getTime()) + " ) AS PROFIT  ";
+        String queryProfit = "( SELECT SUM(G.AMOUNT) FROM MONEY_ITEM G WHERE G.AMOUNT >= 0 AND A.CATEGORY_ID == G.CATEGORY_ID  AND G.DATE >= " + String.valueOf(start.toDate().getTime()) + " AND G.DATE <= " + String.valueOf(end.toDate().getTime()) + " ) AS PROFIT  ";
         String queryExpense = "( SELECT SUM(B.AMOUNT) FROM MONEY_ITEM B WHERE B.AMOUNT < 0 AND A.CATEGORY_ID == B.CATEGORY_ID  AND B.DATE >= " + String.valueOf(start.toDate().getTime()) + " AND B.DATE <= " + String.valueOf(end.toDate().getTime()) + " ) AS EXPENSE  ";
         String megaQuery = "SELECT CATEGORY.NAME, " + queryProfit + " , " + queryExpense + " FROM MONEY_ITEM A INNER JOIN CATEGORY ON A.CATEGORY_ID = CATEGORY._id GROUP BY A.CATEGORY_ID ";
 
@@ -210,8 +208,8 @@ public class DBHelper {
 
             try {
                 obj.put("name", cat_name);
-                obj.put("profit",  cat_profit );
-                obj.put("expense",  cat_expense );
+                obj.put("profit", cat_profit);
+                obj.put("expense", cat_expense);
                 arr.put(obj);
                 obj = new JSONObject();
             } catch (JSONException e) {

@@ -49,11 +49,7 @@
         </intent-filter>
 
         </receiver>-->
-        <receiver android:name=".Broadcast.AutoStart">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
-            </intent-filter>
-        </receiver>
+
 
 
         <service

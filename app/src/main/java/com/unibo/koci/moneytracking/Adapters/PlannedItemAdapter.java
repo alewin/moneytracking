@@ -103,7 +103,7 @@ public class PlannedItemAdapter extends RecyclerView.Adapter<PlannedItemAdapter.
         String occurrence = plannedItems.get(holder.getAdapterPosition()).getOccurrence();
         String repeat = plannedItems.get(holder.getAdapterPosition()).getRepeat().toString();
 
-        Date d = (plannedItems.get(holder.getAdapterPosition()).getPlannedDate());
+        Date d = (plannedItems.get(holder.getAdapterPosition()).getDate());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         holder.txtTitle.setText(name);

@@ -210,19 +210,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
 
-
             init_notification_switch();
-            init_notification_sync();
-
         }
 
-        private void init_notification_sync(){
-            SwitchPreference mSyncNotification = (SwitchPreference) findPreference("notifications_sync");
-            SwitchPreference mReminderNotification = (SwitchPreference) findPreference("notification_reminder");
-
-
-
-        }
         private void init_notification_switch() {
             SwitchPreference mEnableNotification = (SwitchPreference) findPreference("notifications_switch");
 

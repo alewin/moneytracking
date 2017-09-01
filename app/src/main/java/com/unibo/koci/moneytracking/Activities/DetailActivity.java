@@ -32,6 +32,7 @@ import com.unibo.koci.moneytracking.Entities.PlannedItem;
 import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -86,7 +87,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
         if (isPlanned) {
             planned_item.__setDaoSession(dbHelper.getDaoSession());
-            String amount = (String.format("%.0f", planned_item.getAmount()));
+            DecimalFormat df = new DecimalFormat("#.00");
+            String amount = df.format(planned_item.getAmount());
             txt_amount.setText(amount + "€");
             txt_category.setText((planned_item.getCategory().getName()));
             txt_date.setVisibility(View.GONE);
@@ -95,11 +97,12 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             txt_postion.setText(String.valueOf(planned_item.getLocation().getName()));
             txt_occurence.setText(String.valueOf(planned_item.getOccurrence()));
             txt_repeat.setText(String.valueOf(planned_item.getRepeat()));
-            Date d = planned_item.getPlannedDate();  SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date d = planned_item.getDate();  SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             txt_nextdate.setText(String.valueOf(sdf.format(d.getTime())));
         } else {
             money_item.__setDaoSession(dbHelper.getDaoSession());
-            String amount = (String.format("%.0f", money_item.getAmount()));
+            DecimalFormat df = new DecimalFormat("#.00");
+            String amount = df.format(money_item.getAmount());
             txt_amount.setText(amount + "€");
             txt_category.setText((money_item.getCategory().getName()));
             Date d = money_item.getDate();

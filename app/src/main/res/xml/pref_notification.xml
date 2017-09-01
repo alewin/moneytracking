@@ -1,7 +1,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- A 'parent' preference, which enables/disables child preferences (below)
-         when checked/unchecked. -->
     <SwitchPreference
         android:defaultValue="true"
         android:key="@string/notifications_switch"
@@ -20,24 +18,12 @@
         android:dependency="notifications_switch"
         android:defaultValue="1"
         android:inputType="number"
-        android:key="notification_sync"
-        android:maxLines="1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:maxLength="2"
-        android:summary="How many hours check the planned notification?"
-        android:title="Sync" />
-
-<!---
-    <EditTextPreference
-        android:dependency="notifications_switch"
-        android:defaultValue="1"
-        android:inputType="number"
         android:key="notification_reminder"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
+        android:maxLength="2"
         android:summary="Day before recive planned notification?"
         android:title="Reminder" />
--->
+
 </PreferenceScreen>

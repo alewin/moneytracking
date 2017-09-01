@@ -174,7 +174,11 @@ public class NewItemActivity extends AppCompatActivity implements
                     }
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select date");
-                mDatePicker.getDatePicker().setMaxDate(new Date().getTime());
+                if (isPlanned) {
+                    mDatePicker.getDatePicker().setMinDate(new Date().getTime());
+                } else {
+                    mDatePicker.getDatePicker().setMaxDate(new Date().getTime());
+                }
                 mDatePicker.show();
             }
         });

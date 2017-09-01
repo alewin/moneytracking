@@ -56,11 +56,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     cheange notificatonbar text
 
-
-    contraollare detal view funzioni sempre sia item che planned
-
-    inserire linear layout in detail viiew
-
     Ø Budget must be updated at the payment date
     Ø Periodic reminders should be shown 1 and 2 days
 
@@ -117,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         editor.putString("notifications_ringtone", "content://settings/system/notification_sound");
         editor.putBoolean("notifications_switch", true);
         editor.putInt("notification_reminder", 1);
-        editor.putInt("notifications_sync", 1);
 
 
         editor.commit();

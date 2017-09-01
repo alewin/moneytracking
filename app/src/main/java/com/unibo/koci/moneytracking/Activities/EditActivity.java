@@ -40,6 +40,7 @@ import com.unibo.koci.moneytracking.R;
 
 import org.joda.time.LocalDate;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -162,7 +163,8 @@ public class EditActivity extends AppCompatActivity implements
             init_planned_occurrence();
             repeatPlanned = (EditText) findViewById(R.id.add_repeat);
             nameAdd.setText(planned_item.getName());
-            String amount = (String.format("%.0f", planned_item.getAmount()));
+            DecimalFormat df = new DecimalFormat("#.00");
+            String amount = df.format(planned_item.getAmount());
             amountAdd.setText(amount);
             Date d = planned_item.getDate();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -176,7 +178,8 @@ public class EditActivity extends AppCompatActivity implements
             money_item.__setDaoSession(dbHelper.getDaoSession());
 
             nameAdd.setText(money_item.getName());
-            String amount = (String.format("%.0f", money_item.getAmount()));
+            DecimalFormat df = new DecimalFormat("#.00");
+            String amount = df.format(money_item.getAmount());
             amountAdd.setText(amount);
             Date d = money_item.getDate();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -212,12 +215,9 @@ public class EditActivity extends AppCompatActivity implements
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select date");
                 if (isPlanned) {
-                    LocalDate lo = LocalDate.fromDateFields(new Date());
-                    lo = lo.plusDays(1);
-                    mDatePicker.getDatePicker().setMinDate(lo.toDate().getTime());
-                }else{
+                    mDatePicker.getDatePicker().setMinDate(new Date().getTime());
+                } else {
                     mDatePicker.getDatePicker().setMaxDate(new Date().getTime());
-
                 }
                 mDatePicker.show();
             }
