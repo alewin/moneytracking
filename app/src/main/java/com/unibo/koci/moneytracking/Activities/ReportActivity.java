@@ -150,10 +150,11 @@ public class ReportActivity extends AppCompatActivity {
         File fileList = new File(path);
         if (fileList.exists() && fileList != null) {
             File[] files = fileList.listFiles();
-
-            for (File f : files) {
-                if (f.getName().contains("Report-") && f.getName().contains("pdf")) {
-                    arrayAdapter.add(f.getName());
+            if(files != null && files.length > 0) {
+                for (File f : files) {
+                    if (f.getName().contains("Report-") && f.getName().contains("pdf")) {
+                        arrayAdapter.add(f.getName());
+                    }
                 }
             }
         }
