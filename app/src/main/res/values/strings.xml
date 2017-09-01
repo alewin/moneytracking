@@ -63,6 +63,11 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
+
+       <string name="select_category">Select Category</string>
+       <string name="select_planned_occurrence">Select planned occurrence</string>
+
+
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
     <!-- Example settings for Notifications -->

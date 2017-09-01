@@ -24,6 +24,7 @@
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
+        android:maxLength="2"
         android:summary="How many hours check the planned notification?"
         android:title="Sync" />
 

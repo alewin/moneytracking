@@ -125,6 +125,7 @@
                     android:background="@color/white"
                     android:popupBackground="@color/white"
                     android:spinnerMode="dialog"
+                    android:prompt="@string/select_category"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
             </android.support.design.widget.TextInputLayout>
@@ -159,6 +160,8 @@
                         android:layout_height="40dp"
                         android:background="@color/white"
                         android:popupBackground="@color/white"
+                        android:spinnerMode="dialog"
+                        android:prompt="@string/select_planned_occurrence"
                         android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 </android.support.design.widget.TextInputLayout>

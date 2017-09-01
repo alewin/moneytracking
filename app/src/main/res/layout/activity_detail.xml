@@ -66,9 +66,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_amount"
-                android:drawableLeft="@drawable/ic_date"
-
                 android:layout_margin="10dp"
+
+                android:drawableLeft="@drawable/ic_date"
                 android:text="DATE"
                 android:textSize="25dp" />
 
@@ -77,8 +77,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_date"
-                android:drawableLeft="@drawable/ic_category"
                 android:layout_margin="10dp"
+                android:drawableLeft="@drawable/ic_category"
                 android:text="CATEG"
                 android:textSize="25dp" />
 
@@ -102,35 +102,50 @@
                 android:text="Amount:"
                 android:textSize="25dp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/planned_layout_detail"
+                android:visibility="gone"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/detail_planned_occurence"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:drawableLeft="@drawable/ic_date"
-                android:text="Occurence:"
-                android:textSize="25dp" />
+                <TextView
+                    android:id="@+id/textView_planned_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Planned"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/detail_planned_repeat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:drawableLeft="@drawable/ic_repeat"
-                android:text="Repeat:"
-                android:textSize="25dp" />
+                <TextView
+                    android:id="@+id/detail_planned_occurence"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:drawableLeft="@drawable/ic_date"
+                    android:text="Occurence:"
+                    android:textSize="25dp" />
 
-            <TextView
-                android:id="@+id/detail_planned_nextDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:drawableLeft="@drawable/ic_date"
-                android:text="NextDate:"
-                android:textSize="25dp" />
+                <TextView
+                    android:id="@+id/detail_planned_repeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:drawableLeft="@drawable/ic_repeat"
+                    android:text="Repeat:"
+                    android:textSize="25dp" />
 
+                <TextView
+                    android:id="@+id/detail_planned_nextDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:drawableLeft="@drawable/ic_date"
+                    android:text="NextDate:"
+                    android:textSize="25dp" />
 
+            </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

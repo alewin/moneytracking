@@ -107,6 +107,7 @@ public class NewItemActivity extends AppCompatActivity implements
 
     }
 
+
     private void init_editText() {
         li_planned = (LinearLayout) findViewById(R.id.planned_layout);
         nameAdd = (EditText) findViewById(R.id.add_name);

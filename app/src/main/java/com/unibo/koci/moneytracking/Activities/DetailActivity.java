@@ -24,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.itextpdf.text.pdf.parser.Line;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
@@ -45,7 +46,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     DBHelper dbHelper;
     final Context context = this;
     Boolean isPlanned = false;
-
+    LinearLayout layout_planned;
 
 
     @Override
@@ -54,11 +55,14 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         setContentView(R.layout.activity_detail);
         dbHelper = new DBHelper(this);
         isPlanned = (Boolean) getIntent().getExtras().getSerializable("planned");
+        layout_planned = (LinearLayout)findViewById(R.id.planned_layout_detail);
 
         if (isPlanned) {
             planned_item = (PlannedItem) (getIntent().getSerializableExtra("planned_item"));
+            layout_planned.setVisibility(View.VISIBLE);
         } else {
             money_item = (MoneyItem) (getIntent().getSerializableExtra("money_item"));
+            layout_planned.setVisibility(View.GONE);
 
         }
 
@@ -85,14 +89,13 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             String amount = (String.format("%.0f", planned_item.getAmount()));
             txt_amount.setText(amount + "€");
             txt_category.setText((planned_item.getCategory().getName()));
-            Date d = planned_item.getDate();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            txt_date.setText(String.valueOf(sdf.format(d.getTime())));
+            txt_date.setVisibility(View.GONE);
+
             txt_description.setText(String.valueOf(planned_item.getDescription()));
             txt_postion.setText(String.valueOf(planned_item.getLocation().getName()));
             txt_occurence.setText(String.valueOf(planned_item.getOccurrence()));
             txt_repeat.setText(String.valueOf(planned_item.getRepeat()));
-            d = planned_item.getPlannedDate();
+            Date d = planned_item.getPlannedDate();  SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             txt_nextdate.setText(String.valueOf(sdf.format(d.getTime())));
         } else {
             money_item.__setDaoSession(dbHelper.getDaoSession());

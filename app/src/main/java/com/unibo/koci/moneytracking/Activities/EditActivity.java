@@ -132,6 +132,17 @@ public class EditActivity extends AppCompatActivity implements
                 // your code here
             }
         });
+
+
+        int i = 0;
+
+        while (i <= stringArray.length && !planned_item.getOccurrence().equals(stringArray[i])) {
+            i++;
+        }
+
+
+        occurrenceSpinner.setSelection(i);
+
     }
 
     private void init_editText() {
@@ -200,7 +211,14 @@ public class EditActivity extends AppCompatActivity implements
                     }
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select date");
-                mDatePicker.getDatePicker().setMaxDate(new Date().getTime());
+                if (isPlanned) {
+                    LocalDate lo = LocalDate.fromDateFields(new Date());
+                    lo = lo.plusDays(1);
+                    mDatePicker.getDatePicker().setMinDate(lo.toDate().getTime());
+                }else{
+                    mDatePicker.getDatePicker().setMaxDate(new Date().getTime());
+
+                }
                 mDatePicker.show();
             }
         });

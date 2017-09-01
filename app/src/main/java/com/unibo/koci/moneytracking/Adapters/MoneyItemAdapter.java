@@ -17,6 +17,7 @@ import com.unibo.koci.moneytracking.Activities.DetailActivity;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.R;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -80,7 +81,7 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), DetailActivity.class);
-                intent.putExtra("item", moneyItems.get(position));
+                intent.putExtra("money_item", moneyItems.get(position));
                 intent.putExtra("planned", false);
                 v.getContext().startActivity(intent);
                 notifyDataSetChanged();
@@ -92,8 +93,10 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
 
         String name = moneyItems.get(holder.getAdapterPosition()).getName().toString();
 
-
-        String amount = (String.format("%.0f", moneyItems.get(holder.getAdapterPosition()).getAmount()));
+        double d_amount = moneyItems.get(holder.getAdapterPosition()).getAmount();
+        DecimalFormat df = new DecimalFormat("#.00");
+        String amount = df.format(d_amount);
+        //String amount = (String.format("%.0f",d_amount ));
 
 
         Date d = (moneyItems.get(holder.getAdapterPosition()).getDate());

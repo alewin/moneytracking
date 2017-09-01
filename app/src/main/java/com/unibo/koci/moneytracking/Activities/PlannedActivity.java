@@ -1,18 +1,21 @@
 package com.unibo.koci.moneytracking.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
-import com.unibo.koci.moneytracking.Adapters.MoneyItemAdapter;
 import com.unibo.koci.moneytracking.Adapters.PlannedItemAdapter;
 import com.unibo.koci.moneytracking.Database.DBHelper;
-import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.Entities.PlannedItem;
 import com.unibo.koci.moneytracking.Entities.PlannedItemDao;
 import com.unibo.koci.moneytracking.R;
@@ -80,35 +83,37 @@ public class PlannedActivity extends AppCompatActivity {
     }
 
 
-    /*TODO
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_planned_delete, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-    Functionality2: Manage periodic/planned expenses
-    Ø Add information about periodic expenses (e.g. loan)
-    Ø Add information about planned expenses (e.g. bill)
-    Ø Budget must be updated at the payment date
-    Ø Periodic reminders should be shown 1 and 2 days
-    before (e.g. through notifications or alert dialogs)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_delete_planned:
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setTitle("Remove all planned item?")
+                        .setMessage("Are you sure?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (dbHelper.clearReport()) {
+                                    Toast.makeText(PlannedActivity.this, "Planned items deleted", Toast.LENGTH_LONG).show();
+                                    input.clear();
 
-0) creare tabella PLANNNED simile a moneyitem
+                                    adapter.notifyDataSetChanged();
+                                }
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .create();
+                dialog.show();
+                return true;
 
-1) ACTIVITY che permette di scegliere ogni quanto ripetere la transizione
-    giornaliera = ogni giorno
-    settimanale = indicare il giorno in cui si ripeterà ( lun,mart,merc)
-    mensile = indicare il giorno del mese in cui si ripetera ( attenzione a febbrario 1-
-
-2) aprire activity NEW ITEM cambiando, se planned = true inserirlo nella tabella planned
-
-3) notifiche:
-   esempio
-
-   oggi è il 31 agosto
-
-
-   affito, ****, ****, ****, ***, mensile,
-
-
-    *
-    *
-    *
-    * */
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

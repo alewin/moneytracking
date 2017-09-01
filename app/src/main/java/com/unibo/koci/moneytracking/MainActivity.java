@@ -56,9 +56,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     cheange notificatonbar text
 
-    add to detail view planned
-    add to edit view planned
 
+    contraollare detal view funzioni sempre sia item che planned
+
+    inserire linear layout in detail viiew
 
     Ø Budget must be updated at the payment date
     Ø Periodic reminders should be shown 1 and 2 days
