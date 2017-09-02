@@ -141,8 +141,12 @@ public class DBHelper {
     public PlannedItem popPlanned() {
         PlannedItemDao plannedItemDao = getDaoSession().getPlannedItemDao();
         List<PlannedItem> plannedItemList = plannedItemDao.queryBuilder().orderAsc(PlannedItemDao.Properties.Date).list();
-        PlannedItem p = plannedItemList.listIterator().next();
-        return p;
+        if(plannedItemList.size() > 0) {
+            PlannedItem p = plannedItemList.listIterator().next();
+            return p;
+        }else{
+            return  null;
+        }
     }
 
 

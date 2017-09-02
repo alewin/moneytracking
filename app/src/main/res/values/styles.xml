@@ -16,6 +16,10 @@
 
 
 
+
+
+
+
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <item name="android:buttonStyle">@style/AppTheme.Button</item>
@@ -54,8 +58,11 @@
     </style>
 
     <style name="ListViewStyle" parent="@android:style/Widget.Holo.Light.ListView">
-        <item name="android:background">@color/windowBackground</item>
+        <item name="android:textColorPrimary">@color/textColorSecondary</item>
         <item name="android:textColor">@color/black</item>
+        <item name="android:background">@color/black</item>
+        <item name="android:listSelector">@color/black</item>
+
     </style>
 
     <style name="CollapsedAppBarTopic" parent="@android:style/TextAppearance.Medium">

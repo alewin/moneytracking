@@ -313,7 +313,6 @@ public class ReportActivity extends AppCompatActivity {
                 if (item_count == 0) {
                     Toast.makeText(ReportActivity.this, "There aren't sufficient item for a report ", Toast.LENGTH_LONG).show();
                 } else {
-                    LocalDate dt = new LocalDate(LocalDate.now());
                     if (start.toString().isEmpty() || end.toString().isEmpty()) {
                         Toast.makeText(ReportActivity.this, "Please fill all input", Toast.LENGTH_LONG).show();
                     } else {

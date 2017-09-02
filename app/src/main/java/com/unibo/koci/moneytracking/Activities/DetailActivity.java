@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -29,9 +31,11 @@ import com.unibo.koci.moneytracking.Entities.PlannedItem;
 import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -177,12 +181,40 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
     }
 
+    private LatLng getCoordinate(String location_name){
+        LatLng latLng = new LatLng(0,0);
+        try {
+            Geocoder geocoder = new Geocoder(this);
+            List<Address> addresses;
+            addresses = geocoder.getFromLocationName(location_name, 1);
+            if (addresses.size() > 0) {
+                double latitude = addresses.get(0).getLatitude();
+                double longitude = addresses.get(0).getLongitude();
+                latLng = new LatLng(latitude,longitude);
+                return latLng;
+
+            }
+        }  catch(IOException ex){
+            return latLng;
+        }
+        return latLng;
+
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        Location tmp = isPlanned ? planned_item.getLocation() : money_item.getLocation();
+        LatLng item_pos = new LatLng(0,0);
+        Location loc_tmp = isPlanned ? planned_item.getLocation() : money_item.getLocation();
+        if(loc_tmp.getLatitude() == loc_tmp.getLongitude() && loc_tmp.getLatitude() == 0){
 
-        LatLng item_pos = new LatLng(tmp.getLatitude(), tmp.getLongitude());
+            item_pos = getCoordinate(loc_tmp.getName());
+            loc_tmp.setLatitude(item_pos.latitude);
+            loc_tmp.setLongitude(item_pos.longitude);
+            dbHelper.getDaoSession().update(loc_tmp);
+        }
+        else {
+            item_pos = new LatLng(loc_tmp.getLatitude(), loc_tmp.getLongitude());
+        }
         mMap.animateCamera(CameraUpdateFactory.zoomIn());
         mMap.animateCamera(CameraUpdateFactory.zoomOut());
 

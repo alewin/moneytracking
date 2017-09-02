@@ -48,57 +48,38 @@ public class MoneyReminder extends BroadcastReceiver {
 
             prefs = PreferenceManager.getDefaultSharedPreferences(context);
             int reminder_times = Integer.parseInt(prefs.getString("notification_reminder", "1"));
-
             LocalDate current_date = new LocalDate();
 
-
-            Log.w("DEBUGKOCI", p.getDate().getTime() + " -- " + current_date.toDate().getTime());
-
-            if (p.getDate().getTime() == current_date.toDate().getTime()) {
+            if (p.getDate().getTime() <= current_date.toDate().getTime()) {
 
                 // convert planneditem to ==> moneyitem
                 MoneyItem mi = new MoneyItem(null, p.getName(), p.getDescription(), p.getDate(), p.getAmount(), p.getCategoryID(), p.getLocationID());
                 dbHelper.getDaoSession().getMoneyItemDao().insert(mi);
 
                 PlannedNotifyUser(context, "MoneyTrack Transiction added", p.getName() + " planned item, was added to your transiction");
-                Log.w("DEBUGKOCI", "moneyitem aggiunto");
 
                 // decrease repeat from planneditem
                 int repeat = p.getRepeat();
                 p.setRepeat(repeat - 1);
                 dbHelper.getDaoSession().update(p);
 
-                Log.w("DEBUGKOCI", "repeat decrementato");
-
-
                 // if planned item repeat is 0 delete it
                 repeat = p.getRepeat();
                 if (repeat == 0) {
                     dbHelper.getDaoSession().delete(p);
 
-                    Log.w("DEBUGKOCI", "repeat era zero cancello il planned");
-
                 } else {
                     //update planneditem with new planned_date
                     p.setDate(createPlannedDate(p.getOccurrence(), p.getDate()));
                     dbHelper.getDaoSession().update(p);
-                    Log.w("DEBUGKOCI", "aggiorno planned item ora il prossimo sarà" + p.getDate());
-
                 }
-                Log.w("DEBUGKOCI", "faccio un'altro giro");
+
                 checkPlanned(context);
-            } else if (p.getDate().getTime() == current_date.plusDays(reminder_times).toDate().getTime()) {
-
-                //else if(p.getPlannedDate().getTime() "mancano N giorni allora manda una notifica e controlla di non mandarla più")
+            } else if (p.getDate().getTime() <= current_date.plusDays(reminder_times).toDate().getTime()) {
                 PlannedNotifyUser(context, "MoneyTrack Reminder", p.getName() + "\n" + p.getDate());
-
             }
-            Log.w("DEBUGKOC", "non è anroa il momento");
-
 
         }
-
-        Log.w("DEBUGKOC", "ALLARME" + nID);
 
     }
 
@@ -137,8 +118,9 @@ public class MoneyReminder extends BroadcastReceiver {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, MoneyReminder.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pi);
-        // 1000 * 60 * 10, pi Millisec * Second * Minute
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3600000, pi);
+        // 1000 * 60 * 1, pi Millisec * Second * Minute  ---- * hour * day
+        // 1 giorno 3600000
     }
 
     public void cancelAlarm(Context context) {
