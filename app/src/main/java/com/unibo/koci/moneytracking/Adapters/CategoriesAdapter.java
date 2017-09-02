@@ -32,17 +32,14 @@ public class CategoriesAdapter extends ArrayAdapter<Category> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
         Category cat = getItem(position);
-        // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.category_item, parent, false);
         }
-        // Lookup view for data population
+
         TextView catName = (TextView) convertView.findViewById(R.id.category_title);
         TextView catID = (TextView) convertView.findViewById(R.id.category_id);
         ImageView btn_delete = (ImageView) convertView.findViewById(R.id.cat_delete);
-
 
         btn_delete.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -50,20 +47,9 @@ public class CategoriesAdapter extends ArrayAdapter<Category> {
             }
         });
 
-        // Populate the data into the template view using the data object
         catName.setText(cat.getName());
         catID.setText(cat.getCategoryID().toString());
-        // Return the completed view to render on screen
         return convertView;
     }
 
-
-   /*
-   *  ImageView btn_delete = (ImageView)findViewById(R.id.cat_delete);
-        btn_delete.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-            deleteCat(v);
-        }
-    });
-    */
 }

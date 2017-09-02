@@ -19,13 +19,8 @@ import java.util.Date;
 @Entity
 public class MoneyItem implements Serializable {
     private static final long serialVersionUID = 1L;
+    //The serialVersionUID is a universal version identifier for a Serializable class. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized object. If no match is found, then an InvalidClassException is thrown.You fix the error by adding
 
-    /*
-    * The serialVersionUID is a universal version identifier for a Serializable class. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized object. If no match is found, then an InvalidClassException is thrown.
-You fix the error by adding
-
-private static final long serialVersionUID = 7526472295622776147L;  // unique id
-*/
     @Id
     private Long id;
 
@@ -55,11 +50,15 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
     @ToOne(joinProperty = "locationID")
     private Location location;
 
-    /** Used to resolve relations */
+    /**
+     * Used to resolve relations
+     */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
 
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 1993525430)
     private transient MoneyItemDao myDao;
 
@@ -137,7 +136,9 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
     @Generated(hash = 1372501278)
     private transient Long category__resolvedKey;
 
-    /** To-one relationship, resolved on first access. */
+    /**
+     * To-one relationship, resolved on first access.
+     */
     @Generated(hash = 1790867297)
     public Category getCategory() {
         Long __key = this.categoryID;
@@ -156,7 +157,9 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
         return category;
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 264614216)
     public void setCategory(@NotNull Category category) {
         if (category == null) {
@@ -172,7 +175,9 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
     @Generated(hash = 1068795426)
     private transient Long location__resolvedKey;
 
-    /** To-one relationship, resolved on first access. */
+    /**
+     * To-one relationship, resolved on first access.
+     */
     @Generated(hash = 1847191610)
     public Location getLocation() {
         Long __key = this.locationID;
@@ -191,7 +196,9 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
         return location;
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 43823444)
     public void setLocation(@NotNull Location location) {
         if (location == null) {
@@ -247,4 +254,4 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
         myDao = daoSession != null ? daoSession.getMoneyItemDao() : null;
     }
 
-   }
+}

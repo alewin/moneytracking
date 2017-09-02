@@ -41,14 +41,12 @@ import com.unibo.koci.moneytracking.R;
 import org.joda.time.LocalDate;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -132,18 +130,13 @@ public class EditActivity extends AppCompatActivity implements
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
             }
         });
 
-
         int i = 0;
-
         while (i <= stringArray.length && !planned_item.getOccurrence().equals(stringArray[i])) {
             i++;
         }
-
-
         occurrenceSpinner.setSelection(i);
 
     }
@@ -337,7 +330,7 @@ public class EditActivity extends AppCompatActivity implements
                     if (amountAdd.getText().toString().isEmpty()) {
                         ok = false;
                     } else {
-                        amount = Double.valueOf( (amountAdd.getText().toString().replace(',', '.')));
+                        amount = Double.valueOf((amountAdd.getText().toString().replace(',', '.')));
 
                     }
 
@@ -375,8 +368,6 @@ public class EditActivity extends AppCompatActivity implements
                         }
 
                         if (isPlanned) {
-
-
                             planned_item.setAmount(amount);
                             planned_item.setName(name);
                             planned_item.setDescription(description);
@@ -417,29 +408,6 @@ public class EditActivity extends AppCompatActivity implements
         }
     }
 
-    private Date createPlannedDate(String type, Date d) {
-
-        LocalDate lo = LocalDate.fromDateFields(d);
-        // LocalDate llw = LocalDate.parse("01/09/2017", DateTimeFormat.forPattern("dd/MM/yyyy"));
-        //  long llro = llw.toDate().getTime();
-        //  Date fssds = llw.toDate();
-
-        switch (type) {
-            case "Daily":
-                lo = lo.plusDays(1);
-                break;
-            case "Weekly":
-                lo = lo.plusWeeks(1);
-                break;
-            case "Monthly":
-                lo = lo.plusMonths(1);
-                break;
-            case "Yearly":
-                lo = lo.plusYears(1);
-                break;
-        }
-        return lo.toDate();
-    }
 
     @Override
     public void onBackPressed() {
@@ -521,12 +489,9 @@ public class EditActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(LOG_TAG, "Google Places API connection failed with error code: "
-                + connectionResult.getErrorCode());
+        Log.e(LOG_TAG, "Google Places API connection failed with error code: " + connectionResult.getErrorCode());
 
-        Toast.makeText(this,
-                "Google Places API connection failed with error code:" +
-                        connectionResult.getErrorCode(),
+        Toast.makeText(this, "Google Places API connection failed with error code:" + connectionResult.getErrorCode(),
                 Toast.LENGTH_LONG).show();
     }
 

@@ -14,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +39,6 @@ import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-
     private ViewPager viewPager;
     private ViewPagerAdapter vpage_adapter;
     private Toolbar toolbar;
@@ -49,20 +47,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     DBHelper dbHelper;
     SharedPreferences prefs;
-
-    /*TODO
-
-
-    cheange notificatonbar text Periodic reminders should be shown 1 and 2 days
-
-    Display locations on the Google Maps
-
-    export graph image
-
-    cLEAR CODE
-
-    * */
-
     Context context;
     MoneyReminder moneyReminder;
 
@@ -131,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(MainActivity.this, NewItemActivity.class);
                 intent.putExtra("planned", false);
                 startActivity(intent);
@@ -157,8 +140,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         vpage_adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        // Add Fragments to vpage_adapter one by one
-
         TabFragment one = new TabFragment().newInstance(1), two = new TabFragment().newInstance(2), three = new TabFragment().newInstance(3);
         vpage_adapter.addFragment(one, getResources().getString(R.string.tab_day));
         vpage_adapter.addFragment(two, getResources().getString(R.string.tab_week));
@@ -167,32 +148,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                ViewPager viewpager = (ViewPager) findViewById(R.id.viewpager);
-                Log.w("ale", tab.getText().toString() + tab.getPosition());
-                viewpager.setVisibility(View.GONE);
-                viewpager.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                ViewPager viewpager = (ViewPager) findViewById(R.id.viewpager);
-                Log.w("ale", tab.getText().toString() + tab.getPosition());
-                viewpager.setVisibility(View.GONE);
-                viewpager.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                ViewPager viewpager = (ViewPager) findViewById(R.id.viewpager);
-                Log.w("ale", tab.getText().toString() + tab.getPosition());
-                viewpager.setVisibility(View.GONE);
-                viewpager.setVisibility(View.VISIBLE);
-            }
-        });
         tabLayout.setupWithViewPager(viewPager);
 
     }
@@ -210,19 +165,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             return true;
@@ -257,7 +207,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(MainActivity.this, ReportActivity.class));
 
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return false;

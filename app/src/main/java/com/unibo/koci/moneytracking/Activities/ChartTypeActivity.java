@@ -17,8 +17,6 @@ import com.unibo.koci.moneytracking.R;
 
 import org.joda.time.LocalDate;
 
-import java.util.Date;
-
 
 public class ChartTypeActivity extends AppCompatActivity {
 
@@ -29,6 +27,7 @@ public class ChartTypeActivity extends AppCompatActivity {
     DBHelper dbHelper;
 
     MoneyItemDao moneyItemDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +49,9 @@ public class ChartTypeActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 long item_count = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(start.toDate(), end.toDate())).count();
-
-                if(item_count == 0){
+                if (item_count == 0) {
                     Toast.makeText(ChartTypeActivity.this, "There aren't sufficient item for a chart ", Toast.LENGTH_LONG).show();
-
-                }else {
+                } else {
                     Intent intent = new Intent(ChartTypeActivity.this, ShowChartActivity.class);
                     intent.putExtra("start", start);
                     intent.putExtra("end", end);
@@ -69,7 +66,6 @@ public class ChartTypeActivity extends AppCompatActivity {
         setSupportActionBar(type_chart_toolbar);
         getSupportActionBar().setTitle("Generate Charts");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
 
@@ -83,9 +79,7 @@ public class ChartTypeActivity extends AppCompatActivity {
         chart_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View selectedItemView, int position, long id) {
-
                 LocalDate dt = new LocalDate(LocalDate.now());
-                long ll = dt.toDate().getTime();
                 switch (position) {
                     case 0: // Day
                         start = dt;
@@ -112,7 +106,6 @@ public class ChartTypeActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
             }
 
         });

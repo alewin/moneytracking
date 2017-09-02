@@ -57,7 +57,6 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
     }
 
 
-    // Provide a suitable constructor (depends on the kind of dataset)
     public MoneyItemAdapter(List<MoneyItem> myDataset) {
         moneyItems = myDataset;
     }
@@ -65,7 +64,6 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
 
     @Override
     public MoneyItemAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate(R.layout.money_item_list, parent, false);
         ViewHolder vh = new ViewHolder(v);
@@ -73,7 +71,6 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
     }
 
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
@@ -112,8 +109,6 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
 
     }
 
-
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return moneyItems.size();

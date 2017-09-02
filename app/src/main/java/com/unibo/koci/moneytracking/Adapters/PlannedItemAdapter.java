@@ -65,7 +65,6 @@ public class PlannedItemAdapter extends RecyclerView.Adapter<PlannedItemAdapter.
     }
 
 
-    // Provide a suitable constructor (depends on the kind of dataset)
     public PlannedItemAdapter(List<PlannedItem> myDataset) {
         plannedItems = myDataset;
     }
@@ -73,7 +72,6 @@ public class PlannedItemAdapter extends RecyclerView.Adapter<PlannedItemAdapter.
 
     @Override
     public PlannedItemAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate(R.layout.planned_item_list, parent, false);
         ViewHolder vh = new ViewHolder(v);
@@ -81,7 +79,6 @@ public class PlannedItemAdapter extends RecyclerView.Adapter<PlannedItemAdapter.
     }
 
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
@@ -126,7 +123,6 @@ public class PlannedItemAdapter extends RecyclerView.Adapter<PlannedItemAdapter.
     }
 
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return plannedItems.size();

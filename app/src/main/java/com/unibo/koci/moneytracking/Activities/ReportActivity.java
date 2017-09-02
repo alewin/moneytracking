@@ -80,7 +80,7 @@ public class ReportActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(dbHelper.clearReport()) {
+                                if (dbHelper.clearReport()) {
                                     Toast.makeText(ReportActivity.this, "Reports deleted", Toast.LENGTH_LONG).show();
                                     update_listreport();
                                 }
@@ -150,7 +150,7 @@ public class ReportActivity extends AppCompatActivity {
         File fileList = new File(path);
         if (fileList.exists() && fileList != null) {
             File[] files = fileList.listFiles();
-            if(files != null && files.length > 0) {
+            if (files != null && files.length > 0) {
                 for (File f : files) {
                     if (f.getName().contains("Report-") && f.getName().contains("pdf")) {
                         arrayAdapter.add(f.getName());
@@ -210,7 +210,6 @@ public class ReportActivity extends AppCompatActivity {
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-
 
             File file = new File(dir, "Report-" + start.toString() + "-" + end.toString() + ".pdf");
             FileOutputStream fOut = new FileOutputStream(file);
@@ -373,7 +372,6 @@ public class ReportActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
             }
 
         });

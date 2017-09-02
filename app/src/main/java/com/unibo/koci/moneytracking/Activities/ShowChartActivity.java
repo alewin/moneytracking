@@ -196,7 +196,7 @@ public class ShowChartActivity extends AppCompatActivity {
         barChart.getXAxis().setAxisMinValue(0);
         barChart.groupBars(0, groupSpace, barSpace);
 
-       xl.setAxisMaximum(jsonarray.length());
+        xl.setAxisMaximum(jsonarray.length());
 
 
         barChart.invalidate();

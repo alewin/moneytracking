@@ -141,7 +141,6 @@ public class DBHelper {
     public PlannedItem popPlanned() {
         PlannedItemDao plannedItemDao = getDaoSession().getPlannedItemDao();
         List<PlannedItem> plannedItemList = plannedItemDao.queryBuilder().orderAsc(PlannedItemDao.Properties.Date).list();
-        // p is the first item with near planned date
         PlannedItem p = plannedItemList.listIterator().next();
         return p;
     }
@@ -193,7 +192,6 @@ public class DBHelper {
         String queryExpense = "( SELECT SUM(B.AMOUNT) FROM MONEY_ITEM B WHERE B.AMOUNT < 0 AND A.CATEGORY_ID == B.CATEGORY_ID  AND B.DATE >= " + String.valueOf(start.toDate().getTime()) + " AND B.DATE <= " + String.valueOf(end.toDate().getTime()) + " ) AS EXPENSE  ";
         String megaQuery = "SELECT CATEGORY.NAME, " + queryProfit + " , " + queryExpense + " FROM MONEY_ITEM A INNER JOIN CATEGORY ON A.CATEGORY_ID = CATEGORY._id GROUP BY A.CATEGORY_ID ";
 
-        String aiuto = String.valueOf(start.toDate().getTime());
 
         Cursor c = getDaoSession().getDatabase().rawQuery(megaQuery, null);
         c.moveToFirst();

@@ -1,6 +1,8 @@
 package com.unibo.koci.moneytracking.Entities;
 
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.NotNull;
@@ -8,8 +10,6 @@ import org.greenrobot.greendao.annotation.ToOne;
 
 import java.io.Serializable;
 import java.util.Date;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.DaoException;
 
 /**
  * Created by koale on 31/08/17.
@@ -19,12 +19,6 @@ import org.greenrobot.greendao.DaoException;
 public class PlannedItem implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    /*
-    * The serialVersionUID is a universal version identifier for a Serializable class. Deserialization uses this number to ensure that a loaded class corresponds exactly to a serialized object. If no match is found, then an InvalidClassException is thrown.
-You fix the error by adding
-
-private static final long serialVersionUID = 7526472295622776147L;  // unique id
-*/
     @Id
     private Long id;
 
@@ -60,11 +54,15 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
     @NotNull
     private Integer repeat; // how much time repeat this planned item
 
-    /** Used to resolve relations */
+    /**
+     * Used to resolve relations
+     */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
 
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 1660658002)
     private transient PlannedItemDao myDao;
 
@@ -160,7 +158,9 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
     @Generated(hash = 1372501278)
     private transient Long category__resolvedKey;
 
-    /** To-one relationship, resolved on first access. */
+    /**
+     * To-one relationship, resolved on first access.
+     */
     @Generated(hash = 1790867297)
     public Category getCategory() {
         Long __key = this.categoryID;
@@ -179,7 +179,9 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
         return category;
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 264614216)
     public void setCategory(@NotNull Category category) {
         if (category == null) {
@@ -195,7 +197,9 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
     @Generated(hash = 1068795426)
     private transient Long location__resolvedKey;
 
-    /** To-one relationship, resolved on first access. */
+    /**
+     * To-one relationship, resolved on first access.
+     */
     @Generated(hash = 1847191610)
     public Location getLocation() {
         Long __key = this.locationID;
@@ -214,7 +218,9 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
         return location;
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 43823444)
     public void setLocation(@NotNull Location location) {
         if (location == null) {

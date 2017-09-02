@@ -39,14 +39,12 @@ import com.unibo.koci.moneytracking.R;
 
 import org.joda.time.LocalDate;
 
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -62,8 +60,7 @@ public class NewItemActivity extends AppCompatActivity implements
     private static final int GOOGLE_API_CLIENT_ID = 0;
     private GoogleApiClient mGoogleApiClient;
     private PlaceAdapter mPlaceArrayAdapter;
-    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
-            new LatLng(44.4833333, 11.3333333), new LatLng(44.4833333, 11.3333333));
+    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(new LatLng(44.4833333, 11.3333333), new LatLng(44.4833333, 11.3333333));
 
     //object view
     private AutoCompleteTextView addLocation;
@@ -142,7 +139,6 @@ public class NewItemActivity extends AppCompatActivity implements
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
             }
         });
     }
@@ -158,7 +154,6 @@ public class NewItemActivity extends AppCompatActivity implements
 
             @Override
             public void onClick(View v) {
-                //To show current date in the datepicker
                 Calendar mcurrentDate = Calendar.getInstance();
                 int mYear = mcurrentDate.get(Calendar.YEAR);
                 int mMonth = mcurrentDate.get(Calendar.MONTH);
@@ -169,7 +164,6 @@ public class NewItemActivity extends AppCompatActivity implements
                         //int: the month between 0-11.
                         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                         LocalDate lo = new LocalDate(selectedyear, (selectedmonth + 1), selectedday);
-                        Date date_ciao = lo.toDateTimeAtStartOfDay().toDate();
 
                         String date_string = sdf.format(lo.toDate());
                         dateInputText.setText(date_string);
@@ -231,7 +225,6 @@ public class NewItemActivity extends AppCompatActivity implements
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
             }
         });
 
@@ -294,7 +287,7 @@ public class NewItemActivity extends AppCompatActivity implements
                         ok = false;
                     } else {
 
-                            amount = Double.valueOf( (amountAdd.getText().toString().replace(',', '.')));
+                        amount = Double.valueOf((amountAdd.getText().toString().replace(',', '.')));
 
                     }
 
@@ -338,7 +331,6 @@ public class NewItemActivity extends AppCompatActivity implements
 
         }
     }
-
 
 
     public static Date getDate(String datestring) {
@@ -410,19 +402,12 @@ public class NewItemActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(LOG_TAG, "Google Places API connection failed with error code: "
-                + connectionResult.getErrorCode());
-
-        Toast.makeText(this,
-                "Google Places API connection failed with error code:" +
-                        connectionResult.getErrorCode(),
-                Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Google Places API connection failed with error code:" + connectionResult.getErrorCode(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
         mPlaceArrayAdapter.setGoogleApiClient(null);
-        Log.e(LOG_TAG, "Google Places API connection suspended.");
     }
 
     @Override

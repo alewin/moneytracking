@@ -12,7 +12,6 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
@@ -45,7 +44,6 @@ public class MoneyReminder extends BroadcastReceiver {
         PlannedItem p = dbHelper.popPlanned();
 
 
-
         if (p != null) {
 
             prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -62,7 +60,7 @@ public class MoneyReminder extends BroadcastReceiver {
                 MoneyItem mi = new MoneyItem(null, p.getName(), p.getDescription(), p.getDate(), p.getAmount(), p.getCategoryID(), p.getLocationID());
                 dbHelper.getDaoSession().getMoneyItemDao().insert(mi);
 
-                PlannedNotifyUser(context, "MoneyTrack Transiction added",p.getName() + " planned item, was added to your transiction");
+                PlannedNotifyUser(context, "MoneyTrack Transiction added", p.getName() + " planned item, was added to your transiction");
                 Log.w("DEBUGKOCI", "moneyitem aggiunto");
 
                 // decrease repeat from planneditem
@@ -89,14 +87,13 @@ public class MoneyReminder extends BroadcastReceiver {
                 }
                 Log.w("DEBUGKOCI", "faccio un'altro giro");
                 checkPlanned(context);
-            }else if(p.getDate().getTime() == current_date.plusDays(reminder_times).toDate().getTime()){
+            } else if (p.getDate().getTime() == current_date.plusDays(reminder_times).toDate().getTime()) {
 
                 //else if(p.getPlannedDate().getTime() "mancano N giorni allora manda una notifica e controlla di non mandarla più")
-                PlannedNotifyUser(context,"MoneyTrack Reminder", p.getName() + "\n" + p.getDate());
+                PlannedNotifyUser(context, "MoneyTrack Reminder", p.getName() + "\n" + p.getDate());
 
             }
             Log.w("DEBUGKOC", "non è anroa il momento");
-
 
 
         }

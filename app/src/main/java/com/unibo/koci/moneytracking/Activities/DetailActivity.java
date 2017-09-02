@@ -11,9 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +22,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.itextpdf.text.pdf.parser.Line;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Location;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
@@ -56,7 +53,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         setContentView(R.layout.activity_detail);
         dbHelper = new DBHelper(this);
         isPlanned = (Boolean) getIntent().getExtras().getSerializable("planned");
-        layout_planned = (LinearLayout)findViewById(R.id.planned_layout_detail);
+        layout_planned = (LinearLayout) findViewById(R.id.planned_layout_detail);
 
         if (isPlanned) {
             planned_item = (PlannedItem) (getIntent().getSerializableExtra("planned_item"));
@@ -69,22 +66,13 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
         init_toolbar();
         init_textviews();
+        set_textview();
         init_map();
         init_fab();
 
     }
 
-    private void init_textviews() {
-        txt_amount = (TextView) findViewById(R.id.detail_amount);
-        txt_category = (TextView) findViewById(R.id.detail_category);
-        txt_date = (TextView) findViewById(R.id.detail_date);
-        txt_description = (TextView) findViewById(R.id.detail_description);
-        txt_postion = (TextView) findViewById(R.id.detail_position);
-        txt_repeat = (TextView) findViewById(R.id.detail_planned_repeat);
-        txt_occurence = (TextView) findViewById(R.id.detail_planned_occurence);
-        txt_nextdate = (TextView) findViewById(R.id.detail_planned_nextDate);
-
-
+    private void set_textview() {
         if (isPlanned) {
             planned_item.__setDaoSession(dbHelper.getDaoSession());
             DecimalFormat df = new DecimalFormat("#.00");
@@ -97,7 +85,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             txt_postion.setText(String.valueOf(planned_item.getLocation().getName()));
             txt_occurence.setText(String.valueOf(planned_item.getOccurrence()));
             txt_repeat.setText(String.valueOf(planned_item.getRepeat()));
-            Date d = planned_item.getDate();  SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date d = planned_item.getDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             txt_nextdate.setText(String.valueOf(sdf.format(d.getTime())));
         } else {
             money_item.__setDaoSession(dbHelper.getDaoSession());
@@ -111,7 +100,17 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             txt_description.setText(String.valueOf(money_item.getDescription()));
             txt_postion.setText(String.valueOf(money_item.getLocation().getName()));
         }
+    }
 
+    private void init_textviews() {
+        txt_amount = (TextView) findViewById(R.id.detail_amount);
+        txt_category = (TextView) findViewById(R.id.detail_category);
+        txt_date = (TextView) findViewById(R.id.detail_date);
+        txt_description = (TextView) findViewById(R.id.detail_description);
+        txt_postion = (TextView) findViewById(R.id.detail_position);
+        txt_repeat = (TextView) findViewById(R.id.detail_planned_repeat);
+        txt_occurence = (TextView) findViewById(R.id.detail_planned_occurence);
+        txt_nextdate = (TextView) findViewById(R.id.detail_planned_nextDate);
 
     }
 
@@ -174,7 +173,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private void init_map() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
@@ -203,8 +201,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         toolbar_detail = (Toolbar) findViewById(R.id.toolbar_detail);
         setSupportActionBar(toolbar_detail);
         String tmpname = isPlanned ? planned_item.getName() : money_item.getName();
-
-
         getSupportActionBar().setTitle(tmpname);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

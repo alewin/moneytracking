@@ -34,9 +34,15 @@ public class ArchiveActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_archive);
-        init_toolbar();
 
         dbHelper = new DBHelper(this);
+
+        init_toolbar();
+        init_list();
+
+    }
+
+    private void init_list() {
         moneyItemDao = dbHelper.getDaoSession().getMoneyItemDao();
         input = new ArrayList<>();
         LocalDate dt = new LocalDate(LocalDate.now());
@@ -56,7 +62,6 @@ public class ArchiveActivity extends AppCompatActivity {
         setSupportActionBar(toolbar_archive);
         getSupportActionBar().setTitle("Archive");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
 

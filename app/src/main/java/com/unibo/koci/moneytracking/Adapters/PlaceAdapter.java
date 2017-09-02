@@ -78,9 +78,7 @@ public class PlaceAdapter extends ArrayAdapter<PlaceAdapter.PlaceAutocomplete> i
             if (!status.isSuccess()) {
                 Toast.makeText(getContext(), "We recommend using internet for better accuracy of the location! ", Toast.LENGTH_SHORT).show();
 
-                //     Toast.makeText(getContext(), "Error: " + status.toString(),Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "Error getting place predictions: " + status
-                        .toString());
+                Log.e(TAG, "Error getting place predictions: " + status.toString());
                 autocompletePredictions.release();
                 return null;
             }
@@ -123,10 +121,8 @@ public class PlaceAdapter extends ArrayAdapter<PlaceAdapter.PlaceAutocomplete> i
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if (results != null && results.count > 0) {
-                    // The API returned at least one result, update the data.
                     notifyDataSetChanged();
                 } else {
-                    // The API did not return any results, invalidate the data set.
                     notifyDataSetInvalidated();
                 }
             }

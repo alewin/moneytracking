@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,9 @@ import com.unibo.koci.moneytracking.R;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
-import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /*
@@ -30,12 +27,9 @@ import java.util.List;
 
 
 public class TabFragment extends Fragment {
-
-
     DBHelper dbHelper;
     MoneyItemDao moneyItemDao;
     MoneyItemAdapter adapter;
-
 
     public static TabFragment newInstance(int numtab) {
         TabFragment myFragment = new TabFragment();
@@ -47,7 +41,6 @@ public class TabFragment extends Fragment {
 
 
     public TabFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -58,21 +51,16 @@ public class TabFragment extends Fragment {
 
         dbHelper = new DBHelper(getContext());
         moneyItemDao = dbHelper.getDaoSession().getMoneyItemDao();
-
-
     }
 
 
     private List<MoneyItem> getItems() {
         List<MoneyItem> input = new ArrayList<>();
         int tab = getArguments().getInt("numtab");
-       LocalDate dt = new LocalDate();
-        java.util.Date date = java.sql.Date.valueOf(dt.toString());
+        LocalDate dt = new LocalDate();
 
         switch (tab) {
             case 1:
-
-                long gg = dt.now().toDate().getTime();
                 input = moneyItemDao.queryBuilder().where(MoneyItemDao.Properties.Date.between(dt.toDate(), dt.toDate())).list();
                 break;
             case 2:
@@ -88,7 +76,6 @@ public class TabFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.w("ale", "onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_tab_money_item_list, container, false);
         List<MoneyItem> data = getItems();
 
