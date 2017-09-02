@@ -92,13 +92,9 @@ public class MoneyItemAdapter extends RecyclerView.Adapter<MoneyItemAdapter.View
 
 
         String name = moneyItems.get(holder.getAdapterPosition()).getName().toString();
-
         double d_amount = moneyItems.get(holder.getAdapterPosition()).getAmount();
         DecimalFormat df = new DecimalFormat("#.00");
         String amount = df.format(d_amount);
-        //String amount = (String.format("%.0f",d_amount ));
-
-
         Date d = (moneyItems.get(holder.getAdapterPosition()).getDate());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 

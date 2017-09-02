@@ -57,7 +57,7 @@ public class PlannedActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        input = plannedItemDao.queryBuilder().orderAsc(PlannedItemDao.Properties.PlannedDate).list();
+        input = plannedItemDao.queryBuilder().orderAsc(PlannedItemDao.Properties.Date).list();
 
         adapter = new PlannedItemAdapter(input);
         recyclerView.setAdapter(adapter);

@@ -41,12 +41,14 @@ import com.unibo.koci.moneytracking.R;
 import org.joda.time.LocalDate;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -215,7 +217,9 @@ public class EditActivity extends AppCompatActivity implements
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select date");
                 if (isPlanned) {
-                    mDatePicker.getDatePicker().setMinDate(new Date().getTime());
+                    LocalDate lo = LocalDate.fromDateFields(new Date());
+                    lo = lo.plusDays(1);
+                    mDatePicker.getDatePicker().setMinDate(lo.toDate().getTime());
                 } else {
                     mDatePicker.getDatePicker().setMaxDate(new Date().getTime());
                 }
@@ -333,7 +337,8 @@ public class EditActivity extends AppCompatActivity implements
                     if (amountAdd.getText().toString().isEmpty()) {
                         ok = false;
                     } else {
-                        amount = Double.valueOf(amountAdd.getText().toString());
+                        amount = Double.valueOf( (amountAdd.getText().toString().replace(',', '.')));
+
                     }
 
                     if (isPlanned) {
@@ -370,7 +375,7 @@ public class EditActivity extends AppCompatActivity implements
                         }
 
                         if (isPlanned) {
-                            Date planned_date = createPlannedDate(occurrence_type, date);
+
 
                             planned_item.setAmount(amount);
                             planned_item.setName(name);
@@ -382,8 +387,6 @@ public class EditActivity extends AppCompatActivity implements
                             //planned
                             planned_item.setRepeat(repeat);
                             planned_item.setOccurrence(occurrence_type);
-                            planned_item.setPlannedDate(planned_date);
-
                             dbHelper.getDaoSession().update(planned_item);
 
 

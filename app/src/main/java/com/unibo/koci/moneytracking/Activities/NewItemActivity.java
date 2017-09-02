@@ -39,12 +39,14 @@ import com.unibo.koci.moneytracking.R;
 
 import org.joda.time.LocalDate;
 
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -175,7 +177,9 @@ public class NewItemActivity extends AppCompatActivity implements
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select date");
                 if (isPlanned) {
-                    mDatePicker.getDatePicker().setMinDate(new Date().getTime());
+                    LocalDate lo = LocalDate.fromDateFields(new Date());
+                    lo = lo.plusDays(1);
+                    mDatePicker.getDatePicker().setMinDate(lo.toDate().getTime());
                 } else {
                     mDatePicker.getDatePicker().setMaxDate(new Date().getTime());
                 }
@@ -289,7 +293,9 @@ public class NewItemActivity extends AppCompatActivity implements
                     if (amountAdd.getText().toString().isEmpty()) {
                         ok = false;
                     } else {
-                        amount = Double.valueOf(amountAdd.getText().toString());
+
+                            amount = Double.valueOf( (amountAdd.getText().toString().replace(',', '.')));
+
                     }
 
                     if (isPlanned) {
@@ -309,8 +315,8 @@ public class NewItemActivity extends AppCompatActivity implements
                     if (ok) {
                         locid = dbHelper.getDaoSession().insert(loc);
                         if (isPlanned) {
-                            Date planned_date = createPlannedDate(occurrence_type, date);
-                            PlannedItem pi = new PlannedItem(null, name, description, date, amount, catid, locid, occurrence_type, repeat, planned_date);
+
+                            PlannedItem pi = new PlannedItem(null, name, description, date, amount, catid, locid, occurrence_type, repeat);
                             dbHelper.getDaoSession().insert(pi);
                         } else {
                             MoneyItem mi = new MoneyItem(null, name, description, date, amount, catid, locid);
@@ -333,29 +339,7 @@ public class NewItemActivity extends AppCompatActivity implements
         }
     }
 
-    private Date createPlannedDate(String type, Date d) {
 
-        LocalDate lo = LocalDate.fromDateFields(d);
-        // LocalDate llw = LocalDate.parse("01/09/2017", DateTimeFormat.forPattern("dd/MM/yyyy"));
-        //  long llro = llw.toDate().getTime();
-        //  Date fssds = llw.toDate();
-
-        switch (type) {
-            case "Daily":
-                lo = lo.plusDays(1);
-                break;
-            case "Weekly":
-                lo = lo.plusWeeks(1);
-                break;
-            case "Monthly":
-                lo = lo.plusMonths(1);
-                break;
-            case "Yearly":
-                lo = lo.plusYears(1);
-                break;
-        }
-        return lo.toDate();
-    }
 
     public static Date getDate(String datestring) {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");

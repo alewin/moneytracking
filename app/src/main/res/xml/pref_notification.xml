@@ -6,16 +6,11 @@
         android:summary="Recive notification of planned transiction "
         android:title="Enable Notification" />
 
-    <RingtonePreference
-        android:defaultValue="content://settings/system/notification_sound"
-        android:dependency="notifications_switch"
-        android:summary="Notification ringtone"
-        android:key="notifications_ringtone"
-        android:ringtoneType="notification"
-        android:title="@string/pref_title_ringtone" />
+
 
     <EditTextPreference
         android:dependency="notifications_switch"
+        android:digits="0123456789"
         android:defaultValue="1"
         android:inputType="number"
         android:key="notification_reminder"
@@ -23,7 +18,7 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:maxLength="2"
-        android:summary="Day before recive planned notification?"
+        android:summary="Number of days before recive reminder for planned notification"
         android:title="Reminder" />
 
 </PreferenceScreen>

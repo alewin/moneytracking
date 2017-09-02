@@ -140,11 +140,9 @@ public class DBHelper {
 
     public PlannedItem popPlanned() {
         PlannedItemDao plannedItemDao = getDaoSession().getPlannedItemDao();
-        List<PlannedItem> plannedItemList = plannedItemDao.queryBuilder().orderAsc(PlannedItemDao.Properties.PlannedDate).list();
-
+        List<PlannedItem> plannedItemList = plannedItemDao.queryBuilder().orderAsc(PlannedItemDao.Properties.Date).list();
         // p is the first item with near planned date
         PlannedItem p = plannedItemList.listIterator().next();
-
         return p;
     }
 

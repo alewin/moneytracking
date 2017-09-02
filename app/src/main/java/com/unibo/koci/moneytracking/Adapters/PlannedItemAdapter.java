@@ -16,6 +16,7 @@ import com.unibo.koci.moneytracking.Activities.DetailActivity;
 import com.unibo.koci.moneytracking.Entities.PlannedItem;
 import com.unibo.koci.moneytracking.R;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -99,7 +100,9 @@ public class PlannedItemAdapter extends RecyclerView.Adapter<PlannedItemAdapter.
 
 
         String name = plannedItems.get(holder.getAdapterPosition()).getName();
-        String amount = (String.format("%.0f", plannedItems.get(holder.getAdapterPosition()).getAmount()));
+        double d_amount = plannedItems.get(holder.getAdapterPosition()).getAmount();
+        DecimalFormat df = new DecimalFormat("#.00");
+        String amount = df.format(d_amount);
         String occurrence = plannedItems.get(holder.getAdapterPosition()).getOccurrence();
         String repeat = plannedItems.get(holder.getAdapterPosition()).getRepeat().toString();
 

@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.unibo.koci.moneytracking.Activities.ArchiveActivity;
 import com.unibo.koci.moneytracking.Activities.CategoriesActivity;
@@ -30,12 +29,13 @@ import com.unibo.koci.moneytracking.Activities.ReportActivity;
 import com.unibo.koci.moneytracking.Activities.SettingsActivity;
 import com.unibo.koci.moneytracking.Adapters.ViewPagerAdapter;
 import com.unibo.koci.moneytracking.Broadcast.MoneyReminder;
-import com.unibo.koci.moneytracking.Broadcast.ReminderService;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.Category;
 import com.unibo.koci.moneytracking.Fragments.TabFragment;
 
 import org.joda.time.LocalDate;
+
+import java.text.DecimalFormat;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,12 +52,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /*TODO
 
-    set planned date, and times -- every notification check
 
-    cheange notificatonbar text
-
-    Ø Budget must be updated at the payment date
-    Ø Periodic reminders should be shown 1 and 2 days
+    cheange notificatonbar text Periodic reminders should be shown 1 and 2 days
 
     Display locations on the Google Maps
 
@@ -65,10 +61,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     cLEAR CODE
 
-    *
     * */
 
     Context context;
+    MoneyReminder moneyReminder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void init_planned_notification() {
         if (prefs.getBoolean("notifications_switch", true)) {
-            MoneyReminder moneyReminder = new MoneyReminder();
+            moneyReminder = new MoneyReminder();
             moneyReminder.setAlarm(context);
 
         }
@@ -100,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void init_firstTimeStart() {
+
         String categories[] = getResources().getStringArray(R.array.categories_array);
         for (String item : categories) {
             Category c = new Category(null, item);
@@ -109,9 +106,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putBoolean("firstTime", false);
-        editor.putString("notifications_ringtone", "content://settings/system/notification_sound");
-        editor.putBoolean("notifications_switch", true);
-        editor.putInt("notification_reminder", 1);
+        editor.putBoolean("notifications_switch", false);
+        editor.putString("notification_reminder", "1");
 
 
         editor.commit();
@@ -146,10 +142,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void init_toolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         total_amount = (TextView) findViewById(R.id.available_amount);
-
-        String amount = (String.format("%.0f", dbHelper.getTotal(new LocalDate(0), LocalDate.now())));
-//bugged 1septemer
-
+        String amount = "0.00";
+        double d_amount = dbHelper.getTotal(new LocalDate(0), LocalDate.now());
+        if (d_amount > 0) {
+            DecimalFormat df = new DecimalFormat("#.00");
+            amount = df.format(d_amount);
+        }
         total_amount.setText(String.valueOf(amount + "€"));
         setSupportActionBar(toolbar);
     }

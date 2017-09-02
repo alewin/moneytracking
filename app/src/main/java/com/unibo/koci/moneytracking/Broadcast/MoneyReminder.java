@@ -40,12 +40,20 @@ public class MoneyReminder extends BroadcastReceiver {
 
 
     private void checkPlanned(Context context) {
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
         dbHelper = new DBHelper(context);
         PlannedItem p = dbHelper.popPlanned();
 
+
+
         if (p != null) {
+
+            prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            int reminder_times = Integer.parseInt(prefs.getString("notification_reminder", "1"));
+
             LocalDate current_date = new LocalDate();
+
+
             Log.w("DEBUGKOCI", p.getDate().getTime() + " -- " + current_date.toDate().getTime());
 
             if (p.getDate().getTime() == current_date.toDate().getTime()) {
@@ -54,14 +62,15 @@ public class MoneyReminder extends BroadcastReceiver {
                 MoneyItem mi = new MoneyItem(null, p.getName(), p.getDescription(), p.getDate(), p.getAmount(), p.getCategoryID(), p.getLocationID());
                 dbHelper.getDaoSession().getMoneyItemDao().insert(mi);
 
-                Log.w("DEBUGKOCI","moneyitem aggiunto");
+                PlannedNotifyUser(context, "MoneyTrack Transiction added",p.getName() + " planned item, was added to your transiction");
+                Log.w("DEBUGKOCI", "moneyitem aggiunto");
 
                 // decrease repeat from planneditem
                 int repeat = p.getRepeat();
                 p.setRepeat(repeat - 1);
                 dbHelper.getDaoSession().update(p);
 
-                Log.w("DEBUGKOCI","repeat decrementato");
+                Log.w("DEBUGKOCI", "repeat decrementato");
 
 
                 // if planned item repeat is 0 delete it
@@ -69,29 +78,30 @@ public class MoneyReminder extends BroadcastReceiver {
                 if (repeat == 0) {
                     dbHelper.getDaoSession().delete(p);
 
-                    Log.w("DEBUGKOCI","repeat era zero cancello il planned");
+                    Log.w("DEBUGKOCI", "repeat era zero cancello il planned");
 
                 } else {
                     //update planneditem with new planned_date
-                    p.setDate(p.getPlannedDate());
-                    p.setPlannedDate(createPlannedDate(p.getOccurrence(), p.getPlannedDate()));
+                    p.setDate(createPlannedDate(p.getOccurrence(), p.getDate()));
                     dbHelper.getDaoSession().update(p);
-
-                    Log.w("DEBUGKOCI","aggiorno planned item ora il prossimo sarà" + p.getDate());
+                    Log.w("DEBUGKOCI", "aggiorno planned item ora il prossimo sarà" + p.getDate());
 
                 }
-                Log.w("DEBUGKOCI","faccio un'altro giro");
+                Log.w("DEBUGKOCI", "faccio un'altro giro");
                 checkPlanned(context);
-            }
-            Log.w("DEBUGKOC","non è anroa il momento");
+            }else if(p.getDate().getTime() == current_date.plusDays(reminder_times).toDate().getTime()){
 
-            //else if(p.getPlannedDate().getTime() "mancano N giorni allora manda una notifica e controlla di non mandarla più")
+                //else if(p.getPlannedDate().getTime() "mancano N giorni allora manda una notifica e controlla di non mandarla più")
+                PlannedNotifyUser(context,"MoneyTrack Reminder", p.getName() + "\n" + p.getDate());
+
+            }
+            Log.w("DEBUGKOC", "non è anroa il momento");
+
 
 
         }
 
         Log.w("DEBUGKOC", "ALLARME" + nID);
-        Toast.makeText(context, "Alarm !!!!!!!!!!", Toast.LENGTH_LONG).show(); // For example
 
     }
 
@@ -114,12 +124,12 @@ public class MoneyReminder extends BroadcastReceiver {
         return lo.toDate();
     }
 
-    private void PlannedNotifyUser(Context context, String Title, String description) {
+    private void PlannedNotifyUser(Context context, String title, String description) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!");
+                        .setContentTitle(title)
+                        .setContentText(description);
         mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(nID, mBuilder.build());

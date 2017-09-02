@@ -60,9 +60,6 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
     @NotNull
     private Integer repeat; // how much time repeat this planned item
 
-    @NotNull
-    private Date plannedDate;
-
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
@@ -71,8 +68,8 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
     @Generated(hash = 1660658002)
     private transient PlannedItemDao myDao;
 
-    @Generated(hash = 909737551)
-    public PlannedItem(Long id, @NotNull String name, @NotNull String description, @NotNull Date date, double amount, @NotNull Long categoryID, @NotNull Long locationID, @NotNull String occurrence, @NotNull Integer repeat, @NotNull Date plannedDate) {
+    @Generated(hash = 6184275)
+    public PlannedItem(Long id, @NotNull String name, @NotNull String description, @NotNull Date date, double amount, @NotNull Long categoryID, @NotNull Long locationID, @NotNull String occurrence, @NotNull Integer repeat) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -82,7 +79,6 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
         this.locationID = locationID;
         this.occurrence = occurrence;
         this.repeat = repeat;
-        this.plannedDate = plannedDate;
     }
 
     @Generated(hash = 1232195301)
@@ -159,14 +155,6 @@ private static final long serialVersionUID = 7526472295622776147L;  // unique id
 
     public void setRepeat(Integer repeat) {
         this.repeat = repeat;
-    }
-
-    public Date getPlannedDate() {
-        return this.plannedDate;
-    }
-
-    public void setPlannedDate(Date plannedDate) {
-        this.plannedDate = plannedDate;
     }
 
     @Generated(hash = 1372501278)
