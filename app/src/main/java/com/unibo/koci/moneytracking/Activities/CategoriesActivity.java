@@ -71,7 +71,7 @@ public class CategoriesActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_add_cat:
                 final EditText catEditText = new EditText(this);
-                AlertDialog dialog = new AlertDialog.Builder(this)
+                AlertDialog dialog = new AlertDialog.Builder(this, R.style.DialogStyle)
                         .setTitle("Add a new category")
                         .setMessage("Insert category name")
                         .setView(catEditText)

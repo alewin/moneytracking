@@ -134,7 +134,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         fabdelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.DialogStyle);
 
                 builder.setTitle("Delete item")
                         .setMessage("Are you sure?")

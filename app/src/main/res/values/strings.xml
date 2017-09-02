@@ -47,10 +47,34 @@
         <item>Other</item>
     </string-array>
 
+<!--New item -->
+    <string name="Description">Description</string>
+    <string name="Location">Location</string>
+    <string name="Date">Date</string>
+    <string name="Amount">Amount</string>
+    <string name="Category">Category</string>
+
+    <string name="Planned">Planned</string>
+    <string name="Occurrence">Occurrence</string>
+    <string name="Repeat">Repeat</string>
+    <string name="Add">Add</string>
+
+
+
 
     <!-- Strings related to Settings -->
     <string name="pref_header_data_sync">Data</string>
     <string name="pref_header_notifications">Notifications</string>
     <string name="notifications_switch">notifications_switch</string>
+    <string name="planned_textview">Planned</string>
+    <string name="global_summary">Global Summary</string>
+    <string name="generate_report">Generate Report</string>
+    <string name="create_report">Create report</string>
+    <string name="report_list">Report list</string>
+    <string name="chart_expense_profit">Chart Expense - Profit</string>
+    <string name="chart_categories">Chart Categories</string>
+    <string name="generate_chart">Generate Chart</string>
+    <string name="titolo">titolo</string>
+    <string name="moneytrack">MONEYTRACK</string>
 
 </resources>

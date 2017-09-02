@@ -25,10 +25,21 @@
     <style name="DialogStyle" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:textColor">@color/textColorPrimary</item>
         <item name="android:textColorPrimary">@color/textColorSecondary</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/colorAccent</item>
     </style>
 
 
-    <style name="InputLayout" parent="TextAppearance.AppCompat"></style>
 
     <style name="PreferenceScreen" parent="Base.Theme.MTApp">
         <item name="android:textColor">@color/black</item>

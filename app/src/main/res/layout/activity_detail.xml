@@ -56,9 +56,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:drawableLeft="@drawable/ic_description"
-                android:text="description"
-                android:textSize="25dp" />
+                android:drawableStart="@drawable/ic_description"
+                android:textSize="25sp" />
 
 
             <TextView
@@ -67,10 +66,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_amount"
                 android:layout_margin="10dp"
-
-                android:drawableLeft="@drawable/ic_date"
-                android:text="DATE"
-                android:textSize="25dp" />
+                android:drawableStart="@drawable/ic_date"
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/detail_category"
@@ -78,9 +75,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_date"
                 android:layout_margin="10dp"
-                android:drawableLeft="@drawable/ic_category"
-                android:text="CATEG"
-                android:textSize="25dp" />
+                android:drawableStart="@drawable/ic_category"
+                android:textSize="25sp" />
 
 
             <TextView
@@ -88,19 +84,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:drawableLeft="@drawable/ic_location"
-
-                android:text="Posizione:"
-                android:textSize="25dp" />
+                android:drawableStart="@drawable/ic_location"
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/detail_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:drawableLeft="@drawable/ic_money"
-                android:text="Amount:"
-                android:textSize="25dp" />
+                android:drawableStart="@drawable/ic_money"
+                android:textSize="25sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -113,7 +106,7 @@
                     android:id="@+id/textView_planned_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Planned"
+                    android:text="@string/planned_textview"
                     android:textAlignment="center"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -123,27 +116,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:drawableLeft="@drawable/ic_date"
-                    android:text="Occurence:"
-                    android:textSize="25dp" />
+                    android:drawableStart="@drawable/ic_date"
+                    android:textSize="25sp" />
 
                 <TextView
                     android:id="@+id/detail_planned_repeat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:drawableLeft="@drawable/ic_repeat"
-                    android:text="Repeat:"
-                    android:textSize="25dp" />
+                    android:drawableStart="@drawable/ic_repeat"
+                    android:textSize="25sp" />
 
                 <TextView
                     android:id="@+id/detail_planned_nextDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:drawableLeft="@drawable/ic_date"
-                    android:text="NextDate:"
-                    android:textSize="25dp" />
+                    android:drawableStart="@drawable/ic_date"
+                    android:textSize="25sp" />
 
             </LinearLayout>
         </LinearLayout>

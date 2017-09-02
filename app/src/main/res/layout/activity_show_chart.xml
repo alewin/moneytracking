@@ -33,7 +33,7 @@
                 android:id="@+id/textView_chart_detail1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Chart Expense - Profit"
+                android:text="@string/chart_expense_profit"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -49,7 +49,7 @@
                 android:id="@+id/textView_chart_detail_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Chart Categories"
+                android:text="@string/chart_categories"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="bold" />

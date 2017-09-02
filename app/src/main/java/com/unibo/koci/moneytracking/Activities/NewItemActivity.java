@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -56,7 +55,6 @@ public class NewItemActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks {
 
     // google api
-    private static String LOG_TAG = "maps";
     private static final int GOOGLE_API_CLIENT_ID = 0;
     private GoogleApiClient mGoogleApiClient;
     private PlaceAdapter mPlaceArrayAdapter;
@@ -183,7 +181,7 @@ public class NewItemActivity extends AppCompatActivity implements
     }
 
     private void force_create_new_category() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogStyle);
         builder.setMessage("There aren't categories, please add new category")
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -370,11 +368,8 @@ public class NewItemActivity extends AppCompatActivity implements
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final PlaceAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
             final String placeId = String.valueOf(item.placeId);
-            Log.i(LOG_TAG, "Selected: " + item.description);
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                    .getPlaceById(mGoogleApiClient, placeId);
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(mGoogleApiClient, placeId);
             placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-            Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
         }
     };
 
@@ -383,11 +378,8 @@ public class NewItemActivity extends AppCompatActivity implements
         @Override
         public void onResult(PlaceBuffer places) {
             if (!places.getStatus().isSuccess()) {
-                Log.e(LOG_TAG, "Place query did not complete. Error: " +
-                        places.getStatus().toString());
                 return;
             }
-            // Selecting the first object buffer.
             place = places.get(0);
 
         }
@@ -396,8 +388,6 @@ public class NewItemActivity extends AppCompatActivity implements
     @Override
     public void onConnected(Bundle bundle) {
         mPlaceArrayAdapter.setGoogleApiClient(mGoogleApiClient);
-        Log.i(LOG_TAG, "Google Places API connected.");
-
     }
 
     @Override

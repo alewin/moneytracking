@@ -49,7 +49,7 @@
                     android:id="@+id/add_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_title"
+                    android:drawableStart="@drawable/ic_title"
                     android:inputType="textCapSentences"
                     android:maxLength="20" />
             </android.support.design.widget.TextInputLayout>
@@ -57,13 +57,13 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Description">
+                android:hint="@string/Description">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/add_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_description"
+                    android:drawableStart="@drawable/ic_description"
                     android:inputType="text"
                     android:maxLength="30" />
             </android.support.design.widget.TextInputLayout>
@@ -71,26 +71,26 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Location">
+                android:hint="@string/Location">
 
                 <AutoCompleteTextView
                     android:id="@+id/addLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_location"
+                    android:drawableStart="@drawable/ic_location"
                     android:maxLength="200" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Date">
+                android:hint="@string/Date">
 
                 <EditText
                     android:id="@+id/check_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_date"
+                    android:drawableStart="@drawable/ic_date"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:inputType="date" />
@@ -100,13 +100,13 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Amount">
+                android:hint="@string/Amount">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/add_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_money"
+                    android:drawableStart="@drawable/ic_money"
                     android:inputType="numberDecimal|numberSigned"
                     android:maxLength="10" />
             </android.support.design.widget.TextInputLayout>
@@ -114,9 +114,9 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
-                android:hint="Category">
+                android:hint="@string/Category">
 
                 <Spinner
                     android:id="@+id/add_category"
@@ -142,7 +142,7 @@
                     android:id="@+id/textView_planned"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Planned"
+                    android:text="@string/Planned"
                     android:textAlignment="center"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -150,9 +150,9 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
-                    android:hint="Occurrence">
+                    android:hint="@string/Occurrence">
 
                     <Spinner
                         android:id="@+id/add_occurrence"
@@ -169,13 +169,13 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Repeat">
+                    android:hint="@string/Repeat">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/add_repeat"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_repeat"
+                        android:drawableStart="@drawable/ic_repeat"
                         android:inputType="number"
                         android:maxLength="2" />
                 </android.support.design.widget.TextInputLayout>
@@ -187,7 +187,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Add" />
+                android:text="@string/Add" />
 
         </LinearLayout>
     </LinearLayout>

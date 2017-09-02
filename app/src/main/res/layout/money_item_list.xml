@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:layout_marginBottom="8dp"
-    android:layout_marginLeft="16dp"
+    android:layout_marginStart="16dp"
     android:layout_marginRight="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
@@ -22,7 +22,7 @@
             android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/thumb_down" />
 
@@ -31,9 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/itemlist_icon"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_toEndOf="@+id/itemlist_icon"
-            android:text="Title "
             android:textAppearance="?attr/textAppearanceListItem"
             android:textColor="@color/textColorSecondary"
             android:textSize="16sp"
@@ -44,11 +43,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/itemlist_title"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/itemlist_icon"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/itemlist_icon"
             android:ellipsize="end"
-
-            android:text="Description"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp" />
 
@@ -57,10 +54,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/itemlist_amount"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/itemlist_icon"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/itemlist_icon"
             android:ellipsize="end"
-            android:text="date"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:textStyle="italic" />

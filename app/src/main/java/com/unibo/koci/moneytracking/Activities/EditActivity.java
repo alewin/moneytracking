@@ -58,7 +58,6 @@ public class EditActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks {
 
     // google api
-    private static String LOG_TAG = "maps";
     private static final int GOOGLE_API_CLIENT_ID = 0;
     private GoogleApiClient mGoogleApiClient;
     private PlaceAdapter mPlaceArrayAdapter;
@@ -222,7 +221,7 @@ public class EditActivity extends AppCompatActivity implements
     }
 
     private void force_create_new_category() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogStyle);
         builder.setMessage("There aren't categories, please add new category")
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -456,10 +455,8 @@ public class EditActivity extends AppCompatActivity implements
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final PlaceAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
             final String placeId = String.valueOf(item.placeId);
-            Log.i(LOG_TAG, "Selected: " + item.description);
             PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(mGoogleApiClient, placeId);
             placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-            Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
 
         }
     };
@@ -468,7 +465,6 @@ public class EditActivity extends AppCompatActivity implements
         @Override
         public void onResult(PlaceBuffer places) {
             if (!places.getStatus().isSuccess()) {
-                Log.e(LOG_TAG, "Place query did not complete. Error: " + places.getStatus().toString());
                 return;
             }
             // Selecting the first object buffer.
@@ -483,22 +479,16 @@ public class EditActivity extends AppCompatActivity implements
     @Override
     public void onConnected(Bundle bundle) {
         mPlaceArrayAdapter.setGoogleApiClient(mGoogleApiClient);
-        Log.i(LOG_TAG, "Google Places API connected.");
-
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(LOG_TAG, "Google Places API connection failed with error code: " + connectionResult.getErrorCode());
-
-        Toast.makeText(this, "Google Places API connection failed with error code:" + connectionResult.getErrorCode(),
-                Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Google Places API connection failed with error code:" + connectionResult.getErrorCode(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
         mPlaceArrayAdapter.setGoogleApiClient(null);
-        Log.e(LOG_TAG, "Google Places API connection suspended.");
     }
 
     @Override

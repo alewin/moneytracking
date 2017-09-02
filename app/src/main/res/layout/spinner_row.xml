@@ -13,8 +13,7 @@
         android:id="@+id/text_spinner"
         android:layout_width="wrap_content"
         android:textSize="20sp"
-        android:gravity="left"
-        android:text="Ciao"
+        android:gravity="start"
         android:padding="5dip"
         android:layout_height="40dp" />
 </LinearLayout>

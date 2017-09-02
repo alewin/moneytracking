@@ -13,10 +13,9 @@
 
     <TextView
         android:id="@+id/category_title"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:text="titolo"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -25,7 +24,6 @@
         android:id="@+id/category_id"
         android:layout_below="@id/category_title"
         android:textColor="@color/grey"
-        android:text="desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

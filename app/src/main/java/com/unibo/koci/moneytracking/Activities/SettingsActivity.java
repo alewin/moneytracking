@@ -197,7 +197,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             reset.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.DialogStyle);
                     builder.setTitle("Delete all reports?")
                             .setMessage("Are you sure?")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -226,7 +226,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             reset.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.DialogStyle);
                     builder.setTitle("Delete all data?")
                             .setMessage("Are you sure?")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
