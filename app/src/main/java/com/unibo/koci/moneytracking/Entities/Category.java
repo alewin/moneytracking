@@ -15,7 +15,6 @@ import java.io.Serializable;
 @Entity
 public class Category implements Serializable {
     private static final long serialVersionUID = 1L;
-
     @Id
     private Long categoryID;
 

@@ -60,8 +60,6 @@
     <style name="ListViewStyle" parent="@android:style/Widget.Holo.Light.ListView">
         <item name="android:textColorPrimary">@color/textColorSecondary</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:background">@color/black</item>
-        <item name="android:listSelector">@color/black</item>
 
     </style>
 

@@ -1,6 +1,7 @@
 package com.unibo.koci.moneytracking.Broadcast;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -16,6 +17,7 @@ import android.util.Log;
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
 import com.unibo.koci.moneytracking.Entities.PlannedItem;
+import com.unibo.koci.moneytracking.MainActivity;
 import com.unibo.koci.moneytracking.R;
 
 import org.joda.time.LocalDate;
@@ -43,9 +45,7 @@ public class MoneyReminder extends BroadcastReceiver {
         dbHelper = new DBHelper(context);
         PlannedItem p = dbHelper.popPlanned();
 
-
         if (p != null) {
-
             prefs = PreferenceManager.getDefaultSharedPreferences(context);
             int reminder_times = Integer.parseInt(prefs.getString("notification_reminder", "1"));
             LocalDate current_date = new LocalDate();
@@ -55,7 +55,6 @@ public class MoneyReminder extends BroadcastReceiver {
                 // convert planneditem to ==> moneyitem
                 MoneyItem mi = new MoneyItem(null, p.getName(), p.getDescription(), p.getDate(), p.getAmount(), p.getCategoryID(), p.getLocationID());
                 dbHelper.getDaoSession().getMoneyItemDao().insert(mi);
-
                 PlannedNotifyUser(context, "MoneyTrack Transiction added", p.getName() + " planned item, was added to your transiction");
 
                 // decrease repeat from planneditem
@@ -75,7 +74,7 @@ public class MoneyReminder extends BroadcastReceiver {
                 }
 
                 checkPlanned(context);
-            } else if (p.getDate().getTime() <= current_date.plusDays(reminder_times).toDate().getTime()) {
+            } else if (p.getDate().getTime() < current_date.plusDays(reminder_times).toDate().getTime()) {
                 PlannedNotifyUser(context, "MoneyTrack Reminder", p.getName() + "\n" + p.getDate());
             }
 
@@ -103,6 +102,8 @@ public class MoneyReminder extends BroadcastReceiver {
     }
 
     private void PlannedNotifyUser(Context context, String title, String description) {
+
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.mipmap.ic_launcher)
@@ -110,7 +111,18 @@ public class MoneyReminder extends BroadcastReceiver {
                         .setContentText(description);
         mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(nID, mBuilder.build());
+
+
+        Intent notificationIntent = new Intent(context, MainActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+        Notification notification = mBuilder.build();
+
+        notification.contentIntent = intent; // .setLatestEventInfo(context, title, message, intent);
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        notificationManager.notify(nID, notification);
+
         nID++;
     }
 

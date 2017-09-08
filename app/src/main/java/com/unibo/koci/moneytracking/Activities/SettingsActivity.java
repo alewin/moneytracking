@@ -144,9 +144,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     if (!((Boolean) newValue)) {
                         Intent intent = new Intent(context, MoneyReminder.class);
-                        PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
+                        MoneyReminder m = new MoneyReminder();
+                        m.cancelAlarm(context);
+                       /* PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
                         alarmManager.cancel(sender);
+                        */
                         Toast.makeText(context, "Notification disabled", Toast.LENGTH_SHORT).show();
 
                     } else {

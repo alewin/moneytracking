@@ -306,7 +306,6 @@ public class NewItemActivity extends AppCompatActivity implements
                     if (ok) {
                         locid = dbHelper.getDaoSession().insert(loc);
                         if (isPlanned) {
-
                             PlannedItem pi = new PlannedItem(null, name, description, date, amount, catid, locid, occurrence_type, repeat);
                             dbHelper.getDaoSession().insert(pi);
                         } else {

@@ -139,14 +139,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void init_tabview() {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         vpage_adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
         TabFragment one = new TabFragment().newInstance(1), two = new TabFragment().newInstance(2), three = new TabFragment().newInstance(3);
         vpage_adapter.addFragment(one, getResources().getString(R.string.tab_day));
         vpage_adapter.addFragment(two, getResources().getString(R.string.tab_week));
         vpage_adapter.addFragment(three, getResources().getString(R.string.tab_month));
         viewPager.setAdapter(vpage_adapter);
-
-
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
