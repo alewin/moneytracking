@@ -1,4 +1,6 @@
 # Money Tracking
+ALESSIO KOCI
+LABORATORIO APPLICAZIONI MOBILE UNIBO 2016/2017
 
 
 ![alt text](http://i.imgur.com/4r7ZFQi.png)
