@@ -12,7 +12,6 @@ import android.media.RingtoneManager;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.unibo.koci.moneytracking.Database.DBHelper;
 import com.unibo.koci.moneytracking.Entities.MoneyItem;
@@ -48,15 +47,16 @@ public class MoneyReminder extends BroadcastReceiver {
         if (p != null) {
             prefs = PreferenceManager.getDefaultSharedPreferences(context);
             int reminder_times = Integer.parseInt(prefs.getString("notification_reminder", "1"));
+            boolean notification_state = prefs.getBoolean("notifications_switch", true);
+
             LocalDate current_date = new LocalDate();
-
             if (p.getDate().getTime() <= current_date.toDate().getTime()) {
-
                 // convert planneditem to ==> moneyitem
                 MoneyItem mi = new MoneyItem(null, p.getName(), p.getDescription(), p.getDate(), p.getAmount(), p.getCategoryID(), p.getLocationID());
                 dbHelper.getDaoSession().getMoneyItemDao().insert(mi);
-                PlannedNotifyUser(context, "MoneyTrack Transiction added", p.getName() + " planned item, was added to your transiction");
-
+                if(notification_state) {
+                    PlannedNotifyUser(context, "MoneyTrack Transiction added", p.getName() + " planned item, was added to your transiction");
+                }
                 // decrease repeat from planneditem
                 int repeat = p.getRepeat();
                 p.setRepeat(repeat - 1);
@@ -75,7 +75,9 @@ public class MoneyReminder extends BroadcastReceiver {
 
                 checkPlanned(context);
             } else if (p.getDate().getTime() < current_date.plusDays(reminder_times).toDate().getTime()) {
-                PlannedNotifyUser(context, "MoneyTrack Reminder", p.getName() + "\n" + p.getDate());
+                if(notification_state) {
+                    PlannedNotifyUser(context, "MoneyTrack Reminder", p.getName() + "\n" + p.getDate());
+                }
             }
 
         }

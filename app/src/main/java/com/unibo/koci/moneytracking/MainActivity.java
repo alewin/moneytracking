@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unibo.koci.moneytracking.Activities.ArchiveActivity;
 import com.unibo.koci.moneytracking.Activities.CategoriesActivity;
@@ -71,12 +72,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void init_planned_notification() {
-        if (prefs.getBoolean("notifications_switch", true)) {
-            moneyReminder = new MoneyReminder();
-            moneyReminder.setAlarm(context);
-
-        }
-
+        moneyReminder = new MoneyReminder();
+        moneyReminder.cancelAlarm(context);
+        moneyReminder.setAlarm(context);
     }
 
     private void init_firstTimeStart() {
@@ -90,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putBoolean("firstTime", false);
-        editor.putBoolean("notifications_switch", false);
+        editor.putBoolean("notifications_switch", true);
         editor.putString("notification_reminder", "1");
 
 
